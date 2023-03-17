@@ -1,0 +1,27 @@
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333; /* set background color to dark gray */
+    padding: 20px;
+}
+
+nav a {
+    color: #fff; /* set font color to white */
+    text-decoration: none;
+    font-size: 20px;
+    margin: 0 10px;
+}
+
+nav a:hover {
+    border-bottom: 2px solid #fff; /* add underline on hover */
+}
+
+nav .logo {
+    color: #fff; /* set font color to white */
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0 10px;
+}
