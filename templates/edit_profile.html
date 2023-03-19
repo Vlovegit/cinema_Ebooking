@@ -1,134 +1,129 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<head><link rel="stylesheet" href="{% static 'css/registration.css' %}"></head>
+<head><link rel="stylesheet" href="{% static 'css/edit_profile.css' %}"></head>
 
-  <div class="container h-70 pt-5">
+  <div class="container h-70 pt-5" >
         <div class="d-flex justify-content-center">
             <div class="d-flex justify-content-center">
             <div class="card" style="height:760px;width:1200px">
               <div class="card-body p-5">
                 <h1 class="text-uppercase text-center mb-5">Edit Profile</h1>
+
                   {% comment %} {% if user.is_authenticated %} {% endcomment %}
-
-                  <form method="POST" action="edit_profile">
+                  <form method="post" action="edit_profile">
                       {% csrf_token %}
-
+                    {% for x in profileable %}
                   <div class="col ml-auto">
 
                     <div class="row ml-auto py-3">
                         <div class="col ml-auto">
                           <label for="formControlReadonly">E-Mail</label>
-                            <input type="text" id="formControlReadonly" class="form-control form-control-lg">
+                            <input name="email" type="text" id="formControlReadonly" value = "{{ x.email  }}" readonly class="form-control form-control-lg">
                             
                         </div>
+
                         <div class="col ml-auto">
                           <label for="phone_number">Phone Number</label>
-                            <input name="phone_number" type = "tel" id="phone_number" class="form-control form-control-lg">
+
+                            <input name="phone_number" type = "tel" id="phone_number"  value = "{{ x.phone  }}" class="form-control form-control-lg"
+                            >
+
                             
                         </div>
                     </div>
                     <div class="row ml-auto py-3">
                         <div class="col ml-auto">
                           <label for="first_name">First name</label>
-                            <input name="first_name" type="text" id="first_name" class="form-control form-control-lg" placeholder={{customuser.first_name}}>
+                            <input name="first_name" type="text" id="first_name" value = "{{ x.first_name  }}"
+                                   class="form-control form-control-lg" placeholder={{profileable.first_name}}>
                             
                         </div>
                         <div class="col ml-auto">
                           <label for="first_name">Last name</label>
-                            <input name="last_name" type="text"  id="last_name" class="form-control form-control-lg" placeholder={{customuser.last_name}}>
+                            <input name="last_name" type="text"  id="last_name" value = "{{ x.last_name  }}"
+                                   class="form-control form-control-lg" placeholder={{customuser.last_name}}>
                             
                             </div>
                     </div>
-                      <div class="row ml-2 pt-2">
-                          <div class="col">
-                          <p>Billing Address</p>
-                          </div>
-                        <div class="col">
-                          <p>Home Address</p>
-                          </div>
+                      <div class="col ml-auto">
+                          <label>Billing Address</label>
                      </div>
-                      <div class="row ml-auto">
-                        <div class="col ml-auto">
-                            <div class="row mb-4" style="float:left">
-                           <div class="form-outline mb-4 px-2" style="float:left;width:190px">
+                      <div class="row ml-auto py-3">
+                          <div class="col ml-auto" style="width:80%">
                             <input name= "streetAddressBilling" type="text" id="saddress" class="form-control"
-                                   placeholder={{customuser.streetAddressBilling}}>
+                                   value = "{{ x.address  }}">
                             <label class="form-label" for="saddress">Street Address</label>
                           </div>
-                         <div class="form-outline mb-4 px-2" style="float:left;width:80px">
+                          <div class="column" style="width:20%; margin:0px 15px 0px 0px">
                            <input name="aptNumberBilling" type="text" id="aptnumber" class="form-control"
-                                  placeholder={{customuser.aptNumberBilling}}>
+                                   value = "{{ x.apartNumber  }}">
                             <label class="form-label" for="aptnumber">Apt #</label>
-                         </div>
                         </div>
-                        <div class="row mb-4 px-5">
-                        <div class="form-outline mb-4 px-2" style="width:70px">
-                           <input name="stateBilling" type="text" id="bstate" class="form-control"
+                      </div>
+                      <div class="row ml-auto">
+                        <div class="col ml-auto">
+                           <input name="stateBilling" type="text" id="bstate" class="form-control" value = "{{ x.state  }}"
                                   placeholder={{customuser.stateBilling}}>
                             <label class="form-label" for="bstate" >State</label>
                          </div>
-                         <div class="form-outline mb-4" style="float:left;width:90px">
-                           <input name= "zipCodeBilling" id="bzipcode" class="form-control">
+                          <div class="col ml-auto">
+                           <input name= "zipCodeBilling" id="bzipcode" value = "{{ x.zip  }}" class="form-control">
                             <label class="form-label" for="bzipcode">Zip Code</label>
-                         </div></div>
-                        </div>
-                        <div class="col ml-auto">
-                            <div class="row mb-4" style="float:left">
-                           <div class="form-outline mb-4 px-2" style="float:left;width:190px">
-                            <input name="streetAddressHome" type="text" id="haddress" class="form-control"
-                                   placeholder={{customuser.streetAddressHome}}>
-                            <label class="form-label" for="haddress">Street Address</label>
+                         </div>
+                          <div class="col ml-auto">
+                            <input name= "country" type="text" id="country" class="form-control"
+                                   value = "{{ x.country  }}">
+                            <label class="form-label" for="country">Country</label>
                           </div>
-                         <div class="form-outline mb-4 px-2" style="float:left;width:80px">
-                           <input name="aptNumberHome" type="text" id="haptnumber" class="form-control"
-                                  placeholder={{customuser.aptNumberHome}}>
-                            <label class="form-label" for="haptnumber">Apt #</label>
-                         </div>
-                        </div>
-                        <div class="row mb-4 px-5">
-                        <div class="form-outline mb-4 px-2" style="width:70px">
-                           <input name="stateHome" type="text" id="hstate" class="form-control"
-                                  placeholder={{customuser.stateHome}}>
-                            <label class="form-label" for="hstate" >State</label>
-                         </div>
-                         <div class="form-outline mb-4" style="float:left;width:90px">
-                           <input name="zipCodeHome" id="hzipcode" class="form-control">
-                            <label class="form-label" for="hzipcode">Zip Code</label>
-                         </div></div>
-                        </div>
-                    </div>
-                    <div >
+                      </div>
+                    <div class="col ml-auto" >
                           <input type="checkbox" id="promotion" name="promotion">
                         <label for="promotion"> Subscribe for Promotion</label><br>
 
+                    </div >
+                         <div class="column" style="text-align: center; margin:0px 0px 0px 14px">
+
+                            <button class="btn btn-success btn-block btn-lg gradient-custom-3 text-body px-2" type="submit">Update</button>
+                        </div>
                     </div>
-                      <div style="text-align: center;">
 
-                    <button class="btn btn-success btn-block btn-lg gradient-custom-3 text-body px-2" type="submit">Update</button>
 
-            </div>
-                       </div></form></br></br>
-                  <div class="col ml-auto p-3">
-                      <div class="row ml-auto">
-                          <form method="POST">
+
+                  </form>
+                  {% endfor %}
+
+                  <div class="col ml-auto pt-3">
+                      <div class="row ml-auto ">
+                          <div class="col ml-auto">
+                          <form method="POST" action="edit_password" >
                           {% csrf_token %}
-                              <div class="col ml-auto"><button style="color:red" type="submit" value="Change Password",
-                                                               class="btn btn-success btn-block btn-lg gradient-custom-6 text-body">Change Password</button>
+                              <div>
+                                  <button style="color:red" type="submit" value="Change Password",
+                                          class="btn btn-success btn-block btn-lg gradient-custom-6 text-body">Change Password</button>
 
-                              </div> </form>
-                         <form method="POST" action="edit_card">
-                          {% csrf_token %}
+                              </div>
+                          </form>
+                              </div>
+                        <div class="col ml-auto">
+                            <form method="POST" action="edit_card">
+                            {% csrf_token %}
 
-                              <div class="col ml-auto"><button type="submit" value="Change Card Details",
-                                                               class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Change Card Details</button>
+                              <div>
+                                  <button type="submit" value="Change Card Details",
+                                          class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Change Card Details</button>
 
                               </div>
 
                         </form>
+                        </div>
                           </div>
-                      </div>
                   </div>
+                  {% if messages %}
+            {% for message in messages %}
+             <h3 style="text-align:center">{{message}}</h3>
+            {% endfor %}
+            {% endif %}
                   {% comment %} {% else %} {% endcomment %}
                 <p class="text-center text-muted mt-5 mb-0">User Not Logged IN <a href="login" class="fw-bold text-body"><u>Login here</u></a></p>
                       {% comment %} {% endif %} {% endcomment %}

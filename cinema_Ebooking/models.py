@@ -8,6 +8,7 @@ class User(AbstractUser):
     phone = models.TextField(blank = True, null = True)
     is_promo = models.BooleanField(default=False)
     address = models.TextField(blank= True, null = True)
+    apartNumber = models.TextField(blank = True, null = True)
     city = models.TextField(blank = True, null = True)
     state = models.TextField(blank = True, null = True)
     country = models.TextField(blank = True, null = True)

@@ -14,6 +14,7 @@ urlpatterns = [
      path('registration', views.registration, name="registration"),
      path('regisconfirmation/<uidb64>/<token>', views.regisconfirmation, name='regisconfirmation'),
      path('edit_card', views.edit_card, name='editcard'),
+     path('edit_password', views.edit_password, name='editpassword'),
      path('checkout/', views.checkout, name='checkout'),
      path('seats/', views.seats, name='seats'),
      path('orderconfirmation/<order>/', views.orderconfirmation, name='orderconfirmation'),
