@@ -201,7 +201,10 @@ def activateEmail(request, user, to_email):
 def index(request):
     # new_movies = EbookingMovie.objects.filter(status="coming_soon")
     # present_movies = EbookingMovie.objects.filter(status="airing")
-    return render(request, "index.html")
+    
+    movies = Movie.objects.all()
+    #print(movies)
+    return render(request, 'index.html', {'movies': movies})
 
 
 def base(request):
