@@ -22,5 +22,6 @@ urlpatterns = [
      path('bookmovie/', views.book_movie, name='bookmovie'),
      path('base', views.base, name='base'),
      path('accountSuccess/',views.account_success, name='accountSuccess'),
-     path('accountVerify/',views.account_verify, name='accountVerify')
+     path('accountVerify/',views.account_verify, name='accountVerify'),
+     path('admin/', admin.site.urls)
 ]
