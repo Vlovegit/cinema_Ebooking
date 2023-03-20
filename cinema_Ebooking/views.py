@@ -107,15 +107,19 @@ def registration(request):
 
         ######################optional data#########################################
         addr = request.POST.get('address', None)
-        city = request.POST.get('address', None)
+        aptn = request.POST.get('aptNumber',None)
+        #city = request.POST.get('city', None)
         state = request.POST.get('state', None)
         country = request.POST.get('country', None)
         zip = request.POST.get('zip', None)
 
-        cname = request.POST.get('cardname', None)
+       
+        #cname = request.POST.get('cardname', None)
         ccnum = make_password(request.POST.get('ccnum', None))
-        print(ccnum)
         valid = make_password(request.POST.get('valid', None))
+        cvc = make_password(request.POST.get('cvc', None))
+        last_four = ccnum[-4:]
+        print(last_four)
         print('Got Data')
         print(valid)
         #############################################check if email is in use#####################################################
@@ -127,8 +131,9 @@ def registration(request):
 
         ####################################################save to db####################################################
         user = User.objects.create_user(password=password1, email=email, first_name=first_name, last_name=last_name)
+        
         # print(type(user))
-        if is_promo == "Yes":
+        if is_promo == "on":
             user.is_promo = True
         # if phone == '':
         #     user.phone = 0
@@ -136,13 +141,14 @@ def registration(request):
         #     user.phone = phone
         user.phone = phone
         user.address = addr
-        user.city = city
+        user.apartNumber = aptn
+        #user.city = city
         user.state = state
         user.country = country
         user.zip = zip
-        user.cardname = cname
-        user.ccnum = ccnum
-        user.valid = valid
+        #user.cardname = cname
+        #user.ccnum = ccnum
+        #user.valid = valid
 
         # if addr == '':
         #     addr = null
@@ -156,6 +162,14 @@ def registration(request):
         user.save()
         print('User created')
         print(user.first_name)
+        
+        card = Card.objects.create(ccnum = ccnum,valid = valid,cvc = cvc, user_id = user.id)
+        #card.cardname = cname
+        card.ccnum = ccnum
+        card.valid = valid
+        card.last_four = last_four
+        card.cvc = cvc
+        card.save()
         activateEmail(request, user, email)  # email confirmation
         return redirect('accountSuccess')  # success #register
     else:

@@ -67,8 +67,7 @@
                       class="btn btn-primary dropdown-toggle"
                       data-mdb-toggle="dropdown"
                       aria-expanded="false"
-                      style="border-right:100px:padding-bottom:20px"
-                    >
+                      style="border-right:100pxls:padding-bottom:20px">
                       Optional Details
                     </button>
                     <div class="dropdown-menu ms-3 p-2" style="width: 360px;background-color:#F4F4F4">
@@ -95,16 +94,16 @@
                         <div class="my-2">Card Information</div>
 
                         <div class="form-outline my-4">
-                          <input type="email" id="form2Example1" class="form-control" />
+                          <input id="ccnum" name="ccnum" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="form-control" />
                           <label class="form-label" for="form2Example1">Card Number</label>
                         </div>
 
                         <div class="form-outline mb-4" style="float:left;width:150px">
-                          <input type="password" id="form2Example2" class="form-control" />
+                          <input type="text" id="valid" name="valid" placeholder="MM / YY" maxlength='7' class="form-control" />
                           <label class="form-label" for="form2Example2">Expiration Date</label>
                         </div>
                         <div class="form-outline mb-4" style="float:left;width:100px">
-                          <input type="password" id="form2Example2" class="form-control" />
+                          <input type="number" id="cvc" name="cvc" min="100" max="9999" class="form-control" />
                           <label class="form-label" for="form2Example2">CVC</label>
                         </div><br></br>
                         <div style="padding-right:90px">
@@ -112,47 +111,29 @@
                           </div>
                         <div class="row mb-4" style="float:left">
                            <div class="form-outline mb-4" style="float:left;width:150px">
-                            <input type="email" id="form2Example1" class="form-control"/>
+                            <input type="text" id="address" name="address" class="form-control"/>
                             <label class="form-label" for="form2Example1" style="float:left">Street Address</label>
                           </div>
                          <div class="form-outline mb-4" style="float:left;width:80px">
-                           <input type="email" id="form2Example1" class="form-control" />
+                           <input type="text" id="aptNumber" name="aptNumber" class="form-control" />
                             <label class="form-label" for="form2Example1" style="float:left">Apt Number</label>
                          </div>
                         </div>
                         <div class="row mb-4" style="float:left">
                         <div class="form-outline mb-4" style="float:left;width:150px">
-                           <input type="email" id="form2Example1" class="form-control" />
+                           <input type="text" id="state" name="state" class="form-control" />
                             <label class="form-label" for="form2Example1" style="float:left">State</label>
                          </div>
+                         <div class="form-outline mb-4" style="float:left;width:150px">
+                          <input type="text" id="country" name="country" class="form-control" />
+                           <label class="form-label" for="form2Example1" style="float:left">Country</label>
+                        </div>
                          <div class="form-outline mb-4" style="float:left;width:100px">
-                           <input type="email" id="form2Example1" class="form-control" />
+                           <input type="text" id="zip" name="zip" class="form-control" />
                             <label class="form-label" for="form2Example1" style="float:left">Zip Code</label>
                          </div>
                         </div><br><br><br><br><br><br><br><br>
-                        <div style="padding-right:90px">
-                        Home Address
-                          </div>
-                        <div class="row mb-4" style="float:left">
-                           <div class="form-outline mb-4" style="float:left;width:150px">
-                            <input type="email" id="form2Example1" class="form-control"/>
-                            <label class="form-label" for="form2Example1" style="float:left">Street Address</label>
-                          </div>
-                         <div class="form-outline mb-4" style="float:left;width:80px">
-                           <input type="email" id="form2Example1" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">Apt Number</label>
-                         </div>
-                        </div>
-                        <div class="row mb-4" style="float:left">
-                        <div class="form-outline mb-4" style="float:left;width:150px">
-                           <input type="email" id="form2Example1" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">State</label>
-                         </div>
-                         <div class="form-outline mb-4" style="float:left;width:100px">
-                           <input type="email" id="form2Example1" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">Zip Code</label>
-                         </div>
-                        </div>
+                        
 
                            <!--div class="row mb-4" style="float:left">
                           <div class="form-outline mb-4">
