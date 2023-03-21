@@ -107,14 +107,13 @@ def registration(request):
 
         ######################optional data#########################################
         addr = request.POST.get('address', None)
-        aptn = request.POST.get('aptNumber',None)
-        #city = request.POST.get('city', None)
+        aptn = request.POST.get('aptNumber', None)
+        # city = request.POST.get('city', None)
         state = request.POST.get('state', None)
         country = request.POST.get('country', None)
         zip = request.POST.get('zip', None)
 
-       
-        #cname = request.POST.get('cardname', None)
+        # cname = request.POST.get('cardname', None)
         ccnum = make_password(request.POST.get('ccnum', None))
         valid = make_password(request.POST.get('valid', None))
         cvc = make_password(request.POST.get('cvc', None))
@@ -131,7 +130,7 @@ def registration(request):
 
         ####################################################save to db####################################################
         user = User.objects.create_user(password=password1, email=email, first_name=first_name, last_name=last_name)
-        
+
         # print(type(user))
         if is_promo == "on":
             user.is_promo = True
@@ -142,13 +141,13 @@ def registration(request):
         user.phone = phone
         user.address = addr
         user.apartNumber = aptn
-        #user.city = city
+        # user.city = city
         user.state = state
         user.country = country
         user.zip = zip
-        #user.cardname = cname
-        #user.ccnum = ccnum
-        #user.valid = valid
+        # user.cardname = cname
+        # user.ccnum = ccnum
+        # user.valid = valid
 
         # if addr == '':
         #     addr = null
@@ -162,9 +161,9 @@ def registration(request):
         user.save()
         print('User created')
         print(user.first_name)
-        
-        card = Card.objects.create(ccnum = ccnum,valid = valid,cvc = cvc, user_id = user.id)
-        #card.cardname = cname
+
+        card = Card.objects.create(ccnum=ccnum, valid=valid, cvc=cvc, user_id=user.id)
+        # card.cardname = cname
         card.ccnum = ccnum
         card.valid = valid
         card.last_four = last_four
@@ -201,9 +200,9 @@ def activateEmail(request, user, to_email):
 def index(request):
     # new_movies = EbookingMovie.objects.filter(status="coming_soon")
     # present_movies = EbookingMovie.objects.filter(status="airing")
-    
+
     movies = Movie.objects.all()
-    #print(movies)
+    # print(movies)
     return render(request, 'index.html', {'movies': movies})
 
 
@@ -286,7 +285,8 @@ def edit_profile(request):
                 user.is_promo = False
             print(user.is_promo)
             user.save()
-            print('profile updated')
+            print('profile updated successfully')
+            confirmEmailProfileUpdation(user)
             messages.info(request, 'Your profile has  been updated!!!', extra_tags='success')
             return redirect('/edit_profile')
 
@@ -302,10 +302,11 @@ def edit_password(request):
                 currentUser = User.objects.get(email=request.user)
                 currentUser.set_password(newPassword)
                 currentUser.save()
-                messages.info(request, 'Success', extra_tags='success')
+                messages.info(request, 'Successfully changed password', extra_tags='success')
                 print('Updated')
+                confirmEmailPasswordUpdation(currentUser)
                 # conf_Email(request, currentUser, request.user)
-                return redirect('/edit_password')
+                return redirect('/login')
             else:
                 messages.info(request, 'Password not matching', extra_tags='match')
                 print('Password not matching')
@@ -345,3 +346,24 @@ def checkout(request):
 
 def password_reset_confirmation(request):
     return render(request, 'passwordresetconfirm.html')
+
+
+def confirmEmailProfileUpdation(user):
+    try:
+        send_mail(
+            subject='Profile Updated!!!',
+            message='Dear {name},\nYour Profile has been updated successfully'.format(name=user.first_name),
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email])
+    except:
+        pass
+
+def confirmEmailPasswordUpdation(user):
+    try:
+        send_mail(
+            subject='Password Changed!!!',
+            message='Dear {name},\nYour password has been changed successfully'.format(name=user.first_name),
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email])
+    except:
+        pass
