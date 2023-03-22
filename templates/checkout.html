@@ -1,6 +1,20 @@
-{% extends 'base.html' %}
+{% comment %} {% extends 'base.html' %} {% endcomment %}
 {% load static %}
 {% block content %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/registration.css' %}">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title></title>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+  <!-- Bootstrap icons-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Core theme CSS (includes Bootstrap)-->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
 <section class="vh-100 bg-image" style="background-image: url('https://media.istockphoto.com/vectors/clapperboard-over-yellow-seamless-pattern-vector-illustration-vector-id882353200?b=1&k=20&m=882353200&s=170667a&w=0&h=O0UcXXNqovd-qItaF3D9IJRxG-9ytSArSB43a29R2vE='); max-height: 2550px;">
       <div class="container h-75" style="max-width:1500px">
         <div class="row ml-auto">
@@ -141,7 +155,7 @@
                   </div>
                   <div class="form-outline mb-4 row ml-auto">
                         <div class="col ml-auto"><label class="form-label" for="cvv">CVV</label></div>
-                        <div class="col ml-auto"><input type="text" minlength="3" maxlength="3"  name="cvv" id="cvv"  class="form-control form-control-lg" placeholder="CVV *"/> </div>
+                        <div class="col ml-auto"><input type="number" min="000" max="999"  name="cvv" id="cvv"  class="form-control form-control-lg" placeholder="CVV *"/> </div>
                         <div class="col ml-auto"><label class="form-label" for="expireMM">Exp. Date</label></div>
                         <div class="col ml-auto"><select name='expiredate' id='expireMM'>
                                     <option value=''>Month</option>

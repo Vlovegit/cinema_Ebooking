@@ -4,6 +4,7 @@
 <head>
   <link rel="stylesheet" href="{'css/registration.css'}">
     <link rel="stylesheet" href="{'css/bootstrap.css'}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
   <!-- Google Fonts -->
@@ -47,13 +48,25 @@
                   </div>
 
                   <div class="form-outline mb-4">
-                    <input name="password1" type="password" id="password1" class="form-control form-control-lg" />
+                    <input name="password1" type="password" id="password1" class="form-control form-control-lg" onInput = "check()" required/>
                     <label class="form-label" for="password1">Password *</label>
+                    <div id="check0" style = "color:grey">
+                      <i class="far fa-check-circle"></i>  <span> Length more than 8.</span>
+                    </div>
+                    <div id="check1" style = "color:grey">
+                      <i class="far fa-check-circle"></i>  <span> Contain atleast one numeric.</span>
+                    </div>
+                    <div id="check2" style = "color:grey">
+                      <i class="far fa-check-circle"></i>  <span> Contain atleast one symbol.</span>
+                    </div>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <input name="password2" type="password" id="password2" class="form-control form-control-lg" />
+                    <input name="password2" type="password" id="password2" class="form-control form-control-lg" onInput = "check1()" required />
                     <label class="form-label" for="password2">Repeat your password *</label>
+                    <div id="check3" style = "color:grey">
+                      <i class="far fa-check-circle"></i>  <span> Passwords Matched.</span>
+                    </div>
                   </div>
 
                   <div class="form-outline mb-4">
@@ -103,8 +116,31 @@
                         </div>
 
                         <div class="form-outline mb-4" style="float:left;width:150px">
-                          <input type="text" id="valid" name="expiryDate" placeholder="MM / YY" maxlength='7' class="form-control" />
+                          {% comment %} <input type="text" id="valid" name="expiryDate" placeholder="MM / YY" maxlength='7' class="form-control" /> {% endcomment %}
                           <label class="form-label" for="form2Example2">Expiration Date</label>
+                          <div class="my-2"><select name='expiredate' id='expireMM'>
+                            <option value=''>Month</option>
+                            <option value='01'>01</option>
+                            <option value='02'>02</option>
+                            <option value='03'>03</option>
+                            <option value='04'>04</option>
+                            <option value='05'>05</option>
+                            <option value='06'>06</option>
+                            <option value='07'>07</option>
+                            <option value='08'>08</option>
+                            <option value='09'>09</option>
+                            <option value='10'>10</option>
+                            <option value='11'>11</option>
+                            <option value='12'>12</option>
+                        </select>
+                        <select name='expireyear' id='expireYY'>
+                            <option value=''>Year</option>
+                            <option value='20'>2023</option>
+                            <option value='21'>2024</option>
+                            <option value='22'>2025</option>
+                            <option value='23'>2026</option>
+                            <option value='24'>2027</option>
+                        </select>
                         </div>
 
                         <br></br>
@@ -195,6 +231,49 @@
     </div>
   </section>
 <script type="text/javascript" href="{% static 'js/scripts.js' %}"></script>
+<script>
+  function check(){
+    var input = document.getElementById("password1").value;
+    var input1 = document.getElementById("password2").value;
+
+    if(input.length >=8){
+        document.getElementById("check0").style.color = "green";
+    }
+    else{
+      document.getElementById("check0").style.color = "red";
+    }
+
+    if(input.match(/[0-9]/i))
+    {
+        document.getElementById("check1").style.color="green";
+    }
+    else
+    {
+       document.getElementById("check1").style.color="red"; 
+    }
+
+    if(input.match(/[^A-Za-z0-9-' ']/i))
+    {
+        document.getElementById("check2").style.color="green";
+    }
+    else
+    {
+       document.getElementById("check2").style.color="red"; 
+    }
+}
+
+  function check1(){
+    var input = document.getElementById("password1").value;
+    var input1 = document.getElementById("password2").value;
+
+    if(input1 == input){
+      document.getElementById("check3").style.color="green";
+    }
+    else{
+      document.getElementById("check3").style.color = "red";
+    }
+  }
+</script>
 {% endblock %}
 </body>
 
