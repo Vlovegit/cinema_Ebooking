@@ -1,7 +1,11 @@
+import os
+
+from Cryptodome.Util.Padding import pad
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_card_model
 from django.contrib import auth
+from Cryptodome.Cipher import AES
 from .forms import UserRegistrationForm
 from .models import *
 from django.template.loader import render_to_string
@@ -113,14 +117,16 @@ def registration(request):
         country = request.POST.get('country', None)
         zip = request.POST.get('zip', None)
 
-        # cname = request.POST.get('cardname', None)
-        ccnum = make_password(request.POST.get('ccnum', None))
-        valid = make_password(request.POST.get('valid', None))
-        cvc = make_password(request.POST.get('cvc', None))
-        last_four = ccnum[-4:]
+        cardHolderName = request.POST.get('cardHolderName', None)
+        cardNum = request.POST.get('cardNum', None)
+        print(cardNum)
+        expiryDate = request.POST.get('expiryDate', None)
+        last_four = cardNum[-4:]
+        cardNum = request.POST.get('cardNum', None)
+        print('Decryption')
+        print(cardNum)
         print(last_four)
         print('Got Data')
-        print(valid)
         #############################################check if email is in use#####################################################
         if User.objects.filter(email=email).exists():
             messages.info(request, 'Email address is already in use', extra_tags='taken')
@@ -162,12 +168,14 @@ def registration(request):
         print('User created')
         print(user.first_name)
 
-        card = Card.objects.create(ccnum=ccnum, valid=valid, cvc=cvc, user_id=user.id)
-        # card.cardname = cname
-        card.ccnum = ccnum
-        card.valid = valid
+        card = Card.objects.create(cardHolderName=cardHolderName, expiryDate=expiryDate, user_id=user.id)
+        card.cardHolderName = cardHolderName
+        card.cardNum = cardNum
+        card.expiryDate = expiryDate
         card.last_four = last_four
-        card.cvc = cvc
+        print(cardNum)
+
+
         card.save()
         activateEmail(request, user, email)  # email confirmation
         return redirect('accountSuccess')  # success #register
@@ -245,8 +253,11 @@ def account_verify(request):
     return render(request, "accountVerify.html")
 
 
+
 def forgot_password_validation(request):
     return render(request, "new_password.html")
+
+
 
 
 def edit_profile(request):
@@ -321,6 +332,25 @@ def edit_password(request):
 
 
 def edit_card(request):
+    if request.method == 'POST':
+        print(request.user)
+        user = User.objects.get(email=request.user)
+        print(user.id)
+        UserCard = get_user_card_model()
+        mydata = UserCard.objects.filter(user_id=user.id).values()
+        template = loader.get_template('edit_card.html')
+        context = {
+            'cards': mydata
+        }
+        print('Delete')
+        print(request.POST.get('delete'))
+        print(request.POST.get('cardHolderNameInput'))
+        print(request.POST.get('cardNumInput'))
+        print(request.POST.get('expiryDate'))
+        print(request.POST.get('expiryYear'))
+        print('Delete ends')
+        return HttpResponse(template.render(context, request))
+
     return render(request, "edit_card.html")
 
 

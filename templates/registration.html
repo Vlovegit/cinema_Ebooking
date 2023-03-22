@@ -94,18 +94,20 @@
                         <div class="my-2">Card Information</div>
 
                         <div class="form-outline my-4">
-                          <input id="ccnum" name="ccnum" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="form-control" />
+                          <input id="cardHolderName" name="cardHolderName" type="tel" inputmode="text"   placeholder="Virat Kholi" class="form-control" />
+                          <label class="form-label" for="form2Example1">Card Holder Name</label>
+                        </div>
+                        <div class="form-outline my-4">
+                          <input id="ccnum" name="cardNum" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="form-control" />
                           <label class="form-label" for="form2Example1">Card Number</label>
                         </div>
 
                         <div class="form-outline mb-4" style="float:left;width:150px">
-                          <input type="text" id="valid" name="valid" placeholder="MM / YY" maxlength='7' class="form-control" />
+                          <input type="text" id="valid" name="expiryDate" placeholder="MM / YY" maxlength='7' class="form-control" />
                           <label class="form-label" for="form2Example2">Expiration Date</label>
                         </div>
-                        <div class="form-outline mb-4" style="float:left;width:100px">
-                          <input type="number" id="cvc" name="cvc" min="100" max="9999" class="form-control" />
-                          <label class="form-label" for="form2Example2">CVC</label>
-                        </div><br></br>
+
+                        <br></br>
                         <div style="padding-right:90px">
                         Billing Address
                           </div>
