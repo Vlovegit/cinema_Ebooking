@@ -77,9 +77,9 @@ def login_user(request):
             if mydata.exists():
                 if mydata[0]['is_active'] == False:
 
-                    messages.info(request, 'account not verified', extra_tags='verify')
+                    messages.info(request, 'Account not verified', extra_tags='verify')
                     activateEmail(request, mydata1, email)  # email confirmation #resend
-                    return redirect('login')
+                    return redirect('accountNotVerified')
                 else:
                     messages.info(request, 'invalid credentials', extra_tags='invalid')
                     return redirect('login')
@@ -258,7 +258,8 @@ def forgot_password_validation(request):
     return render(request, "new_password.html")
 
 
-
+def account_notverified(request):
+    return render(request, "accountNotVerified.html")
 
 def edit_profile(request):
     User = get_user_model()
@@ -377,6 +378,85 @@ def checkout(request):
 def password_reset_confirmation(request):
     return render(request, 'passwordresetconfirm.html')
 
+def pwd_reset(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        mydata = User.objects.filter(email=email).values()
+
+        # print(mydata)
+        if mydata.exists():
+            mydata1 = User.objects.get(email = email)
+            resetPwdEmail(request, mydata1, email) #reset function call
+            messages.info(request,'Password Reset link has been sent to your Email Id. Please click on \
+            received reset link to reset your password. Note: Check your spam folder.',extra_tags='exist')
+            return render(request,"forgot_password.html")
+        else:
+            messages.info(request,'No account exists for provided Email Id. Please check it once and try sending the link again',extra_tags='exist')
+            return render(request,"forgot_password.html")
+
+
+    else:
+        return render(request,"forgot_password.html")
+    
+def resetPwdEmail(request, user, to_email):
+    # print(user.first_name + 'in resetEmail')
+    firstname = user.first_name
+    # print(fname + ' new var')
+    mail_subject = 'Cinema EBooking Password Reset Link'
+    message = render_to_string('pwdresetmail.html', {
+        'firstname': firstname,
+        'domain': get_current_site(request).domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': account_activation_token.make_token(user),
+        'protocol': 'https' if request.is_secure() else 'http'
+    })
+    print(message)
+    email = EmailMessage(mail_subject, message, to=[to_email])
+    if email.send():
+        messages.info(request, f'Dear {firstname}, a password reset link is sent to you {to_email} inbox. Please click on \
+            received reset link to reset your password. Note: Check your spam folder.')
+    else:
+        messages.error(request, f'Some issue with sending mail to {to_email}, check if you typed it correctly.')
+        
+def forgot_password_validation(request,  uidb64, token):  
+    
+    if request.method == 'POST':
+
+        currentpassword = request.POST['current_password']
+        newpassword1 = request.POST['new_password']
+        newpassword2 = request.POST['new_password2']
+        if newpassword1 == newpassword2:
+            User = get_user_model()
+            try:
+                uid = force_str(urlsafe_base64_decode(uidb64))
+                user = User.objects.get(pk=uid)
+            except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+                user = None
+            
+            user2 = auth.authenticate(email=user.email, password=currentpassword)
+            if user2 is None:
+                messages.info(request, 'Current password entered is incorrect. Please try again with the link sent to mail earlier.', extra_tags='invalid')
+                return render(request, 'passwordresetconfirm.html')
+            if user is not None and account_activation_token.check_token(user, token):
+                user.set_password(newpassword1)
+                print(user.password)
+                user.save()
+                messages.info(request,"Password is reset successfully. Please login with the new password.")
+                return render(request, 'passwordresetconfirm.html') #success page
+
+            else:
+                messages.info(request, 'Reset link is invalid! Please check the link or resend a new link to you email.')
+                return render(request, 'passwordresetconfirm.html') #success page
+               
+        else:
+            messages.info(request, 'Passwords do not match, please try again with the link sent to email', extra_tags='match')
+            return render(request, 'passwordresetconfirm.html')
+       
+    else:
+        return render(request, "passwordreset.html")
+
+def reset_password(request):
+    return render(request, 'passwordreset.html')
 
 def confirmEmailProfileUpdation(user):
     try:
