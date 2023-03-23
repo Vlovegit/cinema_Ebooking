@@ -7,137 +7,219 @@
 <div class="container h-75  pt-5">
 <div class="row ml-auto">
 <div class="col ml-auto">
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  form {
+    width: 1000px;
+    margin: 0 auto;
+  }
+  
+  fieldset {
+    border: none;
+  }
+  
+  legend {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    margin-right: 10px;
+  }
+  
+  input[type="text"], select {
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 250px;
+    margin-bottom: 10px;
+  }
+  
+  #add_card {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #add_card:hover {
+    background-color: #3e8e41;
+  }
+  
+  ul#credit_cards {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+  
+  ul#credit_cards li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  ul#credit_cards li div {
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  ul#credit_cards li div:last-child {
+    margin-right: 0;
+  }
+  
+  ul#credit_cards li label {
+    width: auto;
+    margin-right: 0;
+  }
+  
+  ul#credit_cards li button {
+    background-color: #f44336;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  ul#credit_cards li button:hover {
+    background-color: #da190b;
+  }
+
+  /* Style for the "Add Credit Card" button */
+.add-card-button {
+  background-color: #4CAF50; /* Green background */
+  border: none; /* Remove border */
+  color: white; /* White text */
+  padding: 10px 20px; /* Add padding */
+  text-align: center; /* Center-align text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Display as a block element */
+  font-size: 16px; /* Font size */
+  margin-bottom: 20px; /* Add bottom margin */
+}
+
+/* Style for the "Save Changes" button */
+.save-changes-button {
+  background-color: #008CBA; /* Blue background */
+  border: none; /* Remove border */
+  color: white; /* White text */
+  padding: 10px 20px; /* Add padding */
+  text-align: center; /* Center-align text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Display as a block element */
+  font-size: 16px; /* Font size */
+  margin-bottom: 20px; /* Add bottom margin */
+}
+  
+</style>
 <div class="card">
    <div class="card-body p-5">
-      `
-      <h1 class="text-uppercase text-center mb-5">Edit Payment Card Details</h1>
-      <form method="post" action="edit_card">
-         {% csrf_token %}
-         {% comment %}  {% endcomment %}
+      
+      <h1 class="text-uppercase text-center mb-5">Add/Edit Payment Card Details</h1>
          </br></br>
-         {% for i in cards %}
-         <div class="card border border-dark text-white bg-info mb-3" style="border-radius:25px">
-            <span class="button">
-            <button type="submit" style="margin:20px"
-            value="{{i.id}}" name="delete" {{i.id}} class="btn btn-danger btn-rounded" data-mdb-ripple-color="#ffffff"><i class="fas fa-trash"></i></button>
-            </span>
-            <div class="card-body p-2">
-               <blockquote class="card-blockquote">
-                  <div class="row ml-auto">
-                     <div class="col ml-auto">
-                        <h5 class="card-title">Card Holder Name</h5>
-                     </div>
-                     <div class="col ml-auto">
-                        <input type="text" id="cardHolderName" class="form-control form-control-lg" readonly
-                           value="{{ i.cardHolderName }}">
-                     </div>
+         <form method="post" action="edit_card">
+            {% csrf_token %}
+          
+            <h2>Payment Cards:</h2>
+          
+            <ul id="credit_cards">
+              {% for card in cards %}
+                
+                <li>
+                  <div>
+                    <label for="cardHolderName_{{ forloop.counter }}">Cardholder Name:</label>
+                    <input type="text" required="true" id="cardHolderName_{{ forloop.counter }}" name="cardHolderName_{{ forloop.counter }}" value="{{ card.cardHolderName }}">
                   </div>
-                  <div class="form-outline mb-4 row ml-auto py-4">
-                     <div class="col ml-auto">
-                        <h5 class="card-title">Card Number ending with </h5>
-                     </div>
-                     <div class="col ml-auto"><input type="text"  class="form-control form-control-lg"
-                        readonly value="xxxx-xxxx-xxxx-{{ i.last_four }}"> </div>
+          
+                  <div>
+                    <label for="cardNum_{{ forloop.counter }}">Card Number:</label>
+                    <input type="text" required="true" id="cardNum_{{ forloop.counter }}" name="cardNum_{{ forloop.counter }}" value="{{ card.cardNum }}">
                   </div>
-                  <div class="form-outline mb-4 row ml-auto">
-                     <div class="col ml-auto">
-                        <h5 class="card-title">Exp. Date</h5>
-                     </div>
-                     <div class="col ml-auto"></div>
-                     <div class="col ml-auto">
-                        <input type="text" id="id_month{{i}}" class="form-control form-control-lg"
-                           value="{{i.expiryDate}}">
-                     </div>
+          
+                  <div>
+                    <label for="expiryDate_{{ forloop.counter }}">Expiration Date:</label>
+                    <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}">
                   </div>
-               </blockquote>
+          
+                  <button type="button" onclick="deleteCard(this)">Delete</button>
+                </li>
+                
+              {% endfor %}
+            </ul>
+          
+            <div>
+              <button class="add-card-button" type="button" onclick="addCard()">Add Credit Card</button>
             </div>
-         </div>
-         {% endfor %}
-         {% comment %}  {% endcomment %}
-      </form>
-      </br></br>
-      </br></br>
-      {% comment %} {% if is_new %} {% endcomment %}
-      <div class="card border border-dark text-white bg-info mb-3" style="border-radius:25px">
-         <span class="close">&times;<button type="submit" style="margin:20px"
-            class="btn btn-danger btn-rounded" data-mdb-ripple-color="#ffffff"><i class="fas fa-trash"></i></button>
-         </span>
-         <div class="card-body p-2">
-            <div class="row ml-auto">
-               <div class="card-body p-2">
-                  <div class="row ml-auto">
-                     <div class="col ml-auto">
-                        <h5 class="card-title">Card Holder Name</h5>
-                     </div>
-                     <div class="col ml-auto">
-                        <input type="text" name="cardHolderNameInput"
-                               class="form-control form-control-lg">
-                     </div>
-                  </div>
-                  <div class="form-outline mb-4 row ml-auto py-4">
-                     <div class="col ml-auto">
-                        <h5 class="card-title">Card Number ending with </h5>
-                     </div>
-                     <div class="col ml-auto"><input type="text"  class="form-control form-control-lg"
-                                                     name="cardNumInput"> </div>
-                  </div>
-                  <div class="form-outline mb-4 row ml-auto">
-                     <div class="col ml-auto"><label class="form-label" >Exp. Date</label></div>
-                     <div class="col ml-auto"></div>
-                     <div class="col ml-auto"></div>
-                     <div class="col ml-auto">
-                        <select name='expiryDate' id='expiredate' required>
-                           <option value=''>Month</option>
-                           <option value='01'>01</option>
-                           <option value='02'>02</option>
-                           <option value='03'>03</option>
-                           <option value='04'>04</option>
-                           <option value='05'>05</option>
-                           <option value='06'>06</option>
-                           <option value='07'>07</option>
-                           <option value='08'>08</option>
-                           <option value='09'>09</option>
-                           <option value='10'>10</option>
-                           <option value='11'>11</option>
-                           <option value='12'>12</option>
-                        </select>
-                     </div>
-                     <div class = "col ml-auto">
-                        <select name='expiryYear' required>
-                           <option value=''>Year</option>
-                           <option value='21'>2023</option>
-                           <option value='22'>2024</option>
-                           <option value='23'>2025</option>
-                           <option value='24'>2026</option>
-                           <option value='25'>2027</option>
-                        </select>
-                        </br></br>
-                        </span>
-                        <div class="card-body p-2"></div>
-                     </div>
-                  </div>
-               </div>
-               {% comment %} {% endif %} {% endcomment %}
-               <button class="btn btn-outline-success" type="submit"
-                  style="width:200px;margin-left:450px;margin-bottom:20px"
-                  name="addcard" value="addcard">Add a New Card</button>
-               <div style="text-align: center;"><button class="btn btn-success" type="submit" value="save" name="save">Save</button>
-                  <button class="btn btn-danger" type="submit">Cancel</button>
-               </div>
-
-               {% comment %} {% if messages %} {% endcomment %}
-               {% for message in messages %}
-               <h3>{{message}}</h3>
-               {% endfor %}
-               {% comment %} {% endif %} {% endcomment %}
-               </form></br></br>
+          
+            <div>
+              <button class="save-changes-button" type="submit">Save Changes</button>
             </div>
-         </div>
-      </div>
-   </div>
+            {% if messages %}
+            {% for message in messages %}
+              <h3>{{message}}</h3>
+            {% endfor %}
+        {% endif %}
+            <script>
+              function deleteCard(button) {
+                var li = button.parentNode;
+                var ul = li.parentNode;
+                ul.removeChild(li);
+              }
+          
+              function addCard() {
+                var cards_list = document.getElementById("credit_cards");
+                var num_cards = cards_list.getElementsByTagName("li").length;
+                
+                if (num_cards >= 3) {
+                  alert("You can only add up to 3 cards.");
+                  return;
+                }
+              
+                var new_card_id = (num_cards + 1);
+                var new_card_html = `
+                  <li>
+                    <div>
+                      <label for="cardHolderName_${new_card_id}">Cardholder Name:</label>
+                      <input type="text" required="true" id="cardHolderName_${new_card_id}" name="cardHolderName_${new_card_id}">
+                    </div>
+              
+                    <div>
+                      <label for="cardNum_${new_card_id}">Card Number:</label>
+                      <input type="text" required="true" id="cardNum_${new_card_id}" name="cardNum_${new_card_id}" maxlength="16">
+                    </div>
+              
+                    <div>
+                      <label for="expiryDate_${new_card_id}">Expiration Date:</label>
+                      <input type="text" required="true" id="expiryDate_${new_card_id}" name="expiryDate_${new_card_id}" placeholder="MM/YY">
+                    </div>
+              
+                    <button type="button" onclick="deleteCard(this)">Delete</button>
+                  </li>
+                `;
+                cards_list.innerHTML += new_card_html;
+              }
+              
+            </script>
+          
+    </div>
 </div>
 </div>
 </div>
 </div>
-
+    
 {% endblock %}

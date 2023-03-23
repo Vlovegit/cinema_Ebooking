@@ -1,11 +1,8 @@
 import os
-
-from Cryptodome.Util.Padding import pad
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, get_user_card_model
+from django.contrib.auth import authenticate, login
 from django.contrib import auth
-from Cryptodome.Cipher import AES
 from .forms import UserRegistrationForm
 from .models import *
 from django.template.loader import render_to_string
@@ -170,8 +167,8 @@ def registration(request):
 
         card = Card.objects.create(cardHolderName=cardHolderName, expiryDate=expiryDate, user_id=user.id)
         card.cardHolderName = cardHolderName
-        card.cardNum = cardNum
-        card.expiryDate = expiryDate
+        card.cardNum = encryption(cardNum)
+        card.expiryDate = encryption(expiryDate)
         card.last_four = last_four
         print(cardNum)
 
@@ -333,26 +330,75 @@ def edit_password(request):
 
 
 def edit_card(request):
+    
     if request.method == 'POST':
         print(request.user)
         user = User.objects.get(email=request.user)
         print(user.id)
-        UserCard = get_user_card_model()
-        mydata = UserCard.objects.filter(user_id=user.id).values()
-        template = loader.get_template('edit_card.html')
-        context = {
-            'cards': mydata
+        updated = False
+        if user is not None :
+            card_count = 0
+            cards = []
+            containsRecord = False
+            for key, value in request.POST.items():
+                if key.startswith('cardHolderName_'):
+                   containsRecord = True
+                   card_count = key.split("_")[1]
+                   card = {}
+                   card['cardHolderName'] = value
+                   card['cardNum'] = encryption(request.POST.get(f'cardNum_{card_count}'))
+                   card['expiryDate'] = encryption(request.POST.get(f'expiryDate_{card_count}'))
+                   card['last_four'] = request.POST.get(f'cardNum_{card_count}')[-4:]
+                   cards.append(card)
+                   print("Adding")
+            if containsRecord == True:
+                print("Deleting record now")
+                 # retrieve the record to be deleted
+                card_to_delete = Card.objects.filter(user_id=request.user.id)
+                # delete the record
+                card_to_delete.delete()
+            print(cards)
+            for card in cards:
+                # save each card object to the database
+                obj, created = Card.objects.get_or_create(
+                    user_id=user.id,
+                    cardHolderName=card['cardHolderName'],
+                    cardNum=card['cardNum'],
+                    last_four=card['last_four'],
+                    expiryDate=card['expiryDate']
+                )
+                if created:
+                   updated = True
+                   print('Record created')
+                else:
+                    print('Record Skipped')
+            
+            mydata = Card.objects.filter(user_id=user.id).values()
+            for data in mydata:
+                # modify values as needed
+                data['cardNum'] = decryption(data['cardNum'])
+                data['expiryDate'] = decryption(data['expiryDate'])
+                data['last_four'] = decryption(data['last_four'])
+                #data['cardHolderName'] = decryption(data['cardHolderName'])
+            
+            template = loader.get_template('edit_card.html')
+            context = {
+                'cards': mydata
+            }
+            if updated == True:
+                messages.info(request, 'Successfully updated the payment details for the user.')
+            return HttpResponse(template.render(context, request))
+    
+    print(request.user)
+    user = User.objects.get(email=request.user)
+    print(user.id)
+    mydata = Card.objects.filter(user_id=user.id).values()
+    template = loader.get_template('edit_card.html')
+    context = {
+        'cards': mydata
         }
-        print('Delete')
-        print(request.POST.get('delete'))
-        print(request.POST.get('cardHolderNameInput'))
-        print(request.POST.get('cardNumInput'))
-        print(request.POST.get('expiryDate'))
-        print(request.POST.get('expiryYear'))
-        print('Delete ends')
-        return HttpResponse(template.render(context, request))
-
-    return render(request, "edit_card.html")
+            
+    return HttpResponse(template.render(context, request))
 
 
 def orderconfirmation(request, order):
@@ -387,8 +433,8 @@ def pwd_reset(request):
         if mydata.exists():
             mydata1 = User.objects.get(email = email)
             resetPwdEmail(request, mydata1, email) #reset function call
-            messages.info(request,'Password Reset link has been sent to your Email Id. Please click on \
-            received reset link to reset your password. Note: Check your spam folder.',extra_tags='exist')
+            #messages.info(request,'Password Reset link has been sent to your Email Id. Please click on \
+            #received reset link to reset your password. Note: Check your spam folder.',extra_tags='exist')
             return render(request,"forgot_password.html")
         else:
             messages.info(request,'No account exists for provided Email Id. Please check it once and try sending the link again',extra_tags='exist')
@@ -413,7 +459,7 @@ def resetPwdEmail(request, user, to_email):
     print(message)
     email = EmailMessage(mail_subject, message, to=[to_email])
     if email.send():
-        messages.info(request, f'Dear {firstname}, a password reset link is sent to you {to_email} inbox. Please click on \
+        messages.info(request, f'Dear {firstname}, a password reset link is sent to your {to_email} inbox. Please click on \
             received reset link to reset your password. Note: Check your spam folder.')
     else:
         messages.error(request, f'Some issue with sending mail to {to_email}, check if you typed it correctly.')
@@ -477,3 +523,26 @@ def confirmEmailPasswordUpdation(user):
             recipient_list=[user.email])
     except:
         pass
+
+def encryption(message):
+    encrypted = ""
+    for char in message:
+        if char.isalpha():
+            encrypted += chr(ord('a') + (ord(char) - ord('a') + 13) % 26) # replace characters with ROT13 shift
+        elif char.isdigit():
+            encrypted += str((int(char) + 5) % 10) # replace integers with +5 modulus 10
+        else:
+            encrypted += char
+    return encrypted
+
+def decryption(encrypted):
+    decrypted = ""
+    for char in encrypted:
+        if char.isalpha():
+            decrypted += chr(ord('a') + (ord(char) - ord('a') - 13) % 26) # reverse ROT13 shift for characters
+        elif char.isdigit():
+            decrypted += str((int(char) - 5) % 10) # reverse +5 modulus 10 for integers
+        else:
+            decrypted += char
+    return decrypted
+

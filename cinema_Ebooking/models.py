@@ -25,8 +25,8 @@ class User(AbstractUser):
 
 
 class Card(models.Model):
-    cardHolderName = models.CharField(max_length=100, blank=True, null=True)
-    cardNum = models.CharField(max_length=150, blank=True, null=True)
+    cardHolderName = models.CharField(max_length=1000, blank=True, null=True)
+    cardNum = models.CharField(max_length=1000, blank=True, null=True)
     expiryDate = models.TextField(blank=True, null=True)
     last_four = models.CharField(max_length=4, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

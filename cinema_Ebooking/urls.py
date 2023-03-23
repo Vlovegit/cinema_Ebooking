@@ -7,9 +7,10 @@ urlpatterns = [
      path('', views.index, name="index"),
      path('login/',  views.login_user, name="login"),
      path('logout', views.logout, name="logout"),
-     path('forgot-password/', views.forgot_password_view, name='forgot'),
-     path('reset-password/', views.forgot_password_validation, name='rget'),
-     path('password-reset-confirmation/', views.password_reset_confirmation, name='rget'),
+     path('forgot-password/', views.pwd_reset, name='forgot'),
+     path('resetpassword/<uidb64>/<token>', views.forgot_password_validation, name='forgot_password_validation'),
+     path('resetpassword/', views.reset_password, name='pwdreset'),
+     path('password_reset_confirm/', views.password_reset_confirmation, name='confirmresetpwd'),
      path('edit_profile', views.edit_profile, name='edit'),
      path('registration', views.registration, name="registration"),
      path('regisconfirmation/<uidb64>/<token>', views.regisconfirmation, name='regisconfirmation'),
@@ -23,5 +24,6 @@ urlpatterns = [
      path('base', views.base, name='base'),
      path('accountSuccess/',views.account_success, name='accountSuccess'),
      path('accountVerify/',views.account_verify, name='accountVerify'),
+     path('accountNotVerified',views.account_notverified, name='accountNotVerified'),
      path('admin/', admin.site.urls)
 ]
