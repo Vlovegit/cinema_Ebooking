@@ -1,5 +1,5 @@
 import os
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib import auth
@@ -523,6 +523,26 @@ def confirmEmailPasswordUpdation(user):
             recipient_list=[user.email])
     except:
         pass
+
+def notifyPromo(request, promo_id):
+    allUsers = User.objects.filter(is_promo=True)
+    promo = get_object_or_404(Promotion,pk=promo_id)
+    promooff = promo.discount
+    code = promo.promo_code
+    validuntil = promo.valid_upto
+    mail_subject = 'New promotion, Avail Now'
+    for user in allUsers:
+        first_name = user.first_name
+        to_email = user.email
+        message = render_to_string('promomail.html', {
+        'firstname': first_name,
+        'promooff': promooff,
+        'code': code,
+        'validuntil': validuntil
+        })
+        email = EmailMessage(mail_subject, message, to=[to_email])
+        if email.send():
+            print(f' User : {to_email} notified successfully')
 
 def encryption(message):
     encrypted = ""
