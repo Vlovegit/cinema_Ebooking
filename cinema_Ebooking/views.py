@@ -16,6 +16,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse
 from django.template import loader
+from django.db.models import Q
 
 
 # Create your views here.
@@ -210,9 +211,28 @@ def index(request):
     # print(movies)
     return render(request, 'index.html', {'movies': movies})
 
-
 def base(request):
-    return render(request, 'searchResults.html')
+     
+    results = []
+
+    if request.method == 'GET':
+        movie_category = request.GET.get('movie_category', None)
+        movie_name = request.GET.get('movie_name', None)
+        
+        print(movie_category)
+        print(movie_name)
+        if movie_name == '' and movie_category == 'ALL':
+            results = Movie.objects.all()
+        elif movie_name != '' and movie_category != '':
+            results = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
+        elif movie_name != '':
+            results = Movie.objects.filter(name = movie_name)
+        elif movie_category != '':
+            results = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
+        else:
+            results = Movie.objects.all()
+    print(results)
+    return render(request, 'searchResults.html',{'results':results})
 
 
 def regisconfirmation(request, uidb64, token):
