@@ -217,6 +217,18 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+
+def movie_description(request):
+    print('movie_description')
+    name = request.GET.get('cinema_button')
+    movies = Movie.objects.filter(name=name).values()
+
+    context = {
+        'movies' : movies
+    }
+    return render(request, 'movie_description.html', context)
+
+
 def base(request):
      
     results = []
