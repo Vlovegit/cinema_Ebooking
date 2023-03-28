@@ -81,7 +81,7 @@ class Movie(models.Model):
     director = models.CharField(max_length=100, default='')
     cast = models.CharField(max_length=400, default='')
     producer = models.CharField(max_length=100, default='')
-    poster = models.ImageField(upload_to='images/', default='')
+    poster = models.URLField(max_length=300, default='')
     trailer = models.URLField(max_length=200, default='')
     releasedate = models.DateField(default=False, null=True, blank=True)
     archived = models.BooleanField(default=False, null=True, blank=True)

@@ -207,9 +207,15 @@ def index(request):
     # new_movies = EbookingMovie.objects.filter(status="coming_soon")
     # present_movies = EbookingMovie.objects.filter(status="airing")
 
-    movies = Movie.objects.all()
-    # print(movies)
-    return render(request, 'index.html', {'movies': movies})
+    movies = Movie.objects.values()
+    moviesPlaying = movies.filter(status='Now Playing')
+    moviesComingSoon = movies.filter(status='Coming Soon')
+
+    context = {
+        'moviesNow': moviesPlaying,
+        'moviesSoon': moviesComingSoon
+    }
+    return render(request, 'index.html', context)
 
 def base(request):
      

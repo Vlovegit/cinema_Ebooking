@@ -56,11 +56,6 @@ class Migration(migrations.Migration):
                 ('seatNum', models.IntegerField(default=50)),
             ],
         ),
-        migrations.RenameField(
-            model_name='movie',
-            old_name='category',
-            new_name='category1',
-        ),
         migrations.RemoveField(
             model_name='movie',
             name='description',

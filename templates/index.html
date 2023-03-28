@@ -171,66 +171,68 @@
     <div class="container">
         <h2 class="mb-4">Currently Showing</h2>
         <div class="d-flex flex-wrap">
+            {% for x in moviesNow %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
                 <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 1">
+                    <img src="{{ x.poster }}"
+                         class="card-img-top" alt="Movie 1" width="50" height="200">
                     <div class="card-body">
-                        <h5 class="card-title">They Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h5 class="card-title">"{{ x.name }}"</h5>
+                        <p class="card-text">{{ x.category1 }}, {{ x.category2 }}, {{ x.category3 }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 2">
-                    <div class="card-body">
-                        <h5 class="card-title">They Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 3">
-                    <div class="card-body">
-                        <h5 class="card-title">They Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 4">
-                    <div class="card-body">
-                        <h5 class="card-title">They Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 5">
-                    <div class="card-body">
-                        <h5 class="card-title">They Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"
-                         class="card-img-top" alt="Movie 6">
-                    <div class="card-body">
-                        <h5 class="card-title">The Grey</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 2">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 4">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 5">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 6">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">The Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </section>
@@ -241,63 +243,68 @@
     <div class="container">
         <h2 class="text-white mb-4">Coming Soon</h2>
         <div class="d-flex flex-wrap">
+            {% for x in moviesSoon %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+7" class="card-img-top" alt="Movie 7">
+                <div class="card">
+                    <img src="{{ x.poster }}"
+                         class="card-img-top" alt="Movie 1" width="50" height="200">
                     <div class="card-body">
-                        <h5 class="card-title">Movie 7</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h5 class="card-title">"{{ x.name }}"</h5>
+                        <p class="card-text">{{ x.category1 }}, {{ x.category2 }}, {{ x.category3 }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+8" class="card-img-top" alt="Movie 8">
-                    <div class="card-body">
-                        <h5 class="card-title">Movie 8</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+9" class="card-img-top" alt="Movie 9">
-                    <div class="card-body">
-                        <h5 class="card-title">Movie 9</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+10" class="card-img-top"
-                         alt="Movie 10">
-                    <div class="card-body">
-                        <h5 class="card-title">Movie 10</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+11" class="card-img-top"
-                         alt="Movie 11">
-                    <div class="card-body">
-                        <h5 class="card-title">Movie 11</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">
-                <div class="card bg-dark text-white">
-                    <img src="https://via.placeholder.com/300x450.png?text=Movie+11" class="card-img-top"
-                         alt="Movie 11">
-                    <div class="card-body">
-                        <h5 class="card-title">Movie 11</h5>
-                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 2">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 4">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 5">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">They Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
+<!--                         class="card-img-top" alt="Movie 6">-->
+<!--                    <div class="card-body">-->
+<!--                        <h5 class="card-title">The Grey</h5>-->
+<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
     </div>
