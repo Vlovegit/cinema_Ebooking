@@ -13,6 +13,7 @@ urlpatterns = [
      path('password_reset_confirm/', views.password_reset_confirmation, name='confirmresetpwd'),
      path('edit_profile', views.edit_profile, name='edit'),
      path('movie_description', views.movie_description, name='details'),
+     path('show_time', views.show_time, name='show_time'),
      path('registration', views.registration, name="registration"),
      path('regisconfirmation/<uidb64>/<token>', views.regisconfirmation, name='regisconfirmation'),
      path('edit_card', views.edit_card, name='editcard'),

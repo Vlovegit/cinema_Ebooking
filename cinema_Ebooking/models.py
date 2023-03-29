@@ -100,7 +100,7 @@ class ShowRoom(models.Model):
     theatre = models.CharField(max_length=50,unique=True)
     seatNum = models.IntegerField(default=50)
     def __str__(self):
-        return self.showroom
+        return self.theatre
 
 class MovieShowTime(models.Model):
     showTimes = models.TimeField()
@@ -109,7 +109,7 @@ class MovieShowTime(models.Model):
         
 class Scheduler(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(PlayingOn__gte=Now())
+        return super().get_queryset().filter(showDate__gte=Now())
 
 class ScheduleMovie(models.Model):
     movie=models.ForeignKey(Movie,on_delete=models.CASCADE)
