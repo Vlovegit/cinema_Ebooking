@@ -15,31 +15,34 @@
               
                             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-                                {% if movie_list.movie_count == 0 %}
+                                {% if result_list.result_count == 0 %}
                                     <p> Oops, we cannot find related movies in our system</p>
                                     <!-- place some recommended movie  -->
                                 {% else %}
-                                    {% for movie in movie_list.movie%}                                   
+                                    {% for results in result_list.results%}                                   
                                         <div class="col mb-5 " style="min-width: 280px; max-width: 280px">
                                             <div class="card h-100 w-100">
                                                 <!-- Product image-->
-                                                <img class="card-img-top" src='{{movie.image_link}}' alt="..." />
+                                                <img class="card-img-top" src='{{results.poster}}' alt="..." />
                                                 <!-- Product details-->
                                                 <div class="card-body p-4">
                                                     <div class="text-center">
                                                         <!-- Product name-->
-                                                        <h5 class="fw-bolder">{{movie.movie_title}}</h5>
+                                                        <h5 class="fw-bolder">{{results.name}}</h5>
                                                         <!-- Rating-->
-                                                        <h5 class="fw-bolder">Rating:  {{movie.ratings}}</h5>
+                                                        <h5 class="fw-bolder">Rating:  {{results.rating}}</h5>
                                                         <!-- Product price-->
-                                                        $40.00 - $80.00
+
                                                         
                                                     </div>
                                                 </div>
                                                 <!-- Product actions-->
+                                                <form action = "movie_description">
                                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="bookmovie?movie_title={{movie.movie_title}}">View Movie</a></div>
+                                                    <button class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" value="{{ results.name }}" name="cinema_button" {{ results.name }}>
+                                                        View Movie</button></div>
                                                 </div>
+                                            </form>
                                             </div>
                                         </div>
                                     {% endfor %}

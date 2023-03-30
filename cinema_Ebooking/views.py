@@ -266,21 +266,30 @@ def base(request):
     if request.method == 'GET':
         movie_category = request.GET.get('movie_category', None)
         movie_name = request.GET.get('movie_name', None)
-        
+        count = 0
         print(movie_category)
         print(movie_name)
         if movie_name == '' and movie_category == 'ALL':
             results = Movie.objects.all()
+            count  = Movie.objects.all().count()
         elif movie_name != '' and movie_category != '':
             results = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
+            count = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category)).count()
         elif movie_name != '':
             results = Movie.objects.filter(name = movie_name)
+            count = Movie.objects.filter(name = movie_name).count()
         elif movie_category != '':
             results = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
+            count = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category)).count()
         else:
             results = Movie.objects.all()
+            count = Movie.objects.all().count()
+        result_list = {
+            "results": results,
+            "result_count": count
+        }
     print(results)
-    return render(request, 'searchResults.html',{'results':results})
+    return render(request, 'searchResults.html',{'result_list':result_list})
 
 
 def regisconfirmation(request, uidb64, token):
