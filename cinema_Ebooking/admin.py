@@ -84,7 +84,7 @@ class ScheduleMovieAdmin(admin.ModelAdmin):
     ScheduleMovie._base_manager.filter(showDate__lte=Now()).delete()
 
     def seats_left(self, obj):
-        return obj.showroom.seatNum - obj.booked_seats  # numSeats
+        return obj.theatre.seatNum - obj.booked_seats  # numSeats
 
 
 class ShowroomAdmin(admin.ModelAdmin):

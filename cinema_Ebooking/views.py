@@ -221,6 +221,7 @@ def index(request):
 def movie_description(request):
     print('movie_description')
     name = request.GET.get('cinema_button')
+    name = request.GET.get('cinema_button')
     movies = Movie.objects.filter(name=name).values()
 
     context = {
@@ -228,6 +229,35 @@ def movie_description(request):
     }
     return render(request, 'movie_description.html', context)
 
+def show_time(request):
+    print('show time')
+    name = request.GET.get('book_now_button')
+    movies = Movie.objects.filter(name=name).values('id')
+    movieId = movies[0].get('id')
+    showTimes = ScheduleMovie.objects.filter(movie_id=movieId).values()
+    list = []
+    showDateSet = set()
+    for s in showTimes.order_by('showDate'):
+        showDateSet.add(s.get('showDate'))
+    for s in showTimes.order_by('showDate'):
+        if s.get('showDate') in showDateSet:
+            thisdict = {}
+            # print(ShowRoom.objects.filter(id=s.get('theatre_id')).values('theatre')[0].get('theatre'))
+            thisdict['theatreid'] = ShowRoom.objects.filter(id=s.get('theatre_id')).values('theatre')[0].get('theatre')
+            thisdict['showDate']= (s.get('showDate')).strftime("%m-%d-%Y")
+            i = 1
+            for show in showTimes.order_by('showDate'):
+                if s.get('theatre_id') == show.get('theatre_id') and s.get('showDate') == show.get('showDate'):
+                    showtime = 'show'+str(i)
+                    i = i+1
+                    thisdict[showtime] = show.get('MovieTime')
+            showDateSet.remove(s.get('showDate'))
+            list.append(thisdict)
+
+    context = {
+        'movies' : list
+    }
+    return render(request, 'show_time.html', context)
 
 def base(request):
      
