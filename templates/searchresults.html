@@ -20,7 +20,7 @@
                                     <!-- place some recommended movie  -->
                                 {% else %}
                                     {% for results in result_list.results%}                                   
-                                        <div class="col mb-5 " style="min-width: 280px; max-width: 280px">
+                                        <div class="container" style="min-width: 280px; max-width: 280px">
                                             <div class="card h-100 w-100">
                                                 <!-- Product image-->
                                                 <img class="card-img-top" src='{{results.poster}}' alt="..." />
@@ -31,9 +31,6 @@
                                                         <h5 class="fw-bolder">{{results.name}}</h5>
                                                         <!-- Rating-->
                                                         <h5 class="fw-bolder">Rating:  {{results.rating}}</h5>
-                                                        <!-- Product price-->
-
-                                                        
                                                     </div>
                                                 </div>
                                                 <!-- Product actions-->
