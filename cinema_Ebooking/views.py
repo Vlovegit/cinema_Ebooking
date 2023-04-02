@@ -14,7 +14,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from .tokens import account_activation_token
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail, EmailMessage
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Q
 
@@ -227,11 +227,12 @@ def movie_description(request):
     context = {
         'movies' : movies
     }
+    #print(context)
     return render(request, 'movie_description.html', context)
 
 def show_time(request):
-    print('show time')
-    name = request.GET.get('book_now_button')
+    name = request.GET.get('movie_title')
+    print(name)
     movies = Movie.objects.filter(name=name).values('id')
     movieId = movies[0].get('id')
     showTimes = ScheduleMovie.objects.filter(movie_id=movieId).values()
@@ -242,7 +243,6 @@ def show_time(request):
     for s in showTimes.order_by('showDate'):
         if s.get('showDate') in showDateSet:
             thisdict = {}
-            # print(ShowRoom.objects.filter(id=s.get('theatre_id')).values('theatre')[0].get('theatre'))
             thisdict['theatreid'] = ShowRoom.objects.filter(id=s.get('theatre_id')).values('theatre')[0].get('theatre')
             thisdict['showDate']= (s.get('showDate')).strftime("%m-%d-%Y")
             i = 1
@@ -257,7 +257,9 @@ def show_time(request):
     context = {
         'movies' : list
     }
-    return render(request, 'show_time.html', context)
+    print(context)
+    # return showtime information as a JSON response
+    return JsonResponse(context)
 
 def base(request):
      
@@ -284,12 +286,25 @@ def base(request):
         else:
             results = Movie.objects.all()
             count = Movie.objects.all().count()
-        result_list = {
-            "results": results,
-            "result_count": count
+    if len(results) == 0:
+        messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
+        results = Movie.objects.all()
+        moviesPlaying = results.filter(status='Now Playing')
+        moviesComingSoon = results.filter(status='Coming Soon')
+        context = {
+            'moviesNow': moviesPlaying,
+            'moviesSoon': moviesComingSoon
         }
+        return render(request, 'index.html', context)
+    moviesPlaying = results.filter(status='Now Playing')
+    moviesComingSoon = results.filter(status='Coming Soon')
+
+    context = {
+        'moviesNow': moviesPlaying,
+        'moviesSoon': moviesComingSoon
+    }
     print(results)
-    return render(request, 'searchResults.html',{'result_list':result_list})
+    return render(request, 'index.html', context)
 
 
 def regisconfirmation(request, uidb64, token):

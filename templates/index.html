@@ -17,6 +17,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-1vjCiTtTlTpxr9XlP2lWTKO4bLy4NzjZ4+0LMizOwNlrDfOrKMYx9+9pO8E/DRjDzdr6R5of6mTF+6U5/hqjKQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         /* Set slideshow container height and width */
         .slideshow-container {
@@ -131,32 +133,116 @@
             margin-right: 20px;
         }
 
+        .container1 {
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: 100px;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 100;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            animation: scale-in .2s;
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .popup h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+          }
+          
+          .popup p {
+            font-size: 18px;
+            margin-bottom: 10px;
+          }
+          
+          .popup .close-popup-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 20%;
+            display: block;
+            margin: 0 auto;
+          }
+          
+          .popup .close-popup-btn:hover {
+            background-color: #d32f2f;
+          }
+          
+          .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+          }
+
+          .showtime-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          
+          .showtime-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            align-items: normal;
+          }
+
+          .popup-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 90px;
+          }
+          
+
     </style>
+
+    
+    
 </head>
 
-<!-- SLIDESHOW STARTS -->
 <div class="slideshow-container">
+    {% for movie in moviesNow %}
     <div class="mySlides">
-        <iframe src="https://www.youtube.com/embed/TcMBFSGVi1c" frameborder="0" allowfullscreen></iframe>
+        <iframe src="{{ movie.trailer }}" frameborder="0" allowfullscreen></iframe>
     </div>
-    <div class="mySlides">
-        <iframe src="https://www.youtube.com/embed/TcMBFSGVi1c" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="mySlides">
-        <iframe src="https://www.youtube.com/embed/TcMBFSGVi1c" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="mySlides">
-        <iframe src="https://www.youtube.com/embed/TcMBFSGVi1c" frameborder="0" allowfullscreen></iframe>
+    {% endfor %}
+    <div class="button-container">
+        <button class="prev prev-button" onclick="plusSlides(-1)">❮</button>
+        <button class="next next-button" onclick="plusSlides(1)">❯</button>
     </div>
 </div>
 
-<!-- Navigation buttons outside of slideshow container -->
-<div class="button-container">
-    <button class="prev prev-button" onclick="plusSlides(-1)">❮</button>
-    <button class="next next-button" onclick="plusSlides(1)">❯</button>
-</div>
-
-<!-- Slide indicator dots -->
 <div class="dot-container" style="text-align:center">
     <span class="dot" onclick="currentSlide(1)"></span>
     <span class="dot" onclick="currentSlide(2)"></span>
@@ -164,11 +250,9 @@
     <span class="dot" onclick="currentSlide(4)"></span>
 </div>
 
-<!-- SLIDESHOW ENDS -->
-
 <!-- CURRENTLY SHOWING STARTS -->
 <section class="bg-light py-5">
-    <div class="container">
+    <div class="container1">
         <h2 class="mb-4">Currently Showing</h2>
         <div class="d-flex flex-wrap">
             {% for x in moviesNow %}
@@ -187,67 +271,13 @@
                         <p class="card-text">{{ x.category1 }}, {{ x.category2 }}, {{ x.category3 }}</p>
                     </div>
                 </div>
-                <form action="show_time">
               {% csrf_token %}
                <div >
-                    <button value="{{ x.name }}" name="book_now_button" {{ x.name }}
-                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Book Now</button>
+                <button data-movie-title="{{ x.name }}" onclick="bookNow(event)"
+                class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Book Now</button>
                </div>
-           </form>
-
-
             </div>
             {% endfor %}
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 2">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 3">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 4">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 5">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 6">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">The Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </div>
 </section>
@@ -255,7 +285,7 @@
 
 <!-- COMING SOON STARTS -->
 <section class="bg-dark py-5">
-    <div class="container">
+    <div class="container1">
         <h2 class="text-white mb-4">Coming Soon</h2>
         <div class="d-flex flex-wrap">
             {% for x in moviesSoon %}
@@ -278,56 +308,6 @@
                 </div>
             </div>
             {% endfor %}
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 2">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 3">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 4">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 5">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">They Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-12 col-sm-6 col-md-4 col-lg-2 mb-4">-->
-<!--                <div class="card">-->
-<!--                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHzE1jxo8dwMJWaKFSPfdhmebwUbNZz-4fpA&usqp=CAU"-->
-<!--                         class="card-img-top" alt="Movie 6">-->
-<!--                    <div class="card-body">-->
-<!--                        <h5 class="card-title">The Grey</h5>-->
-<!--                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
     </div>
     </div>
@@ -350,7 +330,16 @@
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Cinema E-Booking 2023</p></div>
 </footer>
 <!-- FOOTER END -->
-
+{% if messages %}
+    <script>
+    var messages = [
+        {% for message in messages %}
+            "{{ message }}",
+        {% endfor %}
+    ];
+    alert(messages.join("\\n"));
+    </script>
+{% endif %}
 </body>
 <script>
 
@@ -387,6 +376,59 @@
         dots[slideIndex - 1].className += " active";
     }
 
+    function bookNow(event) {
+        // add click event listener to each "Book Now" button
+        var movieTitle = event.target.getAttribute("data-movie-title");
+        console.log("Book now for " + movieTitle);
+    
+        // send movie title to backend to get showtime info
+        fetch(`/show_time?movie_title=${movieTitle}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.movies);
+                // create pop-up window HTML
+                var popupHtml = '<div class="popup">';
+                popupHtml += '<h2>' + movieTitle + '</h2>';
+                for (var i = 0; i < data.movies.length; i++) {
+                    var movie = data.movies[i];
+                    popupHtml += '<div class="popup-info"><p>Theater: ' + movie.theatreid + '</p>';
+                    popupHtml += '<p>Date: ' + movie.showDate + '</p></div>';
+                    var showtimeContainer = document.createElement('div');
+                    showtimeContainer.classList.add('showtime-container');
+                    for (var j = 1; j <= 3; j++) {
+                        var showtime = 'show' + j;
+                        if (movie[showtime]) {
+                            var showtimeBtn = document.createElement('button');
+                            showtimeBtn.classList.add('showtime-btn');
+                            showtimeBtn.innerText = movie[showtime];
+                            showtimeContainer.appendChild(showtimeBtn);
+                        }
+                    }
+                    popupHtml += '<div class="theater-date-container">';
+                    popupHtml += '</div>';
+                    popupHtml += showtimeContainer.outerHTML; // add showtime container HTML
+                }
+                popupHtml += '<button class="close-popup-btn">Close</button></div><div class="overlay"></div>';
+    
+                // insert pop-up window HTML into DOM
+                document.body.insertAdjacentHTML('beforeend', popupHtml);
+    
+                // add click event listener to close button
+                var closeBtn = document.querySelector('.close-popup-btn');
+                closeBtn.addEventListener('click', () => {
+                    // remove pop-up window from DOM
+                    var popup = document.querySelector('.popup');
+                    var overlay = document.querySelector('.overlay');
+                    popup.remove();
+                    overlay.remove();
+                });
+            })
+            .catch(error => console.log(error));
+    }
+    
+    
+    
+    
 
 </script>
 </html>

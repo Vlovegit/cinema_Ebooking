@@ -15,6 +15,96 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
+    <style>
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            z-index: 100;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            animation: scale-in .2s;
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .popup h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+          }
+          
+          .popup p {
+            font-size: 18px;
+            margin-bottom: 10px;
+          }
+          
+          .popup .close-popup-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 20%;
+            display: block;
+            margin: 0 auto;
+          }
+          
+          .popup .close-popup-btn:hover {
+            background-color: #d32f2f;
+          }
+          
+          .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+          }
+
+          .showtime-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          
+          .showtime-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            align-items: normal;
+          }
+
+          .popup-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-right: 90px;
+          }
+
+          .book {
+            flex: 0 0 50%;
+            margin-left: 50%;
+            
+          }
+    </style>
 </head>
 <body>
 <div class="container my-5">
@@ -39,6 +129,7 @@
                     <p><strong>IMDb:</strong> {{ movie.imdb }}</p>
                 </div>
             </div>
+            <p class=""><strong>Release Date: {{ movie.releasedate|date:"F d, Y" }}</strong></p>
             <div class="row mb-3">
                 <div class="col-sm-6">
                     <a type="button" href="{{ movie.trailer }}" target="_blank"
@@ -52,12 +143,73 @@
                     </a>
                 </div>
             </div>
+            {% if movie.status == "Now Playing" %}
+            <div class="col-sm-6">
+                <a type="button" data-movie-title="{{ movie.name }}" onclick="bookNow(event)"
+                   class="btn btn-success btn-lg btn-block text-white book">
+                    Book Now
+                </a>
+            </div>
+            {% endif %}
 
-            <p class=""><strong>Release Date: {{ movie.releasedate|date:"F d, Y" }}</strong></p>
+            
         </div>
     </div>
     {% endfor %}
 </div>
 </body>
+<script>
+
+    function bookNow(event) {
+        // add click event listener to each "Book Now" button
+        var movieTitle = event.target.getAttribute("data-movie-title");
+        console.log("Book now for " + movieTitle);
+    
+        // send movie title to backend to get showtime info
+        fetch(`/show_time?movie_title=${movieTitle}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.movies);
+                // create pop-up window HTML
+                var popupHtml = '<div class="popup">';
+                popupHtml += '<h2>' + movieTitle + '</h2>';
+                for (var i = 0; i < data.movies.length; i++) {
+                    var movie = data.movies[i];
+                    popupHtml += '<div class="popup-info"><p>Theater: ' + movie.theatreid + '</p>';
+                    popupHtml += '<p>Date: ' + movie.showDate + '</p></div>';
+                    var showtimeContainer = document.createElement('div');
+                    showtimeContainer.classList.add('showtime-container');
+                    for (var j = 1; j <= 3; j++) {
+                        var showtime = 'show' + j;
+                        if (movie[showtime]) {
+                            var showtimeBtn = document.createElement('button');
+                            showtimeBtn.classList.add('showtime-btn');
+                            showtimeBtn.innerText = movie[showtime];
+                            showtimeContainer.appendChild(showtimeBtn);
+                        }
+                    }
+                    popupHtml += '<div class="theater-date-container">';
+                    popupHtml += '</div>';
+                    popupHtml += showtimeContainer.outerHTML; // add showtime container HTML
+                }
+                popupHtml += '<button class="close-popup-btn">Close</button></div><div class="overlay"></div>';
+    
+                // insert pop-up window HTML into DOM
+                document.body.insertAdjacentHTML('beforeend', popupHtml);
+    
+                // add click event listener to close button
+                var closeBtn = document.querySelector('.close-popup-btn');
+                closeBtn.addEventListener('click', () => {
+                    // remove pop-up window from DOM
+                    var popup = document.querySelector('.popup');
+                    var overlay = document.querySelector('.overlay');
+                    popup.remove();
+                    overlay.remove();
+                });
+            })
+            .catch(error => console.log(error));
+    }
+
+</script>
 </html>
 {% endblock %}
