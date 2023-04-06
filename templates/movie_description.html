@@ -145,7 +145,7 @@
             </div>
             {% if movie.status == "Now Playing" %}
             <div class="col-sm-6">
-                <a type="button" data-movie-title="{{ movie.name }}" onclick="bookNow(event)"
+                <a type="button"  id="showtime-btn" data-movie-title="{{ movie.name }}" onclick="bookNow(event)"
                    class="btn btn-success btn-lg btn-block text-white book">
                     Book Now
                 </a>
@@ -185,7 +185,16 @@
                             var showtimeBtn = document.createElement('button');
                             showtimeBtn.classList.add('showtime-btn');
                             showtimeBtn.innerText = movie[showtime];
+                            showtimeBtn.setAttribute('data-movie-info', JSON.stringify({
+                                movieTitle: movieTitle,
+                                theatreId: movie.theatreid,
+                                showDate: movie.showDate,
+                                showTime: movie[showtime],
+                                showId: movie.showid
+                            }));
+                            //console.log(showtimeBtn.getAttribute('data-movie-info'))
                             showtimeContainer.appendChild(showtimeBtn);
+                            
                         }
                     }
                     popupHtml += '<div class="theater-date-container">';
@@ -206,6 +215,14 @@
                     popup.remove();
                     overlay.remove();
                 });
+                var showBtns =  document.querySelectorAll('.showtime-btn');
+                for (let showBtn of showBtns){
+                    showBtn.addEventListener('click', () => {
+                        var movieInfo = JSON.parse(showtimeBtn.getAttribute('data-movie-info'));
+                        var url = `/ticketcount?show_id=${movieInfo.showId}`;
+                        window.location.href = url;
+                    });
+                }
             })
             .catch(error => console.log(error));
     }

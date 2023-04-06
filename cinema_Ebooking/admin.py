@@ -1,5 +1,5 @@
 from django.contrib import admin
-from . models import User,Card,Movie,MovieShowTime,MovieTime,ScheduleMovie,Promotion,ShowRoom
+from . models import Seat, User,Card,Movie,MovieShowTime,MovieTime,ScheduleMovie,Promotion,ShowRoom
 from django.contrib.auth.models import Group
 from django.db.models.functions import Now
 from .views import notifyPromo
@@ -79,7 +79,7 @@ class ScheduleMovieAdmin(admin.ModelAdmin):
     model = ScheduleMovie
     ordering = ('showDate',)
     movie = Movie.objects.filter(archived=False)
-    list_display = ('movie', 'showDate', 'MovieTime', 'theatre', 'booked_seats', 'seats_left')
+    list_display = ('id','movie', 'showDate', 'MovieTime', 'theatre', 'booked_seats', 'seats_left')
     readonly_fields = ('booked_seats', 'seats_left')
     ScheduleMovie._base_manager.filter(showDate__lte=Now()).delete()
 
@@ -90,6 +90,22 @@ class ScheduleMovieAdmin(admin.ModelAdmin):
 class ShowroomAdmin(admin.ModelAdmin):
     readonly_fields = ('seatNum',)  # numSeats
     list_display = ('theatre', 'seatNum')  # numseats
+
+class SeatAdmin(admin.ModelAdmin):
+    list_display = ('show', 'schedule_movie_id')
+    
+    def schedule_movie_id(self, obj):
+        return obj.show.id
+    
+    schedule_movie_id.short_description = 'Schedule Movie ID'
+    schedule_movie_id.admin_order_field = 'show__id'
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'id':
+            kwargs['queryset'] = ScheduleMovie.objects.all()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+admin.site.register(Seat,SeatAdmin)
 
 
 admin.site.register(ScheduleMovie, ScheduleMovieAdmin)

@@ -235,11 +235,14 @@ def show_time(request):
     print(name)
     movies = Movie.objects.filter(name=name).values('id')
     movieId = movies[0].get('id')
+    print('MovieId : ',movieId)
     showTimes = ScheduleMovie.objects.filter(movie_id=movieId).values()
     list = []
+    print(showTimes)
     showDateSet = set()
     for s in showTimes.order_by('showDate'):
         showDateSet.add(s.get('showDate'))
+        print(showDateSet)
     for s in showTimes.order_by('showDate'):
         if s.get('showDate') in showDateSet:
             thisdict = {}
@@ -251,6 +254,7 @@ def show_time(request):
                     showtime = 'show'+str(i)
                     i = i+1
                     thisdict[showtime] = show.get('MovieTime')
+                    thisdict["showid"] = show.get('id') 
             showDateSet.remove(s.get('showDate'))
             list.append(thisdict)
 
@@ -260,6 +264,68 @@ def show_time(request):
     print(context)
     # return showtime information as a JSON response
     return JsonResponse(context)
+
+def ticketcount(request):
+    showId = request.GET.get("show_id")
+    #print(showId)
+    show = ScheduleMovie.objects.filter(id=showId).first()
+    print(show)
+    #print(show.movie_id)
+    movie = Movie.objects.filter(id=show.movie_id).first()
+    #print(movie)
+    showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
+    seatremaining = 50 - show.booked_seats
+    context = {
+        'seatsremaining': seatremaining,
+        'moviename': movie.name,
+        'showId' : showId,
+        'poster' : movie.poster,
+        'showDate' : show.showDate,
+        'showTime' : show.MovieTime,
+        'theater' : showroom.theatre,
+        'adultticket' : show.adult_cost,
+        'seniorticket' : show.senior_cost,
+        'childticket' : show.child_cost
+    }
+    print(context)
+    return render(request, 'ticketcount.html',context)
+
+
+def seats(request):
+    showId = request.GET.get("show_id")
+    totalCount = request.GET.get("total")
+    adultCount = request.GET.get("adult",None)
+    childCount = request.GET.get("child",None)
+    seniorCount = request.GET.get("senior",None)
+    print(adultCount)
+    show = ScheduleMovie.objects.filter(id=showId).first()
+    print(show)
+    #print(show.movie_id)
+    movie = Movie.objects.filter(id=show.movie_id).first()
+    #print(movie)
+    showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
+    seats = Seat.objects.filter(show_id=showId).first()
+    available_seats = []
+    available_seats = seats.seat_available.split(',')
+    print(available_seats)
+    seatdict = {}
+    for i in range(1,50):
+        if i in available_seats:
+            seatdict[i]='A'
+        else:
+            seatdict[i]='O'
+    print(seatdict)
+    context = {
+        'moviename': movie.name,
+        'showId' : showId,
+        'poster' : movie.poster,
+        'showDate' : show.showDate,
+        'showTime' : show.MovieTime,
+        'theater' : showroom.theatre,
+        'available_seats' : seatdict
+    }
+    return render(request, 'seats.html')
+
 
 def base(request):
      
@@ -500,9 +566,6 @@ def orderconfirmation(request, order):
 def book_movie(request):
     return render(request, 'bookmovie.html')
 
-
-def seats(request):
-    return render(request, 'seats.html')
 
 
 def summary(request):
