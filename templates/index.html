@@ -401,6 +401,13 @@
                             var showtimeBtn = document.createElement('button');
                             showtimeBtn.classList.add('showtime-btn');
                             showtimeBtn.innerText = movie[showtime];
+                            showtimeBtn.setAttribute('data-movie-info', JSON.stringify({
+                                movieTitle: movieTitle,
+                                theatreId: movie.theatreid,
+                                showDate: movie.showDate,
+                                showTime: movie[showtime],
+                                showId: movie.showid
+                            }));
                             showtimeContainer.appendChild(showtimeBtn);
                         }
                     }
@@ -422,6 +429,14 @@
                     popup.remove();
                     overlay.remove();
                 });
+                var showBtns =  document.querySelectorAll('.showtime-btn');
+                for (let showBtn of showBtns){
+                    showBtn.addEventListener('click', () => {
+                        var movieInfo = JSON.parse(showtimeBtn.getAttribute('data-movie-info'));
+                        var url = `/ticketcount?show_id=${movieInfo.showId}`;
+                        window.location.href = url;
+                    });
+                }
             })
             .catch(error => console.log(error));
     }

@@ -307,14 +307,14 @@ def seats(request):
     seats = Seat.objects.filter(show_id=showId).first()
     available_seats = []
     available_seats = seats.seat_available.split(',')
-    print(available_seats)
+    #print(available_seats)
     seatdict = {}
-    for i in range(1,50):
-        if i in available_seats:
+    for i in range(1,51):
+        if str(i) in available_seats:
             seatdict[i]='A'
         else:
             seatdict[i]='O'
-    print(seatdict)
+    #print(seatdict)
     context = {
         'moviename': movie.name,
         'showId' : showId,
@@ -322,9 +322,11 @@ def seats(request):
         'showDate' : show.showDate,
         'showTime' : show.MovieTime,
         'theater' : showroom.theatre,
-        'available_seats' : seatdict
+        'available_seats' : seatdict,
+        'min_seats' : totalCount
     }
-    return render(request, 'seats.html')
+    print(context)
+    return render(request, 'seats.html',context)
 
 
 def base(request):

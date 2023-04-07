@@ -132,18 +132,11 @@
             <p class=""><strong>Release Date: {{ movie.releasedate|date:"F d, Y" }}</strong></p>
             <div class="row mb-3">
                 <div class="col-sm-6">
-                    <a type="button" href="{{ movie.trailer }}" target="_blank"
-                       class="btn btn-primary btn-lg btn-block text-white">
-                        Watch Trailer
-                    </a>
-                </div>
-                <div class="col-sm-6">
                     <a href="{{ movie.review }}" target="_blank" class="btn btn-success btn-lg btn-block" role="button">
                         Read Review
                     </a>
                 </div>
-            </div>
-            {% if movie.status == "Now Playing" %}
+                {% if movie.status == "Now Playing" %}
             <div class="col-sm-6">
                 <a type="button"  id="showtime-btn" data-movie-title="{{ movie.name }}" onclick="bookNow(event)"
                    class="btn btn-success btn-lg btn-block text-white book">
@@ -151,6 +144,14 @@
                 </a>
             </div>
             {% endif %}
+            </div>
+            
+            <br>
+            
+            <div class="mySlides">
+                <iframe src="{{ movie.trailer }}" frameborder="0" allowfullscreen width="1000px" height="500px"></iframe>
+            </div>
+            
 
             
         </div>
