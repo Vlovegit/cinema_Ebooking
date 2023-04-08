@@ -208,8 +208,8 @@ def index(request):
     # present_movies = EbookingMovie.objects.filter(status="airing")
 
     movies = Movie.objects.values()
-    moviesPlaying = movies.filter(status='Now Playing')
-    moviesComingSoon = movies.filter(status='Coming Soon')
+    moviesPlaying = movies.filter(status='Now Playing',archived = False)
+    moviesComingSoon = movies.filter(status='Coming Soon',archived = False)
 
     context = {
         'moviesNow': moviesPlaying,
@@ -340,25 +340,25 @@ def base(request):
         print(movie_category)
         print(movie_name)
         if movie_name == '' and movie_category == 'ALL':
-            results = Movie.objects.all()
-            count  = Movie.objects.all().count()
+            results = Movie.objects.filter(archived = False)
+            count  = Movie.objects.filter(archived = False).count()
         elif movie_name != '' and movie_category != '':
-            results = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
-            count = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category)).count()
+            results = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category),archived = False)
+            count = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category),archived = False).count()
         elif movie_name != '':
-            results = Movie.objects.filter(name = movie_name)
-            count = Movie.objects.filter(name = movie_name).count()
+            results = Movie.objects.filter(name = movie_name,archived = False)
+            count = Movie.objects.filter(name = movie_name,archived = False).count()
         elif movie_category != '':
             results = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
             count = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category)).count()
         else:
-            results = Movie.objects.all()
-            count = Movie.objects.all().count()
+            results = Movie.objects.filter(archived = False)
+            count = Movie.objects.filter(archived = False).count()
     if len(results) == 0:
         messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
         results = Movie.objects.all()
-        moviesPlaying = results.filter(status='Now Playing')
-        moviesComingSoon = results.filter(status='Coming Soon')
+        moviesPlaying = results.filter(status='Now Playing',archived = False)
+        moviesComingSoon = results.filter(status='Coming Soon',archived = False)
         context = {
             'moviesNow': moviesPlaying,
             'moviesSoon': moviesComingSoon
