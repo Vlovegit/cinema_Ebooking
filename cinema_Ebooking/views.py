@@ -1,3 +1,4 @@
+import json
 import os
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
@@ -292,41 +293,53 @@ def ticketcount(request):
 
 
 def seats(request):
-    showId = request.GET.get("show_id")
-    totalCount = request.GET.get("total")
-    adultCount = request.GET.get("adult",None)
-    childCount = request.GET.get("child",None)
-    seniorCount = request.GET.get("senior",None)
-    print(adultCount)
-    show = ScheduleMovie.objects.filter(id=showId).first()
-    print(show)
-    #print(show.movie_id)
-    movie = Movie.objects.filter(id=show.movie_id).first()
-    #print(movie)
-    showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
-    seats = Seat.objects.filter(show_id=showId).first()
-    available_seats = []
-    available_seats = seats.seat_available.split(',')
-    #print(available_seats)
-    seatdict = {}
-    for i in range(1,51):
-        if str(i) in available_seats:
-            seatdict[i]='A'
-        else:
-            seatdict[i]='O'
-    #print(seatdict)
-    context = {
-        'moviename': movie.name,
-        'showId' : showId,
-        'poster' : movie.poster,
-        'showDate' : show.showDate,
-        'showTime' : show.MovieTime,
-        'theater' : showroom.theatre,
-        'available_seats' : seatdict,
-        'min_seats' : totalCount
-    }
-    print(context)
-    return render(request, 'seats.html',context)
+    
+    if request.method == 'POST':
+        seats = json.loads(request.body)['seats']
+        showId = json.loads(request.body)['showid']
+        print(seats)
+        print(showId)
+        return redirect('checkout')
+        # Rest of your 
+    else:
+        showId = request.GET.get("show_id")
+        totalCount = request.GET.get("total")
+        adultCount = request.GET.get("adult",None)
+        childCount = request.GET.get("child",None)
+        seniorCount = request.GET.get("senior",None)
+        print(adultCount)
+        show = ScheduleMovie.objects.filter(id=showId).first()
+        print(show)
+        #print(show.movie_id)
+        movie = Movie.objects.filter(id=show.movie_id).first()
+        #print(movie)
+        showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
+        seats = Seat.objects.filter(show_id=showId).first()
+        available_seats = []
+        available_seats = seats.seat_available.split(',')
+        #print(available_seats)
+        seatdict = {}
+        for i in range(1,51):
+            if str(i) in available_seats:
+                seatdict[i]='A'
+            else:
+                seatdict[i]='O'
+        #print(seatdict)
+        context = {
+            'moviename': movie.name,
+            'showId' : showId,
+            'poster' : movie.poster,
+            'showDate' : show.showDate,
+            'showTime' : show.MovieTime,
+            'theater' : showroom.theatre,
+            'available_seats' : seatdict,
+            'min_seats' : totalCount,
+            'adult_count' : adultCount,
+            'senior_count' : seniorCount,
+            'child_count' : childCount,
+        }
+        print(context)
+        return render(request, 'seats.html',context)
 
 
 def base(request):
@@ -575,6 +588,7 @@ def summary(request):
 
 
 def checkout(request):
+    print('I am here')
     return render(request, 'checkout.html')
 
 

@@ -53,11 +53,11 @@
         {% for seatno, status in available_seats.items %}
           <div class="col mb-1" style="width:90px">
             {% if status == 'O' %}
-              <input type="checkbox" class="btn-check" id="{{seatno}}" name="{{seatno}}" autocomplete="off" disabled/>
+              <input type="checkbox" class="btn-check" id="{{seatno}}" name="seat{{seatno}}" autocomplete="off" disabled/>
               <label class="btn btn-primary" for="{{seatno}}" style="width:40px;background-color:gray;border-top-left-radius:20px;border-top-right-radius:20px;float:left;margin-right: 10px">{{seatno}}</label>
               {% elif status == 'A' %}
-              <input type="checkbox" class="btn-check" id="{{seatno}}" name="{{seatno}}" autocomplete="off"/>
-              <label class="btn btn-primary" for="{{seatno}}" style="width:40px;background-color:green;border-top-left-radius:20px;border-top-right-radius:20px;float:left;margin-right: 10px" onclick="changeColor(this)">{{seatno}}</label>
+              <input type="checkbox" class="btn-check" id="{{seatno}}" name="seat{{seatno}}" autocomplete="off"/>
+              <label class="btn btn-primary" for="{{seatno}}" style="width:40px;background-color:green;border-top-left-radius:20px;border-top-right-radius:20px;float:left;margin-right: 10px" onclick="changeColor(this, '{{seatno}}')">{{seatno}}</label>
               {% endif %}
           </div>
         {% endfor %}
@@ -72,12 +72,6 @@
               </div>
           </div>
       </div>
-      {% for ik, price in ticket_cat_list.items %}
-      <div class="form-outline mb-4 row ml-auto mt-3">
-          <div class="col ml-auto "><label class="form-label" for="{{ik}}">Num of Tickets for {{ik}}</label></div>
-          <div class="col ml-auto"><input type="text" name="{{ik}}" id="{{ik}}" class="form-control form-control-lg" placeholder="{{price}}"> </div>
-      </div>
-      {% endfor %}
                     <div class="form-outline mb-4 row ml-auto mt-3 justify-content-center">
                        <button id="checkout-btn" class="btn btn-success btn-block gradient-custom-4 text-body" style="width:100px;margin-right:640px">Checkout</button>
 				 </div>
@@ -107,28 +101,79 @@
 
 <script>
 
-  function changeColor(btn) {
-    btn.style.backgroundColor = 'blue';
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const selectedseats = []; // create an empty array to store selected seats
+
+  function changeColor(btn, seatno) {
+    
+    if (btn.style.backgroundColor === 'blue') {
+      btn.style.backgroundColor = 'green';
+      btn.classList.remove('selected');
+      const index = selectedseats.indexOf(seatno);
+      if (index !== -1) {
+        selectedseats.splice(index, 1); // remove the selected seat from the array
+      }
+    } else {
+      btn.style.backgroundColor = 'blue';
+      btn.classList.add('selected');
+      selectedseats.push(seatno); // add the selected seat to the array
+    }
+    
+    console.log(selectedseats); // print the selected seats array
   }
   
   const checkoutBtn = document.getElementById('checkout-btn');
 
-  function checkout(btn) {
+  checkoutBtn.addEventListener('click', () => {
+    const minSeats = parseInt('{{ min_seats }}');
+    const selectedSeats = document.querySelectorAll('.selected');
+    console.log(selectedSeats);
+    if (selectedSeats.length < minSeats) {
+      alert(`Please select at least ${minSeats} seats. ${selectedSeats.length} seat selected`);
+    } else if (selectedSeats.length > minSeats) {
+      alert(`You can only select ${minSeats} seats. ${selectedSeats.length} seat selected`);
+    } else {
+       
+      const showId = parseInt('{{ showId }}');
+      const adultCount = parseInt('{{ adult_count }}');
+      const seniorCount = parseInt('{{ senior_count }}');
+      const childCount = parseInt('{{ child_count }}');
 
-      checkoutBtn.addEventListener('click', () => {
-      const minSeats = parseInt('{{ min_seats }}');
-      const selectedSeats = document.querySelectorAll('.selected');
-      console.log('I am here');
-      if (selectedSeats.length < minSeats) {
-        alert(`Please select at least ${minSeats} seats.`);
-      } else if (selectedSeats.length > minSeats) {
-        alert(`You can only select ${minSeats} seats.`);
-      } else {
-        // Perform checkout logic here.
-      }
-    });
-         
-  }
+      console.log(selectedseats);
+        // Send the POST request to the checkout endpoint
+        fetch('/seatselect/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+            showid : showId,
+            adultCount : adultCount,
+            seniorCount : seniorCount,
+            childCount : childCount,
+            totalSeat : minSeats,
+            seats: selectedseats
+          })
+        });
+      
+    }
+  });
+
 </script>
 
 </body>
