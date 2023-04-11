@@ -5,7 +5,7 @@
 -- Dumped from database version 15.2
 -- Dumped by pg_dump version 15.2
 
--- Started on 2023-04-01 23:20:07 EDT
+-- Started on 2023-04-11 10:16:49 EDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -29,7 +29,7 @@ CREATE SCHEMA public;
 ALTER SCHEMA public OWNER TO pg_database_owner;
 
 --
--- TOC entry 3796 (class 0 OID 0)
+-- TOC entry 3795 (class 0 OID 0)
 -- Dependencies: 4
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: pg_database_owner
 --
@@ -333,57 +333,10 @@ ALTER TABLE public."cinema_Ebooking_schedulemovie" ALTER COLUMN id ADD GENERATED
 
 CREATE TABLE public."cinema_Ebooking_seat" (
     id bigint NOT NULL,
-    seat_01 character varying(15) NOT NULL,
-    seat_02 character varying(15) NOT NULL,
-    seat_03 character varying(15) NOT NULL,
-    seat_04 character varying(15) NOT NULL,
-    seat_05 character varying(15) NOT NULL,
-    seat_06 character varying(15) NOT NULL,
-    seat_07 character varying(15) NOT NULL,
-    seat_08 character varying(15) NOT NULL,
-    seat_09 character varying(15) NOT NULL,
-    seat_10 character varying(15) NOT NULL,
-    seat_11 character varying(15) NOT NULL,
-    seat_12 character varying(15) NOT NULL,
-    seat_13 character varying(15) NOT NULL,
-    seat_14 character varying(15) NOT NULL,
-    seat_15 character varying(15) NOT NULL,
-    seat_16 character varying(15) NOT NULL,
-    seat_17 character varying(15) NOT NULL,
-    seat_18 character varying(15) NOT NULL,
-    seat_19 character varying(15) NOT NULL,
-    seat_20 character varying(15) NOT NULL,
-    seat_21 character varying(15) NOT NULL,
-    seat_22 character varying(15) NOT NULL,
-    seat_23 character varying(15) NOT NULL,
-    seat_24 character varying(15) NOT NULL,
-    seat_25 character varying(15) NOT NULL,
-    seat_26 character varying(15) NOT NULL,
-    seat_27 character varying(15) NOT NULL,
-    seat_28 character varying(15) NOT NULL,
-    seat_29 character varying(15) NOT NULL,
-    seat_30 character varying(15) NOT NULL,
-    seat_31 character varying(15) NOT NULL,
-    seat_32 character varying(15) NOT NULL,
-    seat_33 character varying(15) NOT NULL,
-    seat_34 character varying(15) NOT NULL,
-    seat_35 character varying(15) NOT NULL,
-    seat_36 character varying(15) NOT NULL,
-    seat_37 character varying(15) NOT NULL,
-    seat_38 character varying(15) NOT NULL,
-    seat_39 character varying(15) NOT NULL,
-    seat_40 character varying(15) NOT NULL,
-    seat_41 character varying(15) NOT NULL,
-    seat_42 character varying(15) NOT NULL,
-    seat_43 character varying(15) NOT NULL,
-    seat_44 character varying(15) NOT NULL,
-    seat_45 character varying(15) NOT NULL,
-    seat_46 character varying(15) NOT NULL,
-    seat_47 character varying(15) NOT NULL,
-    seat_48 character varying(15) NOT NULL,
-    seat_49 character varying(15) NOT NULL,
-    seat_50 character varying(15) NOT NULL,
-    show_id bigint NOT NULL
+    show_id bigint NOT NULL,
+    seat_available character varying(200) NOT NULL,
+    seat_booked character varying(200),
+    seat_selected character varying(200)
 );
 
 
@@ -643,7 +596,7 @@ CREATE TABLE public.django_session (
 ALTER TABLE public.django_session OWNER TO postgres;
 
 --
--- TOC entry 3763 (class 0 OID 16436)
+-- TOC entry 3762 (class 0 OID 16436)
 -- Dependencies: 221
 -- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -651,7 +604,7 @@ ALTER TABLE public.django_session OWNER TO postgres;
 
 
 --
--- TOC entry 3765 (class 0 OID 16444)
+-- TOC entry 3764 (class 0 OID 16444)
 -- Dependencies: 223
 -- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -659,7 +612,7 @@ ALTER TABLE public.django_session OWNER TO postgres;
 
 
 --
--- TOC entry 3761 (class 0 OID 16430)
+-- TOC entry 3760 (class 0 OID 16430)
 -- Dependencies: 219
 -- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -723,28 +676,30 @@ INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES 
 
 
 --
--- TOC entry 3778 (class 0 OID 24787)
+-- TOC entry 3777 (class 0 OID 24787)
 -- Dependencies: 236
 -- Data for Name: cinema_Ebooking_card; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."cinema_Ebooking_card" (id, "cardNum", "expiryDate", last_four, user_id, "cardHolderName") VALUES (148, '6789012345678901', '50/70', '3456', 49, 'Vaibhav Goyal');
+INSERT INTO public."cinema_Ebooking_card" (id, "cardNum", "expiryDate", last_four, user_id, "cardHolderName") VALUES (150, '', '', '', 51, '');
 
 
 --
--- TOC entry 3776 (class 0 OID 16571)
+-- TOC entry 3775 (class 0 OID 16571)
 -- Dependencies: 234
 -- Data for Name: cinema_Ebooking_movie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (4, 'Pathaan', 'Action', 'Adventure', 'Thriller', 'https://www.imdb.com/title/tt12844910/reviews/?ref_=tt_ov_rt', 'PG', 'Now Playing', 'Shah Rukh Khan, Deepika Padukone', 'Siddharth Anand', 'Red Chillies Entertainment', 'https://variety.com/wp-content/uploads/2022/11/Pathaan-poster1.jpg?w=1000&h=563&crop=1', 'https://www.youtube.com/embed/vqu4z34wENw', '2023-04-01', false, '2023', '6.1', 'An Indian agent races against a doomsday clock as a ruthless mercenary, with a bitter vendetta, mounts an apocalyptic attack against the country.');
 INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (1, 'RRR', 'Action', 'Adventure', 'Fantasy', 'https://www.imdb.com/title/tt8178634/reviews/?ref_=tt_ov_rt', 'PG', 'Coming Soon', 'N.T. Rama Rao Jr., Ram Charan', 'S.S. Rajamouli', 'S.S. Rajamouli', 'https://www.goldderby.com/wp-content/uploads/2022/12/RRR.jpg?w=620', 'https://www.youtube.com/embed/f_vbAtFSEc0', '2022-11-15', false, '2022', '8.8', 'A fictitious story about two legendary revolutionaries and their journey away from home before they started fighting for their country in the 1920s.');
 INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (5, 'Black Panther: Wakanda Forever', 'Adventure', 'Action', 'Drama', 'https://www.imdb.com/title/tt9114286/reviews/?ref_=tt_ov_rt', 'G', 'Now Playing', 'Letitia Wright, Lupita Nyong''o', 'Ryan Coogler', 'Marvel Entertainment', 'https://cdn1.parksmedia.wdprapps.disney.com/media/blog/wp-content/uploads/2022/11/bpwf409204924249042.jpg', 'https://www.youtube.com/embed/_Z3QKkl1WyM', '2022-12-20', false, '2022', '6.7', 'The people of Wakanda fight to protect their home from intervening world powers as they mourn the death of King T''Challa.');
-INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (2, 'Avatar: The Way of Water', 'Romance', 'Adventure', 'Fantasy', 'https://www.rottentomatoes.com/m/avatar', 'PG', 'Now Playing', 'Sam Worthington', 'James Cameroon', 'James Cameroon', 'https://static01.nyt.com/images/2022/09/16/arts/16CAMERON1/merlin_32166390_1d2bc63a-bc12-42d9-a341-dd4298250844-articleLarge.jpg?quality=75&auto=webp&disable=upscale', 'https://www.youtube.com/embed/d9MyW72ELq0', '2022-11-15', false, '2022', '8.8', '');
+INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (2, 'Avatar: The Way of Water', 'Romance', 'Adventure', 'Fantasy', 'https://www.rottentomatoes.com/m/avatar', 'PG', 'Now Playing', 'Sam Worthington', 'James Cameroon', 'James Cameroon', 'https://static01.nyt.com/images/2022/09/16/arts/16CAMERON1/merlin_32166390_1d2bc63a-bc12-42d9-a341-dd4298250844-articleLarge.jpg?quality=75&auto=webp&disable=upscale', 'https://www.youtube.com/embed/d9MyW72ELq0', '2022-11-15', false, '2022', '8.8', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na''vi race to protect their home.');
+INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (6, 'Maze Runner: The Scorch Trials', 'Biography', 'Animation', 'Crime', 'https://www.imdb.com/title/tt4046784/reviews/?ref_=tt_ov_rt', 'R', 'Coming Soon', 'Dylan O''Brien,  Kaya Scodelario', 'Wes Ball', 'Wes Ball', 'https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/BD1A7A6BC8E4717BA366078B91B7A26F8BA0EED5A99473AADBC2B6B4E859BA37/scale?width=1200&aspectRatio=1.78&format=jpeg', 'https://www.youtube.com/embed/SDofO3P2HpE', '2023-04-26', false, '2023', '8.8', 'After having escaped the Maze, the Gladers now face a new set of challenges on the open roads of a desolate landscape filled with unimaginable obstacles.');
+INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (7, 'Shazam! Fury of the Gods', 'Action', 'Adventure', 'Animation', 'https://www.imdb.com/title/tt10151854/reviews/?ref_=tt_ov_rt', 'G', 'Now Playing', 'Tai Do', 'Vaibhav', 'Mohammed', 'https://images.lifestyleasia.com/wp-content/uploads/sites/5/2022/03/10152416/shazam2-hero.jpg', 'https://www.youtube.com/embed/Zi88i4CpHe4', '2023-04-12', false, '2023', '8.8', 'The film continues the story of teenage Billy Batson who, upon reciting the magic word "SHAZAM!" is transformed into his adult Super Hero alter ego, Shazam.');
+INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, category3, review, rating, status, "cast", director, producer, poster, trailer, releasedate, archived, year, imdb, sypnopsis) VALUES (4, 'Pathaan', 'Action', 'Adventure', 'Thriller', 'https://www.imdb.com/title/tt12844910/reviews/?ref_=tt_ov_rt', 'PG', 'Now Playing', 'Shah Rukh Khan, Deepika Padukone', 'Siddharth Anand', 'Red Chillies Entertainment', 'https://www.koimoi.com/wp-content/new-galleries/2022/12/pathan-cast-fee-revealed-deepika-padukone-shah-rukh-khan-john-abraham-takes-home-massive-paycheck-001.jpg', 'https://www.youtube.com/embed/vqu4z34wENw', '2023-04-01', false, '2023', '6.1', 'An Indian agent races against a doomsday clock as a ruthless mercenary, with a bitter vendetta, mounts an apocalyptic attack against the country.');
 
 
 --
--- TOC entry 3780 (class 0 OID 24862)
+-- TOC entry 3779 (class 0 OID 24862)
 -- Dependencies: 238
 -- Data for Name: cinema_Ebooking_movieshowtime; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -752,7 +707,7 @@ INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, cate
 
 
 --
--- TOC entry 3782 (class 0 OID 24868)
+-- TOC entry 3781 (class 0 OID 24868)
 -- Dependencies: 240
 -- Data for Name: cinema_Ebooking_movietime; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -760,38 +715,44 @@ INSERT INTO public."cinema_Ebooking_movie" (id, name, category1, category2, cate
 
 
 --
--- TOC entry 3784 (class 0 OID 24874)
+-- TOC entry 3783 (class 0 OID 24874)
 -- Dependencies: 242
 -- Data for Name: cinema_Ebooking_promotion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 INSERT INTO public."cinema_Ebooking_promotion" (id, discount, user_notified, promo_code, valid_upto) VALUES (1, 50, true, 'ABC123', '2023-03-30');
 INSERT INTO public."cinema_Ebooking_promotion" (id, discount, user_notified, promo_code, valid_upto) VALUES (2, 25, true, 'MANOJ123', '2023-03-28');
+INSERT INTO public."cinema_Ebooking_promotion" (id, discount, user_notified, promo_code, valid_upto) VALUES (3, 50, true, 'VAIB1234', '2023-04-26');
+INSERT INTO public."cinema_Ebooking_promotion" (id, discount, user_notified, promo_code, valid_upto) VALUES (4, 45, true, 'VAIB123', '2023-04-18');
+INSERT INTO public."cinema_Ebooking_promotion" (id, discount, user_notified, promo_code, valid_upto) VALUES (5, 75, true, 'MOHA123', '2023-04-20');
 
 
 --
--- TOC entry 3786 (class 0 OID 24882)
+-- TOC entry 3785 (class 0 OID 24882)
 -- Dependencies: 244
 -- Data for Name: cinema_Ebooking_schedulemovie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (3, '2023-04-03', '10:00AM', 5.99, 9.99, 6.99, 0, 4, 1);
-INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (4, '2023-04-05', '16:00PM', 5.99, 9.99, 6.99, 0, 4, 2);
-INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (5, '2023-04-03', '16:00PM', 5.99, 9.99, 6.99, 0, 4, 1);
-INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (8, '2023-04-03', '13:00PM', 5.99, 9.99, 6.99, 0, 2, 1);
-INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (10, '2023-04-04', '19:00PM', 5.99, 9.99, 6.99, 0, 5, 3);
+INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (26, '2023-04-18', '10:00AM', 5.99, 9.99, 6.99, 0, 5, 1);
+INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (27, '2023-04-17', '16:00PM', 5.99, 9.99, 6.99, 0, 2, 2);
+INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (28, '2023-04-20', '10:00AM', 5.99, 9.99, 6.99, 0, 4, 1);
+INSERT INTO public."cinema_Ebooking_schedulemovie" (id, "showDate", "MovieTime", child_cost, adult_cost, senior_cost, booked_seats, movie_id, theatre_id) VALUES (29, '2023-04-18', '19:00PM', 5.99, 9.99, 6.99, 0, 7, 3);
 
 
 --
--- TOC entry 3790 (class 0 OID 24899)
+-- TOC entry 3789 (class 0 OID 24899)
 -- Dependencies: 248
 -- Data for Name: cinema_Ebooking_seat; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public."cinema_Ebooking_seat" (id, show_id, seat_available, seat_booked, seat_selected) VALUES (7, 27, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50', NULL, NULL);
+INSERT INTO public."cinema_Ebooking_seat" (id, show_id, seat_available, seat_booked, seat_selected) VALUES (8, 26, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50', NULL, NULL);
+INSERT INTO public."cinema_Ebooking_seat" (id, show_id, seat_available, seat_booked, seat_selected) VALUES (9, 29, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50', NULL, NULL);
+INSERT INTO public."cinema_Ebooking_seat" (id, show_id, seat_available, seat_booked, seat_selected) VALUES (10, 28, '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50', NULL, NULL);
 
 
 --
--- TOC entry 3788 (class 0 OID 24890)
+-- TOC entry 3787 (class 0 OID 24890)
 -- Dependencies: 246
 -- Data for Name: cinema_Ebooking_showroom; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -803,17 +764,17 @@ INSERT INTO public."cinema_Ebooking_showroom" (id, theatre, "seatNum") VALUES (4
 
 
 --
--- TOC entry 3767 (class 0 OID 16476)
+-- TOC entry 3766 (class 0 OID 16476)
 -- Dependencies: 225
 -- Data for Name: cinema_Ebooking_user; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, phone, is_promo, address, state, country, zip, email, "apartNumber") VALUES (49, 'pbkdf2_sha256$390000$XoCnCOEoB1beOUEdBeanxs$ICMiWg7hWS7GNbL5O0hvDnBVKWHCafvuI6AC7lElw4c=', '2023-03-23 10:57:36.466057-04', false, 'Manoj', 'Goyal', false, true, '2023-03-23 10:50:34.480492-04', '7627723235', true, '', '', '', '', 'vaibhavgoyal17796@gmail.com', '');
-INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, phone, is_promo, address, state, country, zip, email, "apartNumber") VALUES (32, 'pbkdf2_sha256$390000$lCPirRRSp0J8RUjOkg4wvC$TXu+0ROfUNJGDusluLjThEmc9W9YrhwB5ygYSMV6A0Y=', '2023-04-01 18:01:39.987452-04', true, '', '', true, true, '2023-03-20 02:25:13.355316-04', NULL, false, NULL, NULL, NULL, NULL, 'vg17796@gmail.com', NULL);
+INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, phone, is_promo, address, state, country, zip, email, "apartNumber") VALUES (51, 'pbkdf2_sha256$390000$HqCkeRuI2o9eLkC81pycuX$rz7OxwSlwm+vbdwfrkQeUwyvhqmIIvCeGKin+qar3aQ=', '2023-04-07 12:03:57.761541-04', false, 'Vaibhav', 'Goyal', false, true, '2023-04-07 11:47:41.816448-04', '7627723235', true, '', '', '', '', 'vaibhavgoyal17796@gmail.com', '');
+INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuser, first_name, last_name, is_staff, is_active, date_joined, phone, is_promo, address, state, country, zip, email, "apartNumber") VALUES (32, 'pbkdf2_sha256$390000$lCPirRRSp0J8RUjOkg4wvC$TXu+0ROfUNJGDusluLjThEmc9W9YrhwB5ygYSMV6A0Y=', '2023-04-11 10:10:19.174553-04', true, '', '', true, true, '2023-03-20 02:25:13.355316-04', NULL, false, NULL, NULL, NULL, NULL, 'vg17796@gmail.com', NULL);
 
 
 --
--- TOC entry 3769 (class 0 OID 16486)
+-- TOC entry 3768 (class 0 OID 16486)
 -- Dependencies: 227
 -- Data for Name: cinema_Ebooking_user_groups; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -821,7 +782,7 @@ INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuse
 
 
 --
--- TOC entry 3771 (class 0 OID 16492)
+-- TOC entry 3770 (class 0 OID 16492)
 -- Dependencies: 229
 -- Data for Name: cinema_Ebooking_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -829,7 +790,7 @@ INSERT INTO public."cinema_Ebooking_user" (id, password, last_login, is_superuse
 
 
 --
--- TOC entry 3773 (class 0 OID 16527)
+-- TOC entry 3772 (class 0 OID 16527)
 -- Dependencies: 231
 -- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -854,10 +815,51 @@ INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, ac
 INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (18, '2023-04-01 20:09:11.630235-04', '8', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
 INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (19, '2023-04-01 20:09:57.596852-04', '9', 'Black Panther: Wakanda Forever', 1, '[{"added": {}}]', 12, 32);
 INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (20, '2023-04-01 20:10:28.772374-04', '10', 'Black Panther: Wakanda Forever', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (21, '2023-04-02 22:46:09.778608-04', '11', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (22, '2023-04-02 22:57:25.951266-04', '12', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (23, '2023-04-02 23:01:27.860378-04', '13', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (24, '2023-04-02 23:03:42.966029-04', '14', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (25, '2023-04-02 23:04:36.656991-04', '15', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (26, '2023-04-03 13:30:58.672545-04', '3', 'VAIB1234', 1, '[{"added": {}}]', 11, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (27, '2023-04-03 14:34:02.251607-04', '16', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (28, '2023-04-03 23:48:19.741592-04', '17', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (29, '2023-04-03 23:49:30.34876-04', '2', 'Avatar: The Way of Water on 2023-04-06 at 16:00PM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (30, '2023-04-03 23:49:37.857673-04', '2', 'Avatar: The Way of Water on 2023-04-06 at 16:00PM', 2, '[]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (31, '2023-04-04 12:12:47.498161-04', '3', 'Pathaan on 2023-04-07 at 10:00AM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (32, '2023-04-06 22:18:47.262501-04', '18', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (33, '2023-04-06 22:19:23.130252-04', '19', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (34, '2023-04-06 22:19:49.348511-04', '20', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (35, '2023-04-06 22:20:03.885826-04', '21', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (36, '2023-04-06 22:20:46.35351-04', '4', 'Pathaan on 2023-04-08 at 16:00PM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (37, '2023-04-06 22:20:55.108477-04', '5', 'Pathaan on 2023-04-08 at 10:00AM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (38, '2023-04-06 22:21:00.48266-04', '6', 'Pathaan on 2023-04-09 at 13:00PM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (39, '2023-04-06 22:22:30.01657-04', '22', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (40, '2023-04-06 22:22:51.365634-04', '23', 'Black Panther: Wakanda Forever', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (41, '2023-04-06 22:24:58.725399-04', '4', 'VAIB123', 1, '[{"added": {}}]', 11, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (42, '2023-04-07 11:20:34.133851-04', '6', 'Maze Runner: The Scorch Trials', 1, '[{"added": {}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (43, '2023-04-07 11:22:05.547868-04', '6', 'Maze Runner: The Scorch Trials', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (44, '2023-04-07 11:22:40.470771-04', '6', 'Maze Runner: The Scorch Trials', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (45, '2023-04-07 11:23:19.628897-04', '4', 'Pathaan', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (46, '2023-04-07 11:23:56.809026-04', '4', 'Pathaan', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (47, '2023-04-07 11:24:21.516154-04', '4', 'Pathaan', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (48, '2023-04-07 11:24:54.74461-04', '6', 'Maze Runner: The Scorch Trials', 2, '[{"changed": {"fields": ["Poster"]}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (49, '2023-04-07 12:01:19.159291-04', '7', 'Shazam! Fury of the Gods', 1, '[{"added": {}}]', 8, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (50, '2023-04-07 12:01:44.182157-04', '24', 'Shazam! Fury of the Gods', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (51, '2023-04-07 12:02:01.227535-04', '22', 'Avatar: The Way of Water', 2, '[]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (52, '2023-04-07 12:02:32.783728-04', '25', 'Shazam! Fury of the Gods', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (53, '2023-04-07 12:03:13.511902-04', '5', 'MOHA123', 1, '[{"added": {}}]', 11, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (54, '2023-04-11 10:12:02.044862-04', '26', 'Black Panther: Wakanda Forever', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (55, '2023-04-11 10:12:26.338361-04', '27', 'Avatar: The Way of Water', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (56, '2023-04-11 10:12:43.699759-04', '28', 'Pathaan', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (57, '2023-04-11 10:12:59.771968-04', '29', 'Shazam! Fury of the Gods', 1, '[{"added": {}}]', 12, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (58, '2023-04-11 10:13:43.980993-04', '7', 'Avatar: The Way of Water on 2023-04-17 at 16:00PM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (59, '2023-04-11 10:13:49.59325-04', '8', 'Black Panther: Wakanda Forever on 2023-04-18 at 10:00AM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (60, '2023-04-11 10:13:54.286841-04', '9', 'Shazam! Fury of the Gods on 2023-04-18 at 19:00PM', 1, '[{"added": {}}]', 14, 32);
+INSERT INTO public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) VALUES (61, '2023-04-11 10:13:59.448685-04', '10', 'Pathaan on 2023-04-20 at 10:00AM', 1, '[{"added": {}}]', 14, 32);
 
 
 --
--- TOC entry 3759 (class 0 OID 16408)
+-- TOC entry 3758 (class 0 OID 16408)
 -- Dependencies: 217
 -- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -879,7 +881,7 @@ INSERT INTO public.django_content_type (id, app_label, model) VALUES (14, 'cinem
 
 
 --
--- TOC entry 3757 (class 0 OID 16400)
+-- TOC entry 3756 (class 0 OID 16400)
 -- Dependencies: 215
 -- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -918,10 +920,12 @@ INSERT INTO public.django_migrations (id, app, name, applied) VALUES (31, 'cinem
 INSERT INTO public.django_migrations (id, app, name, applied) VALUES (32, 'cinema_Ebooking', '0014_alter_card_cardholdername_alter_card_cardnum', '2023-03-22 17:24:59.82774-04');
 INSERT INTO public.django_migrations (id, app, name, applied) VALUES (33, 'cinema_Ebooking', '0015_movieshowtime_movietime_promotion_schedulemovie_and_more', '2023-03-23 14:42:56.875488-04');
 INSERT INTO public.django_migrations (id, app, name, applied) VALUES (34, 'cinema_Ebooking', '0016_alter_movie_poster', '2023-03-31 10:56:38.007623-04');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (35, 'cinema_Ebooking', '0017_remove_seat_seat_01_remove_seat_seat_02_and_more', '2023-04-04 11:54:13.007533-04');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (36, 'cinema_Ebooking', '0018_alter_seat_seat_booked_alter_seat_seat_selected', '2023-04-04 12:12:39.878958-04');
 
 
 --
--- TOC entry 3774 (class 0 OID 16547)
+-- TOC entry 3773 (class 0 OID 16547)
 -- Dependencies: 232
 -- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -933,11 +937,13 @@ INSERT INTO public.django_session (session_key, session_data, expire_date) VALUE
 INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('ymzb0h4n2v9gtxflb69nsrxb22hp1b28', '.eJxVjEsOwiAUAO_C2hCgfEqX7j0DecDDogaa0iYa490NSRe6nZnMmzjYt9ntDVeXI5nIwMnpF3oIdyzdxBuUa6Whlm3NnvaEHrbRS434OB_t32CGNvcvQ1Ai-mCY0NEEDGCCRS-tTHJMg5JGMmsMaD1ypThwYaxPKQ6SaS1snzZsLdfi8Lnk9UUm9vkCrHc-wg:1pe9ft:I681zugDWFRotSE0z6e1L9WFxURL5SY1ZQau_965OH0', '2023-04-03 03:11:21.605084-04');
 INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('o8o0prg3w10j25w89qeu4ss3evlj1bn1', '.eJxVjMEOwiAQRP-FsyFbCkV69O43kIXdWtSAKW2iMf67bdKDniaZefPewuMyj36pPPlEohetEoffMmC8cd4WumK-FBlLnqcU5IbIfa3yXIjvp539E4xYx_WtjW210oacBq1th2QdOBzUmtxSB-ZIpmmGDsCicmBjjAG4CQqMosCbtHKtqWTPz0eaXqKHzxdsvj54:1pg8Tc:wf0ON-efNiuu3JNoNzOe3UpQkz2f5V_JvaRWZni3kNk', '2023-04-08 14:18:52.06727-04');
 INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('43wh9betheldunrqtx7kwe4ya8b0ln3h', '.eJxVjMEOwiAQRP-FsyFbCkV69O43kIXdWtSAKW2iMf67bdKDniaZefPewuMyj36pPPlEohetEoffMmC8cd4WumK-FBlLnqcU5IbIfa3yXIjvp539E4xYx_WtjW210oacBq1th2QdOBzUmtxSB-ZIpmmGDsCicmBjjAG4CQqMosCbtHKtqWTPz0eaXqKHzxdsvj54:1pijI3:kFYsQCIzq2hDsoIv38jEiyEwZ3My3zBYlZyaptfED9M', '2023-04-15 18:01:39.997532-04');
+INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('7ou4qcyee035gde4ampk3ys2t24g4y19', '.eJxVjMEOwiAQRP-FsyFbCkV69O43kIXdWtSAKW2iMf67bdKDniaZefPewuMyj36pPPlEohetEoffMmC8cd4WumK-FBlLnqcU5IbIfa3yXIjvp539E4xYx_WtjW210oacBq1th2QdOBzUmtxSB-ZIpmmGDsCicmBjjAG4CQqMosCbtHKtqWTPz0eaXqKHzxdsvj54:1pkdl8:IfQxTOrGPnhdsE5iLnUTM6YttQ15bBj19TpLrc63_6Q', '2023-04-21 00:31:34.03802-04');
+INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('ronq4n9vxshuskjsk11hqeqjipet43gc', '.eJxVjMEOwiAQRP-FsyELXUA8evcbyMJSqRpISnsy_rtt0oOeJpn3Zt4i0LqUsPY8h4nFRQxanH7LSOmZ6074QfXeZGp1macod0UetMtb4_y6Hu7fQaFetjUaN6BGwx4B0Vli58HTqLfMA1swZzZKjRbAkfbgUkoRsooajOaYxecL0cw3Ow:1pmEhP:LlWeBUvM3JVzKzjDi-7VSC0cbuNgXXxWOKfg5qwI33M', '2023-04-25 10:10:19.179075-04');
 INSERT INTO public.django_session (session_key, session_data, expire_date) VALUES ('ow9bp425evstws8n3owxsab45hxa62eq', '.eJxVjMEOwiAQRP-FsyFbCkV69O43kIXdWtSAKW2iMf67bdKDniaZefPewuMyj36pPPlEohetEoffMmC8cd4WumK-FBlLnqcU5IbIfa3yXIjvp539E4xYx_WtjW210oacBq1th2QdOBzUmtxSB-ZIpmmGDsCicmBjjAG4CQqMosCbtHKtqWTPz0eaXqKHzxdsvj54:1pfLSZ:hU1OMOugKvxoCIWgEkknUGjNHrtEBGXF93rACQpwEgk', '2023-04-06 09:58:31.236741-04');
 
 
 --
--- TOC entry 3797 (class 0 OID 0)
+-- TOC entry 3796 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -946,7 +952,7 @@ SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
 
 
 --
--- TOC entry 3798 (class 0 OID 0)
+-- TOC entry 3797 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -955,7 +961,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 
 
 --
--- TOC entry 3799 (class 0 OID 0)
+-- TOC entry 3798 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -964,25 +970,25 @@ SELECT pg_catalog.setval('public.auth_permission_id_seq', 56, true);
 
 
 --
--- TOC entry 3800 (class 0 OID 0)
+-- TOC entry 3799 (class 0 OID 0)
 -- Dependencies: 235
 -- Name: cinema_Ebooking_card_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_card_id_seq"', 148, true);
+SELECT pg_catalog.setval('public."cinema_Ebooking_card_id_seq"', 150, true);
 
 
 --
--- TOC entry 3801 (class 0 OID 0)
+-- TOC entry 3800 (class 0 OID 0)
 -- Dependencies: 233
 -- Name: cinema_Ebooking_movie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_movie_id_seq"', 5, true);
+SELECT pg_catalog.setval('public."cinema_Ebooking_movie_id_seq"', 7, true);
 
 
 --
--- TOC entry 3802 (class 0 OID 0)
+-- TOC entry 3801 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: cinema_Ebooking_movieshowtime_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -991,7 +997,7 @@ SELECT pg_catalog.setval('public."cinema_Ebooking_movieshowtime_id_seq"', 1, fal
 
 
 --
--- TOC entry 3803 (class 0 OID 0)
+-- TOC entry 3802 (class 0 OID 0)
 -- Dependencies: 239
 -- Name: cinema_Ebooking_movietime_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1000,34 +1006,34 @@ SELECT pg_catalog.setval('public."cinema_Ebooking_movietime_id_seq"', 1, false);
 
 
 --
--- TOC entry 3804 (class 0 OID 0)
+-- TOC entry 3803 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: cinema_Ebooking_promotion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_promotion_id_seq"', 2, true);
+SELECT pg_catalog.setval('public."cinema_Ebooking_promotion_id_seq"', 5, true);
 
 
 --
--- TOC entry 3805 (class 0 OID 0)
+-- TOC entry 3804 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: cinema_Ebooking_schedulemovie_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_schedulemovie_id_seq"', 10, true);
+SELECT pg_catalog.setval('public."cinema_Ebooking_schedulemovie_id_seq"', 29, true);
 
 
 --
--- TOC entry 3806 (class 0 OID 0)
+-- TOC entry 3805 (class 0 OID 0)
 -- Dependencies: 247
 -- Name: cinema_Ebooking_seat_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_seat_id_seq"', 1, false);
+SELECT pg_catalog.setval('public."cinema_Ebooking_seat_id_seq"', 10, true);
 
 
 --
--- TOC entry 3807 (class 0 OID 0)
+-- TOC entry 3806 (class 0 OID 0)
 -- Dependencies: 245
 -- Name: cinema_Ebooking_showroom_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1036,7 +1042,7 @@ SELECT pg_catalog.setval('public."cinema_Ebooking_showroom_id_seq"', 4, true);
 
 
 --
--- TOC entry 3808 (class 0 OID 0)
+-- TOC entry 3807 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: cinema_Ebooking_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1045,16 +1051,16 @@ SELECT pg_catalog.setval('public."cinema_Ebooking_user_groups_id_seq"', 1, false
 
 
 --
--- TOC entry 3809 (class 0 OID 0)
+-- TOC entry 3808 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: cinema_Ebooking_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public."cinema_Ebooking_user_id_seq"', 49, true);
+SELECT pg_catalog.setval('public."cinema_Ebooking_user_id_seq"', 51, true);
 
 
 --
--- TOC entry 3810 (class 0 OID 0)
+-- TOC entry 3809 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: cinema_Ebooking_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1063,16 +1069,16 @@ SELECT pg_catalog.setval('public."cinema_Ebooking_user_user_permissions_id_seq"'
 
 
 --
--- TOC entry 3811 (class 0 OID 0)
+-- TOC entry 3810 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 20, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 61, true);
 
 
 --
--- TOC entry 3812 (class 0 OID 0)
+-- TOC entry 3811 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1081,12 +1087,12 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 14, true);
 
 
 --
--- TOC entry 3813 (class 0 OID 0)
+-- TOC entry 3812 (class 0 OID 0)
 -- Dependencies: 214
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 34, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 36, true);
 
 
 --
@@ -1222,15 +1228,6 @@ ALTER TABLE ONLY public."cinema_Ebooking_schedulemovie"
 
 ALTER TABLE ONLY public."cinema_Ebooking_seat"
     ADD CONSTRAINT "cinema_Ebooking_seat_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 3600 (class 2606 OID 24907)
--- Name: cinema_Ebooking_seat cinema_Ebooking_seat_show_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."cinema_Ebooking_seat"
-    ADD CONSTRAINT "cinema_Ebooking_seat_show_id_key" UNIQUE (show_id);
 
 
 --
@@ -1423,6 +1420,14 @@ CREATE INDEX "cinema_Ebooking_schedulemovie_theatre_id_70535a7f" ON public."cine
 
 
 --
+-- TOC entry 3599 (class 1259 OID 24941)
+-- Name: cinema_Ebooking_seat_show_id_933ccb0a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "cinema_Ebooking_seat_show_id_933ccb0a" ON public."cinema_Ebooking_seat" USING btree (show_id);
+
+
+--
 -- TOC entry 3594 (class 1259 OID 24922)
 -- Name: cinema_Ebooking_showroom_theatre_66f0cda7_like; Type: INDEX; Schema: public; Owner: postgres
 --
@@ -1503,7 +1508,7 @@ CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session U
 
 
 --
--- TOC entry 3602 (class 2606 OID 16465)
+-- TOC entry 3601 (class 2606 OID 16465)
 -- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1512,7 +1517,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 3603 (class 2606 OID 16460)
+-- TOC entry 3602 (class 2606 OID 16460)
 -- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1521,7 +1526,7 @@ ALTER TABLE ONLY public.auth_group_permissions
 
 
 --
--- TOC entry 3601 (class 2606 OID 16451)
+-- TOC entry 3600 (class 2606 OID 16451)
 -- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1530,7 +1535,7 @@ ALTER TABLE ONLY public.auth_permission
 
 
 --
--- TOC entry 3610 (class 2606 OID 24794)
+-- TOC entry 3609 (class 2606 OID 24794)
 -- Name: cinema_Ebooking_card cinema_Ebooking_card_user_id_c54ccabe_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1539,7 +1544,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_card"
 
 
 --
--- TOC entry 3611 (class 2606 OID 24908)
+-- TOC entry 3610 (class 2606 OID 24908)
 -- Name: cinema_Ebooking_schedulemovie cinema_Ebooking_sche_movie_id_b4b439b3_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1548,7 +1553,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_schedulemovie"
 
 
 --
--- TOC entry 3612 (class 2606 OID 24913)
+-- TOC entry 3611 (class 2606 OID 24913)
 -- Name: cinema_Ebooking_schedulemovie cinema_Ebooking_sche_theatre_id_70535a7f_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1557,7 +1562,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_schedulemovie"
 
 
 --
--- TOC entry 3613 (class 2606 OID 24923)
+-- TOC entry 3612 (class 2606 OID 24942)
 -- Name: cinema_Ebooking_seat cinema_Ebooking_seat_show_id_933ccb0a_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1566,7 +1571,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_seat"
 
 
 --
--- TOC entry 3604 (class 2606 OID 16505)
+-- TOC entry 3603 (class 2606 OID 16505)
 -- Name: cinema_Ebooking_user_groups cinema_Ebooking_user_groups_group_id_8a1c7758_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1575,7 +1580,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_user_groups"
 
 
 --
--- TOC entry 3606 (class 2606 OID 16519)
+-- TOC entry 3605 (class 2606 OID 16519)
 -- Name: cinema_Ebooking_user_user_permissions cinema_Ebooking_user_permission_id_1b742a1b_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1584,7 +1589,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_user_user_permissions"
 
 
 --
--- TOC entry 3607 (class 2606 OID 16514)
+-- TOC entry 3606 (class 2606 OID 16514)
 -- Name: cinema_Ebooking_user_user_permissions cinema_Ebooking_user_user_id_c0c0027c_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1593,7 +1598,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_user_user_permissions"
 
 
 --
--- TOC entry 3605 (class 2606 OID 16500)
+-- TOC entry 3604 (class 2606 OID 16500)
 -- Name: cinema_Ebooking_user_groups cinema_Ebooking_user_user_id_dc34ea6b_fk_cinema_Eb; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1602,7 +1607,7 @@ ALTER TABLE ONLY public."cinema_Ebooking_user_groups"
 
 
 --
--- TOC entry 3608 (class 2606 OID 16535)
+-- TOC entry 3607 (class 2606 OID 16535)
 -- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1611,7 +1616,7 @@ ALTER TABLE ONLY public.django_admin_log
 
 
 --
--- TOC entry 3609 (class 2606 OID 16540)
+-- TOC entry 3608 (class 2606 OID 16540)
 -- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_cinema_Ebooking_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1619,7 +1624,7 @@ ALTER TABLE ONLY public.django_admin_log
     ADD CONSTRAINT "django_admin_log_user_id_c564eba6_fk_cinema_Ebooking_user_id" FOREIGN KEY (user_id) REFERENCES public."cinema_Ebooking_user"(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2023-04-01 23:20:08 EDT
+-- Completed on 2023-04-11 10:16:50 EDT
 
 --
 -- PostgreSQL database dump complete
