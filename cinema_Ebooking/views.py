@@ -297,6 +297,10 @@ def seats(request):
     if request.method == 'POST':
         seats = json.loads(request.body)['seats']
         showId = json.loads(request.body)['showid']
+        totalSeats = json.loads(request.body)['totalSeat']
+        childCount = json.loads(request.body)['adultCount']
+        adultCount = json.loads(request.body)['childCount']
+        seniorCount = json.loads(request.body)['seniorCount']
         print(seats)
         print(showId)
         return redirect('checkout')
@@ -701,6 +705,7 @@ def notifyPromo(request, promo_id):
     promooff = promo.discount
     code = promo.promo_code
     validuntil = promo.valid_upto
+    validfrom = promo.valid_from
     mail_subject = 'New promotion, Avail Now'
     for user in allUsers:
         first_name = user.first_name
@@ -709,6 +714,7 @@ def notifyPromo(request, promo_id):
         'firstname': first_name,
         'promooff': promooff,
         'code': code,
+        'validfrom' : validfrom,
         'validuntil': validuntil
         })
         email = EmailMessage(mail_subject, message, to=[to_email])

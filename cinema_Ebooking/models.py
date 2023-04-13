@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, AbstractUser
 from .managers import CustomUserManager
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-from datetime import datetime
+from datetime import datetime, timezone
 from django.db.models.functions import Now
 
 
@@ -132,6 +132,7 @@ class Promotion(models.Model):
     discount = models.IntegerField()
     user_notified = models.BooleanField(default=False, editable=False)
     promo_code = models.CharField(max_length=10, unique=True)
+    valid_from = models.DateField(default=datetime.now)
     valid_upto = models.DateField()
     def __str__(self):
         return self.promo_code
