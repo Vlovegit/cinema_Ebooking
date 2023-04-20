@@ -1,5 +1,7 @@
 import json
 import os
+from datetime import date
+
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -291,7 +293,109 @@ def ticketcount(request):
     print(context)
     return render(request, 'ticketcount.html',context)
 
+def confirmPayment(request):
+    print('Confirm payment')
+    context={
 
+    }
+    return render(request, 'confirmPayment.html', context)
+
+def checkout(request):
+    print(request.method)
+    if request.method == 'POST':
+        showId = request.POST.get("show_id")
+        print(showId)
+        movie = request.POST.get("movie")
+        movieDateTime = request.POST.get("show_time")
+        theatre = request.POST.get("show_room")
+        selectedseats = request.POST.get("seats")
+        totalCount = request.POST.get("no_of_tickets")
+        price = request.POST.get("tickets_price")
+        tax = request.POST.get("taxes")
+        totalPrice = request.POST.get("total_price")
+        promotion_code = request.POST.get("promotion_code")
+        print(promotion_code)
+        promotion = Promotion.objects.filter(promo_code=promotion_code).first()
+        discount = 0.00
+        dateToday = date.today()
+        if promotion is None:
+            messages.info(request, 'Promo code is not valid', extra_tags='promocode')
+            payment_amount = totalPrice
+        else:
+            if promotion.valid_from <= dateToday and dateToday<=promotion.valid_upto:
+                subtotal = float(price)-(float(price)*float(promotion.discount))/100
+                tax = (subtotal * 5) / 100
+                payment_amount = subtotal + tax
+                discount = (float(price)*float(promotion.discount))/100
+                discount = str("{0:.2f}".format(discount))
+                tax = str("{0:.2f}".format(tax))
+                payment_amount = str("{0:.2f}".format(payment_amount))
+                messages.info(request, f'Promo code is valid, you get {promotion.discount} % discount', extra_tags='promocode')
+            else:
+                messages.info(request, 'Promo code is not valid', extra_tags='promocode')
+                payment_amount = totalPrice
+        context={
+            'theater' : theatre,
+            'movieDateTime': movieDateTime,
+            'movie': movie,
+            'seats': selectedseats,
+            'numSeats': totalCount,
+            'price': price,
+            'tax': tax,
+            'totalPrice': totalPrice,
+            'promotion_code': promotion_code,
+            'discount': "- "+str(discount),
+            'payment_amount':payment_amount,
+            'showId': showId
+        }
+
+        return render(request, 'checkout.html', context)
+    else:
+        print('Inside Checkout GET method')
+        showId = request.GET.get("show_id")
+        totalCount = int(request.GET.get("total"))
+        adultCount = int(request.GET.get("adult", None))
+        childCount = int(request.GET.get("child", None))
+        seniorCount = int(request.GET.get("senior", None))
+        selectedseats = request.GET.get("seatselected", None)
+        show = ScheduleMovie.objects.filter(id=showId).first()
+        movie = Movie.objects.filter(id=show.movie_id).first()
+        showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
+        price = adultCount * show.adult_cost + childCount * show.child_cost + seniorCount * show.senior_cost
+        tax = (price * 5)/100
+        totalPrice = price + tax
+        totalPrice = str("{0:.2f}".format(totalPrice))
+        tax = str("{0:.2f}".format(tax))
+        price = str("{0:.2f}".format(price))
+        theater = showroom.theatre
+        movieDateTime = show.MovieTime + ' ' + str(show.showDate)
+
+        print(request.user)
+        user = User.objects.get(email=request.user)
+        print(user.id)
+        cardDetails = Card.objects.filter(user_id=user.id).values()
+        for data in cardDetails:
+            # modify values as needed
+            data['cardNum'] = decryption(data['cardNum'])
+            data['expiryDate'] = decryption(data['expiryDate'])
+            data['last_four'] = decryption(data['last_four'])
+            # data['cardHolderName'] = decryption(data['cardHolderName'])
+
+        context = {
+            'showId' :showId,
+            'theater' : theater,
+            'movieDateTime' : movieDateTime,
+            'movie':movie,
+            'seats' : selectedseats,
+            'numSeats' : totalCount,
+            'price' : price,
+            'tax' : tax,
+            'totalPrice' : totalPrice,
+            'discount':"0.00",
+            'payment_amount':totalPrice,
+            'cards':cardDetails
+        }
+        return render(request, 'checkout.html', context)
 def seats(request):
     
     if request.method == 'POST':
@@ -303,7 +407,9 @@ def seats(request):
         seniorCount = json.loads(request.body)['seniorCount']
         print(seats)
         print(showId)
-        return redirect('checkout')
+        context={
+        }
+        return render(request, 'checkout.html', context)
         # Rest of your 
     else:
         showId = request.GET.get("show_id")
@@ -591,9 +697,7 @@ def summary(request):
     return render(request, 'summary.html')
 
 
-def checkout(request):
-    print('I am here')
-    return render(request, 'checkout.html')
+
 
 
 def password_reset_confirmation(request):

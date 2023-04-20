@@ -152,7 +152,7 @@
       const adultCount = parseInt('{{ adult_count }}');
       const seniorCount = parseInt('{{ senior_count }}');
       const childCount = parseInt('{{ child_count }}');
-
+      const totalCount = adultCount + childCount + seniorCount;
       console.log(selectedseats);
         // Send the POST request to the checkout endpoint
         fetch('/seatselect/', {
@@ -169,8 +169,12 @@
             totalSeat : minSeats,
             seats: selectedseats
           })
-        });
-      
+        }).then(response => {
+      const url = `seatselect?show_id=${showId}&seatsselected=${selectedseats}`;
+      console.log(url)
+      console.log('helloo')
+      window.location.href = `../checkout?show_id=${showId}&total=${totalCount}&adult=${adultCount}&child=${childCount}&senior=${seniorCount}&seatselected=${selectedseats}`;
+      });
     }
   });
 
