@@ -612,18 +612,20 @@ def base(request):
         else:
             results = Movie.objects.filter(archived=False)
             count = Movie.objects.filter(archived=False).count()
-    if len(results) == 0:
-        messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
-        results = Movie.objects.all()
-        moviesPlaying = results.filter(status='Now Playing', archived=False)
-        moviesComingSoon = results.filter(status='Coming Soon', archived=False)
-        context = {
-            'moviesNow': moviesPlaying,
-            'moviesSoon': moviesComingSoon
-        }
-        return render(request, 'index.html', context)
-    moviesPlaying = results.filter(status='Now Playing')
-    moviesComingSoon = results.filter(status='Coming Soon')
+    # if len(results) == 0:
+    #     messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
+    #     results = Movie.objects.all()
+    #     moviesPlaying = results.filter(status='Now Playing',archived = False)
+    #     moviesComingSoon = results.filter(status='Coming Soon',archived = False)
+    #     context = {
+    #         'moviesNow': moviesPlaying,
+    #         'moviesSoon': moviesComingSoon
+        result_list = {
+            "results": results,
+            "result_count": count}
+    #     return render(request, 'index.html', context)
+    # moviesPlaying = results.filter(status='Now Playing')
+    # moviesComingSoon = results.filter(status='Coming Soon')
 
     # context = {
     #     'moviesNow': moviesPlaying,
