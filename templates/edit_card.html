@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
+{% block content %} 
 <link rel="stylesheet" href="{% static 'css/registration.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
@@ -127,15 +127,15 @@
 }
   
 </style>
-<div class="card">
+<div class="bg-dark" style="border-radius: 75px;">
    <div class="card-body p-5">
       
-      <h1 class="text-uppercase text-center mb-5">Add/Edit Payment Card Details</h1>
+      <h1 class="text-uppercase text-center mb-5 text-white">Add/Edit Payment Card Details</h1>
          </br></br>
          <form method="post" action="edit_card">
             {% csrf_token %}
           
-            <h2>Payment Cards:</h2>
+            <h2 class="text-white">Payment Cards:</h2>
           
             <ul id="credit_cards">
               {% for card in cards %}
@@ -171,7 +171,7 @@
             </div>
             {% if messages %}
             {% for message in messages %}
-              <h3>{{message}}</h3>
+              <h3 class ="text-white">{{message}}</h3>
             {% endfor %}
         {% endif %}
             <script>
