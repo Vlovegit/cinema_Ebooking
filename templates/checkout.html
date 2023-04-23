@@ -20,44 +20,64 @@
     "
 >
     <div class="container h-75" style="max-width: 1500px;">
+        <form method="POST" action="checkout">
+                            {% csrf_token %}
         <div class="row ml-auto">
             <div class="col ml-auto">
                 <div class="card">
                     <div class="card-body p-5">
-                        <form method="POST" action="checkout">
-                            {% csrf_token %}
-                            <h3 class="text-uppercase text-center mb-5">Order Summary</h3>
+                        <h3 class="text-uppercase text-center mb-5">Order Summary</h3>
 
-                            <div class="col ml-auto">
-                                <div class="row ml-auto">
-                                    <div class="col ml-auto"><p>Theater</p></div>
-                                    <div class="col ml-auto"><input type="text" name="show_room" id="show_room" value="{{ theater }}" class="form-control form-control-lg" readonly /></div>
-
-                                    <div class="col ml-auto"><p>Movie</p></div>
-                                    <div class="col ml-auto"><input type="text" name="movie" id="movie" value="{{ movie  }}" class="form-control form-control-lg" readonly /></div>
-                                </div>
-                                <div class="row ml-auto">
-                                    <div class="col ml-auto"><p>Show Time & Date:</p></div>
-                                    <div class="col ml-auto"><input type="text" name="show_time" id="show_time" value="{{ movieDateTime  }}" class="form-control form-control-lg" readonly /></div>
-                                    <div class="col ml-auto"><p>Seats:</p></div>
-                                    <div class="col ml-auto"><input type="text" name="seats" id="seats" value="{{ seats }}" class="form-control form-control-lg" readonly /></div>
-                                </div>
-                                <br />
-                                <!--                    <div>-->
-                                <!--                        <button class="btn btn-outline-success" name="proceed_checkout" value="save" type="submit" href = 'bookmovie/'>Update Order</button>-->
-                                <!--                    </div>-->
+                        <div class="col ml-auto">
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Theater</p></div>
+                                <div class="col ml-auto"><input type="text" name="show_room" id="show_room" value="{{ theater }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Movie</p></div>
+                                <div class="col ml-auto"><input type="text" name="movie" id="movie" value="{{ movie  }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Show Time & Date:</p></div>
+                                <div class="col ml-auto"><input type="text" name="show_time" id="show_time" value="{{ movieDateTime  }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Adult Count:</p></div>
+                                <div class="col ml-auto"><input type="text" name="adult" id="adult" value="{{ adult }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Child Count:</p></div>
+                                <div class="col ml-auto"><input type="text" name="child" id="child" value="{{ child }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Senior Count:</p></div>
+                                <div class="col ml-auto"><input type="text" name="senior" id="senior" value="{{ senior }}" class="form-control form-control-lg" readonly /></div>
+                            </div>
+                            <div class="row ml-auto">
+                                <div class="col ml-auto"><p>Seats:</p></div>
+                                <div class="col ml-auto"><input type="text" name="seats" id="seats" value="{{ seats }}" class="form-control form-control-lg" readonly /></div>
                             </div>
                             <br />
-                            <br />
-                            <div class="row">
-                                <div class="col-4" style="width: 200px;">
+                            <!--                    <div>-->
+                            <!--                        <button class="btn btn-outline-success" name="proceed_checkout" value="save" type="submit" href = 'bookmovie/'>Update Order</button>-->
+                            <!--                    </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col ml-auto">
+                <div class="card">
+                    <div class="card-body">
+
+                            <div class="col ml-auto">
+                                <div>
                                     <div class="card" style="border-radius: 15px;">
                                         <div class="card-body p-5">
                                             <h3 class="text-uppercase text-center mb-5">Checkout</h3>
 
                                             <div class="row ml-auto">
                                                 <div class="col ml-auto"><p>No.of Tickets</p></div>
-                                                <input type="hidden" name="show_id" value="{{showId}}">
+                                                <input type="hidden" name="show_id" value="{{showId}}" />
                                                 <div class="col ml-auto"><input type="number" name="no_of_tickets" style="text-align: right;" value="{{ numSeats }}" id="no_of_tickets" class="form-control form-control-lg" readonly /></div>
                                             </div>
 
@@ -75,202 +95,41 @@
                                             </div>
                                             <div class="form-outline mb-4 row ml-auto">
                                                 <div class="col ml-auto"><label class="form-label" for="promotion_code">Promotion Code</label></div>
-                                                <div class="col ml-auto"><input type="text" name="promotion_code"
-                                                                               value="{{ promotion_code }}" id="promotion_code" class="form-control form-control-lg" placeholder="{{promotion_code}}" /></div>
+                                                <div class="col ml-auto">
+                                                    <input type="text" name="promotion_code" value="{{ promotion_code }}" id="promotion_code" class="form-control form-control-lg" placeholder="{{promotion_code}}" />
+                                                </div>
                                             </div>
                                             <div class="row ml-auto">
                                                 <div class="col ml-auto"><p>Discount</p></div>
-                                                <div class="col ml-auto"><input type="text" name="discount" style="text-align: right;"
-                                                                               value="{{ discount }}" id="discount" class="form-control form-control-lg" readonly /></div>
+                                                <div class="col ml-auto"><input type="text" name="discount" style="text-align: right;" value="{{ discount }}" id="discount" class="form-control form-control-lg" readonly /></div>
                                             </div>
                                             <div class="row ml-auto">
                                                 <div class="col ml-auto"><p>Payment Amount</p></div>
                                                 <div class="col ml-auto">
-                                                    <input type="text" id="amount" style="text-align: right;"
-                                                           value="{{ payment_amount }}" class="form-control form-control-lg" readonly />
+                                                    <input type="text" id="amount" style="text-align: right;" value="{{ payment_amount }}" class="form-control form-control-lg" readonly />
                                                 </div>
                                             </div>
                                             <div class="row ml-auto">
                                                 <div class="col ml-auto">
                                                     <button class="btn btn-outline-success" name="proceed_checkout" value="save" type="submit">Apply Promotion</button>
                                                 </div>
-                                                <div class="col ml-auto">
-                                                    <button class="btn btn-outline-success" name="make_payment" id="make_payment" value="save" type="submit">Make Payment</button>
-                                                </div>
                                             </div>
                                         </div>
-                                        {% if messages %}
-                                        {% for message in messages %}
-                                        <h3 style="text-align:center">{{message}}</h3>
-                                        {% endfor %}
-                                        {% endif %}
+                                        {% if messages %} {% for message in messages %}
+                                        <h3 style="text-align: center;">{{message}}</h3>
+                                        {% endfor %} {% endif %}
                                     </div>
                                 </div>
-                                <script>
-                                    function makePayment() {
-                                    var showId = {{showId}}
-                                    console.log(showId)
-                                    var seats = (document.getElementById("seats").value);
-                                    console.log(seats)
-                                    const url = `confirmPayment?show_id=${showId}&seats=${seats}`;
-                                    console.log(url)
-                                    window.location.href = url;
-                                    }
-                                    document.getElementById("make_payment").addEventListener("click", makePayment);
-                                </script>
-<!--                                <div>-->
-<!--                                    <div class="card">-->
-<!--                                       <div class="card-body p-5">-->
-
-<!--                                          <h1 class="text-uppercase text-center mb-5">Add/Edit Payment Card Details</h1>-->
-<!--                                             </br></br>-->
-<!--                                             <form method="post" action="edit_card">-->
-<!--                                                {% csrf_token %}-->
-
-<!--                                                <h2>Payment Cards:</h2>-->
-
-<!--                                                <ul id="credit_cards">-->
-<!--                                                  {% for card in cards %}-->
-
-<!--                                                    <li>-->
-<!--                                                      <div>-->
-<!--                                                        <label for="cardHolderName_{{ forloop.counter }}">Cardholder Name:</label>-->
-<!--                                                        <input type="text" required="true" id="cardHolderName_{{ forloop.counter }}" name="cardHolderName_{{ forloop.counter }}" value="{{ card.cardHolderName }}">-->
-<!--                                                      </div>-->
-
-<!--                                                      <div>-->
-<!--                                                        <label for="cardNum_{{ forloop.counter }}">Card Number:</label>-->
-<!--                                                        <input type="text" required="true" id="cardNum_{{ forloop.counter }}" name="cardNum_{{ forloop.counter }}" value="{{ card.cardNum }}">-->
-<!--                                                      </div>-->
-
-<!--                                                      <div>-->
-<!--                                                        <label for="expiryDate_{{ forloop.counter }}">Expiration Date:</label>-->
-<!--                                                        <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}">-->
-<!--                                                      </div>-->
-
-<!--                                                      <button type="button" onclick="deleteCard(this)">Delete</button>-->
-<!--                                                    </li>-->
-
-<!--                                                  {% endfor %}-->
-<!--                                                </ul>-->
-<!--                                             </form>-->
-<!--                                       </div>-->
-<!--                                                                        </div>-->
-
-
-<!--                                </div>-->
-
-<!--                                <div class="col-8">-->
-<!--                                    <div class="card" style="border-radius: 15px;">-->
-<!--                                        <div class="card-body p-5">-->
-<!--                                            <div class="row">-->
-<!--                                                {% for i in cards %}-->
-
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <div class="card border border-dark text-white bg-info mb-3" style="border-radius: 25px; width: 350px; height: 200px;">-->
-<!--                                                        <span class="button">-->
-<!--                                                            <button type="submit" style="margin: 5px;" value="{{i.id}}" name="delete" {{i.id}} class="btn btn-danger btn-rounded" data-mdb-ripple-color="#ffffff">-->
-<!--                                                                <i class="fas fa-trash"></i>-->
-<!--                                                            </button>-->
-<!--                                                        </span>-->
-<!--                                                        <div class="card-body p-2">-->
-<!--                                                            <blockquote class="card-blockquote">-->
-<!--                                                                <div class="row ml-auto">-->
-<!--                                                                    <div class="col ml-auto">-->
-<!--                                                                        <h5 class="card-title" style="font-size: 15px;">Card Number</h5>-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col ml-auto">-->
-<!--                                                                        <input type="text" id="cardnumber" class="form-control form-control-sm" placeholder="{{i.cardNum}}" />-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                                <div class="form-outline mb-4 row ml-auto py-2">-->
-<!--                                                                    <div class="col ml-auto"><h5 class="card-title" style="font-size: 15px;">Card Holder Name</h5></div>-->
-<!--                                                                    <div class="col ml-auto"><input type="text" class="form-control form-control-sm" placeholder="{{i.cardHolderName}}" /></div>-->
-<!--                                                                </div>-->
-<!--                                                                <div class="form-outline mb-4 row ml-auto">-->
-<!--                                                                    <div class="col ml-auto"><h5 class="card-title" style="font-size: 15px;">Exp. Date</h5></div>-->
-<!--                                                                    <div class="col ml-auto">-->
-<!--                                                                        <input type="text" id="id_month{{i.id}}" class="form-control form-control-sm" placeholder="{{i.expiryDate}}" />-->
-<!--                                                                        <label class="form-label" for="id_month{{i.id}}">Month</label>-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col ml-auto">-->
-<!--                                                                        <input type="text" id="id_year{{i.id}}" class="form-control form-control-sm" placeholder="{{i.expiryDate}}" />-->
-<!--                                                                        <label class="form-label" for="id_year{{i.id}}">Year</label>-->
-<!--                                                                    </div>-->
-<!--                                                                    <div class="col ml-auto">-->
-<!--                                                                        <input type="text" minlength="3" maxlength="3" id="cvv{{i.id}}" name="cvv{{i.id}}" class="form-control form-control-sm" placeholder="{{i.cvv}}" />-->
-<!--                                                                        <label class="form-label" for="cvv{{i.id}}">CVV</label>-->
-<!--                                                                    </div>-->
-<!--                                                                </div>-->
-<!--                                                            </blockquote>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
-<!--                                                {% endfor %}-->
-<!--                                            </div>-->
-<!--                                            <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>-->
-<!--                                            <div class="form-outline mb-4 row ml-auto">-->
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <label class="form-label" for="card_number">Card Number</label>-->
-<!--                                                </div>-->
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" placeholder="Card Number *" />-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="form-outline mb-4 row ml-auto">-->
-<!--                                                <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>-->
-<!--                                                <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" placeholder="Card Holder Name *" /></div>-->
-<!--                                            </div>-->
-<!--                                            <div class="form-outline mb-4 row ml-auto">-->
-<!--                                                <div class="col ml-auto"><label class="form-label" for="cvv">CVV</label></div>-->
-<!--                                                <div class="col ml-auto"><input type="number" min="000" max="999" name="cvv" id="cvv" class="form-control form-control-lg" placeholder="CVV *" /></div>-->
-<!--                                                <div class="col ml-auto"><label class="form-label" for="expireMM">Exp. Date</label></div>-->
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <select name="expiredate" id="expireMM">-->
-<!--                                                        <option value="">Month</option>-->
-<!--                                                        <option value="01">01</option>-->
-<!--                                                        <option value="02">02</option>-->
-<!--                                                        <option value="03">03</option>-->
-<!--                                                        <option value="04">04</option>-->
-<!--                                                        <option value="05">05</option>-->
-<!--                                                        <option value="06">06</option>-->
-<!--                                                        <option value="07">07</option>-->
-<!--                                                        <option value="08">08</option>-->
-<!--                                                        <option value="09">09</option>-->
-<!--                                                        <option value="10">10</option>-->
-<!--                                                        <option value="11">11</option>-->
-<!--                                                        <option value="12">12</option>-->
-<!--                                                    </select>-->
-<!--                                                </div>-->
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <select name="expireyear" id="expireYY">-->
-<!--                                                        <option value="">Year</option>-->
-<!--                                                        <option value="20">2020</option>-->
-<!--                                                        <option value="21">2021</option>-->
-<!--                                                        <option value="22">2022</option>-->
-<!--                                                        <option value="23">2023</option>-->
-<!--                                                        <option value="24">2024</option>-->
-<!--                                                    </select>-->
-<!--                                                    <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />-->
-<!--                                                </div>-->
-<!--                                                <div class="col ml-auto">-->
-<!--                                                    <input type="checkbox" id="rememberme" name="rememberme" />-->
-<!--                                                    <label for="rememberme" class="text-center text-muted mt-5 mb-0"> Remember Me</label><br />-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-
-<!--                                            <button class="btn btn-outline-success" name="Proceed Payment" value="payment" type="submit">Proceed Payment</button>-->
-<!--                                            <button class="btn btn-outline-success" name="Cancel" type="submit">Cancel</button>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
                             </div>
+                        </div>
+                        <div class="col ml-auto">
+                        <button class="btn btn-outline-success" name="make_payment" value="save" type="submit">Make Payment</button>
+                        </div>
 
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
+        </form>
     </div>
 </section>
 {% endblock %}

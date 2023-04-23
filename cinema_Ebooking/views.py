@@ -211,8 +211,8 @@ def index(request):
     # present_movies = EbookingMovie.objects.filter(status="airing")
 
     movies = Movie.objects.values()
-    moviesPlaying = movies.filter(status='Now Playing',archived = False)
-    moviesComingSoon = movies.filter(status='Coming Soon',archived = False)
+    moviesPlaying = movies.filter(status='Now Playing', archived=False)
+    moviesComingSoon = movies.filter(status='Coming Soon', archived=False)
 
     context = {
         'moviesNow': moviesPlaying,
@@ -228,9 +228,9 @@ def movie_description(request):
     movies = Movie.objects.filter(name=name).values()
 
     context = {
-        'movies' : movies
+        'movies': movies
     }
-    #print(context)
+    # print(context)
     return render(request, 'movie_description.html', context)
 
 def show_time(request):
@@ -238,7 +238,7 @@ def show_time(request):
     print(name)
     movies = Movie.objects.filter(name=name).values('id')
     movieId = movies[0].get('id')
-    print('MovieId : ',movieId)
+    print('MovieId : ', movieId)
     showTimes = ScheduleMovie.objects.filter(movie_id=movieId).values()
     list = []
     print(showTimes)
@@ -250,23 +250,24 @@ def show_time(request):
         if s.get('showDate') in showDateSet:
             thisdict = {}
             thisdict['theatreid'] = ShowRoom.objects.filter(id=s.get('theatre_id')).values('theatre')[0].get('theatre')
-            thisdict['showDate']= (s.get('showDate')).strftime("%m-%d-%Y")
+            thisdict['showDate'] = (s.get('showDate')).strftime("%m-%d-%Y")
             i = 1
             for show in showTimes.order_by('showDate'):
                 if s.get('theatre_id') == show.get('theatre_id') and s.get('showDate') == show.get('showDate'):
-                    showtime = 'show'+str(i)
-                    i = i+1
+                    showtime = 'show' + str(i)
+                    i = i + 1
                     thisdict[showtime] = show.get('MovieTime')
-                    thisdict["showid"] = show.get('id') 
+                    thisdict["showid"] = show.get('id')
             showDateSet.remove(s.get('showDate'))
             list.append(thisdict)
 
     context = {
-        'movies' : list
+        'movies': list
     }
     print(context)
     # return showtime information as a JSON response
     return JsonResponse(context)
+
 
 def ticketcount(request):
     showId = request.GET.get("show_id")
@@ -275,81 +276,219 @@ def ticketcount(request):
     print(show)
     #print(show.movie_id)
     movie = Movie.objects.filter(id=show.movie_id).first()
-    #print(movie)
+    # print(movie)
     showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
     seatremaining = 50 - show.booked_seats
     context = {
         'seatsremaining': seatremaining,
         'moviename': movie.name,
-        'showId' : showId,
-        'poster' : movie.poster,
-        'showDate' : show.showDate,
-        'showTime' : show.MovieTime,
-        'theater' : showroom.theatre,
-        'adultticket' : show.adult_cost,
-        'seniorticket' : show.senior_cost,
-        'childticket' : show.child_cost
+        'showId': showId,
+        'poster': movie.poster,
+        'showDate': show.showDate,
+        'showTime': show.MovieTime,
+        'theater': showroom.theatre,
+        'adultticket': show.adult_cost,
+        'seniorticket': show.senior_cost,
+        'childticket': show.child_cost
     }
     print(context)
-    return render(request, 'ticketcount.html',context)
+    return render(request, 'ticketcount.html', context)
+
 
 def confirmPayment(request):
-    print('Confirm payment')
-    context={
+    User = get_user_model()
+    print(request.method)
+    if request.method == 'POST':
+        print('Confirm Payment')
+        cardIdBtn = request.POST.get("cardId")
+        print('Pay button ID')
+        print(cardIdBtn)
+        referenceNumber = request.POST.get("referenceNumber")
+        referenceNumber = 'tkt20230423113235113263'
+        ticket = Tickets.objects.filter(referenceNumber=referenceNumber).first()
+        seatsOccupied = Seat.objects.filter(show_id=ticket.show_id).first()
+        currentUser = User.objects.get(email=request.user)
+        list_seat_available = []
+        list_seat_selected = []
+        list_seat_booked = []
+        print(seatsOccupied.seat_selected)
+        print(seatsOccupied.seat_booked)
+        print(seatsOccupied.seat_available)
+        if str(seatsOccupied.seat_booked) != 'None':
+            list_seat_booked = seatsOccupied.seat_booked.split(',')
+        if str(seatsOccupied.seat_selected) != 'None':
+            list_seat_selected = seatsOccupied.seat_selected.split(',')
+            list_seat_selected1 = seatsOccupied.seat_selected.split(',')
 
-    }
-    return render(request, 'confirmPayment.html', context)
+        for i in list_seat_selected1:
+            list_seat_booked.append(i)
+            list_seat_selected.remove(i)
+        list_string_selected = ''
+        list_string_booked = ''
+
+        k = 0
+        for i in list_seat_selected:
+            if k == 0:
+                list_string_selected = str(i)
+                k = 1
+            else:
+                list_string_selected = list_string_selected + ',' + str(i)
+        k = 0
+        for i in list_seat_booked:
+            if k == 0:
+                list_string_booked = str(i)
+                k = 1
+            else:
+                list_string_booked = list_string_booked + ',' + str(i)
+        ticket.isBooked = True
+        print(list_string_selected)
+        print(list_string_booked)
+        #seatsOccupied.save()
+        #ticket.save()
+        show = ScheduleMovie.objects.filter(id=ticket.show_id).first()
+        movie = Movie.objects.filter(id=show.movie_id).first()
+        showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
+        confirmEmailTicketBooking(currentUser, movie, show, showroom, ticket)
+        #confirmEmailProfileUpdation(currentUser)
+        print('Email sent')
+        print(referenceNumber)
+        print(request.method)
+        return render(request, 'confirmPayment.html')
+    else:
+        print('Confirm Payment')
+        showId = request.GET.get("show_id")
+        referenceNumber = request.GET.get("referenceNumber")
+        referenceNumber = 'tkt20230423113235113263'
+        print(referenceNumber)
+        print(showId)
+        mydata = User.objects.filter(email=request.user).first()
+        print(mydata.id)
+        cardDetails = Card.objects.filter(user_id=mydata.id).values()
+        print(cardDetails)
+        for data in cardDetails:
+            # modify values as needed
+            data['cardNum'] = decryption(data['cardNum'])
+            data['expiryDate'] = decryption(data['expiryDate'])
+            data['last_four'] = decryption(data['last_four'])
+
+        context = {
+            'cards': cardDetails,
+            'referenceNumber': referenceNumber
+
+        }
+        return render(request, 'confirmPayment.html', context)
+
 
 def checkout(request):
     print(request.method)
     if request.method == 'POST':
+        apply_promo_btn = request.POST.get("proceed_checkout")
+        make_payment_btn = request.POST.get("make_payment")
         showId = request.POST.get("show_id")
         print(showId)
         movie = request.POST.get("movie")
+        print(movie)
         movieDateTime = request.POST.get("show_time")
         theatre = request.POST.get("show_room")
         selectedseats = request.POST.get("seats")
         totalCount = request.POST.get("no_of_tickets")
         price = request.POST.get("tickets_price")
         tax = request.POST.get("taxes")
+        adultCount = request.POST.get("adult")
+        childCount = request.POST.get("child")
+        seniorCount = request.POST.get("senior")
         totalPrice = request.POST.get("total_price")
         promotion_code = request.POST.get("promotion_code")
         print(promotion_code)
         promotion = Promotion.objects.filter(promo_code=promotion_code).first()
         discount = 0.00
         dateToday = date.today()
-        if promotion is None:
-            messages.info(request, 'Promo code is not valid', extra_tags='promocode')
-            payment_amount = totalPrice
-        else:
-            if promotion.valid_from <= dateToday and dateToday<=promotion.valid_upto:
-                subtotal = float(price)-(float(price)*float(promotion.discount))/100
-                tax = (subtotal * 5) / 100
-                payment_amount = subtotal + tax
-                discount = (float(price)*float(promotion.discount))/100
-                discount = str("{0:.2f}".format(discount))
-                tax = str("{0:.2f}".format(tax))
-                payment_amount = str("{0:.2f}".format(payment_amount))
-                messages.info(request, f'Promo code is valid, you get {promotion.discount} % discount', extra_tags='promocode')
-            else:
+        if apply_promo_btn is not None:
+            if promotion is None:
                 messages.info(request, 'Promo code is not valid', extra_tags='promocode')
                 payment_amount = totalPrice
-        context={
-            'theater' : theatre,
-            'movieDateTime': movieDateTime,
-            'movie': movie,
-            'seats': selectedseats,
-            'numSeats': totalCount,
-            'price': price,
-            'tax': tax,
-            'totalPrice': totalPrice,
-            'promotion_code': promotion_code,
-            'discount': "- "+str(discount),
-            'payment_amount':payment_amount,
-            'showId': showId
-        }
+            else:
+                if promotion.valid_from <= dateToday and dateToday <= promotion.valid_upto:
+                    subtotal = float(price) - (float(price) * float(promotion.discount)) / 100
+                    tax = (subtotal * 5) / 100
+                    payment_amount = subtotal + tax
+                    discount = (float(price) * float(promotion.discount)) / 100
+                    discount = str("{0:.2f}".format(discount))
+                    tax = str("{0:.2f}".format(tax))
+                    payment_amount = str("{0:.2f}".format(payment_amount))
+                    messages.info(request, f'Promo code is valid, you get {promotion.discount} % discount',
+                                  extra_tags='promocode')
+                else:
+                    messages.info(request, 'Promo code is not valid', extra_tags='promocode')
+                    payment_amount = totalPrice
+            context = {
+                'theater': theatre,
+                'movieDateTime': movieDateTime,
+                'movie': movie,
+                'seats': selectedseats,
+                'numSeats': totalCount,
+                'price': price,
+                'tax': tax,
+                'totalPrice': totalPrice,
+                'promotion_code': promotion_code,
+                'discount': "- " + str(discount),
+                'payment_amount': payment_amount,
+                'showId': showId,
+                'adult': adultCount,
+                'child': childCount,
+                'senior': seniorCount
+            }
+            return render(request, 'checkout.html', context)
+        if make_payment_btn is not None:
+            print('make payment')
+            ticket = Tickets()
+            ticket.user = request.user
+            ticket.isBooked = False
+            ticket.ticket_adult = adultCount
+            ticket.ticket_child = childCount
+            ticket.ticket_senior = seniorCount
+            ticket.seat_data = selectedseats
+            ticket.show_id = showId
+            ticket.time_created = datetime.now()
+            referenceNumber = 'tkt-' + "-".join(str(ticket.time_created).split(' '))
+            ticket.referenceNumber = referenceNumber.replace('-', '').replace(':', '').replace('.', '')
+            seatsOccupied = Seat.objects.filter(show_id=showId).first()
+            list_seat_available = []
+            list_seat_selected = []
+            if str(seatsOccupied.seat_available) != 'None':
+                list_seat_available = seatsOccupied.seat_available.split(',')
+            if str(seatsOccupied.seat_selected) != 'None':
+                list_seat_selected = seatsOccupied.seat_selected.split(',')
 
-        return render(request, 'checkout.html', context)
+            list_seat_selected1 = selectedseats.split(',')
+            for i in list_seat_selected1:
+                list_seat_selected.append(i)
+                list_seat_available.remove(i)
+            list_string_selected = ''
+            list_string_available = ''
+
+            k = 0
+            for i in list_seat_selected:
+                if k == 0:
+                    list_string_selected = str(i)
+                    k = 1
+                else:
+                    list_string_selected = list_string_selected + ',' + str(i)
+            k = 0
+            for i in list_seat_available:
+                if k == 0:
+                    list_string_available = str(i)
+                    k = 1
+                else:
+                    list_string_available = list_string_available + ',' + str(i)
+
+            seatsOccupied.seat_available = list_string_available
+            seatsOccupied.seat_selected = list_string_selected
+            print(list_string_selected)
+            print(list_string_available)
+            seatsOccupied.save()
+            ticket.save()
+            return redirect(f'/confirmPayment?show_Id={showId}&referenceNumber={ticket.referenceNumber}')
     else:
         print('Inside Checkout GET method')
         showId = request.GET.get("show_id")
@@ -362,7 +501,7 @@ def checkout(request):
         movie = Movie.objects.filter(id=show.movie_id).first()
         showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
         price = adultCount * show.adult_cost + childCount * show.child_cost + seniorCount * show.senior_cost
-        tax = (price * 5)/100
+        tax = (price * 5) / 100
         totalPrice = price + tax
         totalPrice = str("{0:.2f}".format(totalPrice))
         tax = str("{0:.2f}".format(tax))
@@ -370,32 +509,27 @@ def checkout(request):
         theater = showroom.theatre
         movieDateTime = show.MovieTime + ' ' + str(show.showDate)
 
-        print(request.user)
-        user = User.objects.get(email=request.user)
-        print(user.id)
-        cardDetails = Card.objects.filter(user_id=user.id).values()
-        for data in cardDetails:
-            # modify values as needed
-            data['cardNum'] = decryption(data['cardNum'])
-            data['expiryDate'] = decryption(data['expiryDate'])
-            data['last_four'] = decryption(data['last_four'])
-            # data['cardHolderName'] = decryption(data['cardHolderName'])
+        # data['cardHolderName'] = decryption(data['cardHolderName'])
 
         context = {
-            'showId' :showId,
-            'theater' : theater,
-            'movieDateTime' : movieDateTime,
-            'movie':movie,
-            'seats' : selectedseats,
-            'numSeats' : totalCount,
-            'price' : price,
-            'tax' : tax,
-            'totalPrice' : totalPrice,
-            'discount':"0.00",
-            'payment_amount':totalPrice,
-            'cards':cardDetails
+            'showId': showId,
+            'theater': theater,
+            'movieDateTime': movieDateTime,
+            'movie': movie,
+            'seats': selectedseats,
+            'numSeats': totalCount,
+            'price': price,
+            'tax': tax,
+            'totalPrice': totalPrice,
+            'discount': "0.00",
+            'payment_amount': totalPrice,
+            'adult': adultCount,
+            'child': childCount,
+            'senior': seniorCount
         }
         return render(request, 'checkout.html', context)
+
+
 def seats(request):
     
     if request.method == 'POST':
@@ -407,53 +541,52 @@ def seats(request):
         seniorCount = json.loads(request.body)['seniorCount']
         print(seats)
         print(showId)
-        context={
+        context = {
         }
         return render(request, 'checkout.html', context)
         # Rest of your 
     else:
         showId = request.GET.get("show_id")
         totalCount = request.GET.get("total")
-        adultCount = request.GET.get("adult",None)
-        childCount = request.GET.get("child",None)
-        seniorCount = request.GET.get("senior",None)
+        adultCount = request.GET.get("adult", None)
+        childCount = request.GET.get("child", None)
+        seniorCount = request.GET.get("senior", None)
         print(adultCount)
         show = ScheduleMovie.objects.filter(id=showId).first()
         print(show)
-        #print(show.movie_id)
+        # print(show.movie_id)
         movie = Movie.objects.filter(id=show.movie_id).first()
-        #print(movie)
+        # print(movie)
         showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
         seats = Seat.objects.filter(show_id=showId).first()
         available_seats = []
         available_seats = seats.seat_available.split(',')
-        #print(available_seats)
+        # print(available_seats)
         seatdict = {}
-        for i in range(1,51):
+        for i in range(1, 51):
             if str(i) in available_seats:
-                seatdict[i]='A'
+                seatdict[i] = 'A'
             else:
-                seatdict[i]='O'
-        #print(seatdict)
+                seatdict[i] = 'O'
+        # print(seatdict)
         context = {
             'moviename': movie.name,
-            'showId' : showId,
-            'poster' : movie.poster,
-            'showDate' : show.showDate,
-            'showTime' : show.MovieTime,
-            'theater' : showroom.theatre,
-            'available_seats' : seatdict,
-            'min_seats' : totalCount,
-            'adult_count' : adultCount,
-            'senior_count' : seniorCount,
-            'child_count' : childCount,
+            'showId': showId,
+            'poster': movie.poster,
+            'showDate': show.showDate,
+            'showTime': show.MovieTime,
+            'theater': showroom.theatre,
+            'available_seats': seatdict,
+            'min_seats': totalCount,
+            'adult_count': adultCount,
+            'senior_count': seniorCount,
+            'child_count': childCount,
         }
         print(context)
-        return render(request, 'seats.html',context)
+        return render(request, 'seats.html', context)
 
 
 def base(request):
-     
     results = []
 
     if request.method == 'GET':
@@ -463,34 +596,34 @@ def base(request):
         print(movie_category)
         print(movie_name)
         if movie_name == '' and movie_category == 'ALL':
-            results = Movie.objects.filter(archived = False)
-            count  = Movie.objects.filter(archived = False).count()
+            results = Movie.objects.filter(archived=False)
+            count = Movie.objects.filter(archived=False).count()
         elif movie_name != '' and movie_category != '':
-            results = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category),archived = False)
-            count = Movie.objects.filter(Q(name__icontains = movie_name)|Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category),archived = False).count()
+            results = Movie.objects.filter(Q(name__icontains=movie_name) | Q(category1__icontains=movie_category) | Q(
+                category2__icontains=movie_category) | Q(category3__icontains=movie_category), archived=False)
+            count = Movie.objects.filter(Q(name__icontains=movie_name) | Q(category1__icontains=movie_category) | Q(
+                category2__icontains=movie_category) | Q(category3__icontains=movie_category), archived=False).count()
         elif movie_name != '':
-            results = Movie.objects.filter(name = movie_name,archived = False)
-            count = Movie.objects.filter(name = movie_name,archived = False).count()
+            results = Movie.objects.filter(name=movie_name, archived=False)
+            count = Movie.objects.filter(name=movie_name, archived=False).count()
         elif movie_category != '':
             results = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category))
             count = Movie.objects.filter(Q(category1__icontains = movie_category)|Q(category2__icontains = movie_category)|Q(category3__icontains = movie_category)).count()
         else:
-            results = Movie.objects.filter(archived = False)
-            count = Movie.objects.filter(archived = False).count()
-    # if len(results) == 0:
-    #     messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
-    #     results = Movie.objects.all()
-    #     moviesPlaying = results.filter(status='Now Playing',archived = False)
-    #     moviesComingSoon = results.filter(status='Coming Soon',archived = False)
-    #     context = {
-    #         'moviesNow': moviesPlaying,
-    #         'moviesSoon': moviesComingSoon
-        result_list = {
-            "results": results,
-            "result_count": count}
-    #     return render(request, 'index.html', context)
-    # moviesPlaying = results.filter(status='Now Playing')
-    # moviesComingSoon = results.filter(status='Coming Soon')
+            results = Movie.objects.filter(archived=False)
+            count = Movie.objects.filter(archived=False).count()
+    if len(results) == 0:
+        messages.error(request, 'No movie exists for given title or category', extra_tags='exist')
+        results = Movie.objects.all()
+        moviesPlaying = results.filter(status='Now Playing', archived=False)
+        moviesComingSoon = results.filter(status='Coming Soon', archived=False)
+        context = {
+            'moviesNow': moviesPlaying,
+            'moviesSoon': moviesComingSoon
+        }
+        return render(request, 'index.html', context)
+    moviesPlaying = results.filter(status='Now Playing')
+    moviesComingSoon = results.filter(status='Coming Soon')
 
     # context = {
     #     'moviesNow': moviesPlaying,
@@ -544,6 +677,7 @@ def forgot_password_validation(request):
 
 def account_notverified(request):
     return render(request, "accountNotVerified.html")
+
 
 def edit_profile(request):
     User = get_user_model()
@@ -623,24 +757,24 @@ def edit_card(request):
         user = User.objects.get(email=request.user)
         print(user.id)
         updated = False
-        if user is not None :
+        if user is not None:
             card_count = 0
             cards = []
             containsRecord = False
             for key, value in request.POST.items():
                 if key.startswith('cardHolderName_'):
-                   containsRecord = True
-                   card_count = key.split("_")[1]
-                   card = {}
-                   card['cardHolderName'] = value
-                   card['cardNum'] = encryption(request.POST.get(f'cardNum_{card_count}'))
-                   card['expiryDate'] = encryption(request.POST.get(f'expiryDate_{card_count}'))
-                   card['last_four'] = request.POST.get(f'cardNum_{card_count}')[-4:]
-                   cards.append(card)
-                   print("Adding")
+                    containsRecord = True
+                    card_count = key.split("_")[1]
+                    card = {}
+                    card['cardHolderName'] = value
+                    card['cardNum'] = encryption(request.POST.get(f'cardNum_{card_count}'))
+                    card['expiryDate'] = encryption(request.POST.get(f'expiryDate_{card_count}'))
+                    card['last_four'] = request.POST.get(f'cardNum_{card_count}')[-4:]
+                    cards.append(card)
+                    print("Adding")
             if containsRecord == True:
                 print("Deleting record now")
-                 # retrieve the record to be deleted
+                # retrieve the record to be deleted
                 card_to_delete = Card.objects.filter(user_id=request.user.id)
                 # delete the record
                 card_to_delete.delete()
@@ -655,19 +789,19 @@ def edit_card(request):
                     expiryDate=card['expiryDate']
                 )
                 if created:
-                   updated = True
-                   print('Record created')
+                    updated = True
+                    print('Record created')
                 else:
                     print('Record Skipped')
-            
+
             mydata = Card.objects.filter(user_id=user.id).values()
             for data in mydata:
                 # modify values as needed
                 data['cardNum'] = decryption(data['cardNum'])
                 data['expiryDate'] = decryption(data['expiryDate'])
                 data['last_four'] = decryption(data['last_four'])
-                #data['cardHolderName'] = decryption(data['cardHolderName'])
-            
+                # data['cardHolderName'] = decryption(data['cardHolderName'])
+
             template = loader.get_template('edit_card.html')
             context = {
                 'cards': mydata
@@ -675,7 +809,7 @@ def edit_card(request):
             if updated == True:
                 messages.info(request, 'Successfully updated the payment details for the user.')
             return HttpResponse(template.render(context, request))
-    
+
     print(request.user)
     user = User.objects.get(email=request.user)
     print(user.id)
@@ -683,8 +817,8 @@ def edit_card(request):
     template = loader.get_template('edit_card.html')
     context = {
         'cards': mydata
-        }
-            
+    }
+
     return HttpResponse(template.render(context, request))
 
 
@@ -696,16 +830,13 @@ def book_movie(request):
     return render(request, 'bookmovie.html')
 
 
-
 def summary(request):
     return render(request, 'summary.html')
 
 
-
-
-
 def password_reset_confirmation(request):
     return render(request, 'passwordresetconfirm.html')
+
 
 def pwd_reset(request):
     if request.method == 'POST':
@@ -714,19 +845,22 @@ def pwd_reset(request):
 
         # print(mydata)
         if mydata.exists():
-            mydata1 = User.objects.get(email = email)
-            resetPwdEmail(request, mydata1, email) #reset function call
-            #messages.info(request,'Password Reset link has been sent to your Email Id. Please click on \
-            #received reset link to reset your password. Note: Check your spam folder.',extra_tags='exist')
-            return render(request,"forgot_password.html")
+            mydata1 = User.objects.get(email=email)
+            resetPwdEmail(request, mydata1, email)  # reset function call
+            # messages.info(request,'Password Reset link has been sent to your Email Id. Please click on \
+            # received reset link to reset your password. Note: Check your spam folder.',extra_tags='exist')
+            return render(request, "forgot_password.html")
         else:
-            messages.info(request,'No account exists for provided Email Id. Please check it once and try sending the link again',extra_tags='exist')
-            return render(request,"forgot_password.html")
+            messages.info(request,
+                          'No account exists for provided Email Id. Please check it once and try sending the link again',
+                          extra_tags='exist')
+            return render(request, "forgot_password.html")
 
 
     else:
-        return render(request,"forgot_password.html")
-    
+        return render(request, "forgot_password.html")
+
+
 def resetPwdEmail(request, user, to_email):
     # print(user.first_name + 'in resetEmail')
     firstname = user.first_name
@@ -746,9 +880,9 @@ def resetPwdEmail(request, user, to_email):
             received reset link to reset your password. Note: Check your spam folder.')
     else:
         messages.error(request, f'Some issue with sending mail to {to_email}, check if you typed it correctly.')
-        
-def forgot_password_validation(request,  uidb64, token):  
-    
+
+
+def forgot_password_validation(request, uidb64, token):
     if request.method == 'POST':
 
         currentpassword = request.POST['current_password']
@@ -761,31 +895,37 @@ def forgot_password_validation(request,  uidb64, token):
                 user = User.objects.get(pk=uid)
             except(TypeError, ValueError, OverflowError, User.DoesNotExist):
                 user = None
-            
+
             user2 = auth.authenticate(email=user.email, password=currentpassword)
             if user2 is None:
-                messages.info(request, 'Current password entered is incorrect. Please try again with the link sent to mail earlier.', extra_tags='invalid')
+                messages.info(request,
+                              'Current password entered is incorrect. Please try again with the link sent to mail earlier.',
+                              extra_tags='invalid')
                 return render(request, 'passwordresetconfirm.html')
             if user is not None and account_activation_token.check_token(user, token):
                 user.set_password(newpassword1)
                 print(user.password)
                 user.save()
-                messages.info(request,"Password is reset successfully. Please login with the new password.")
-                return render(request, 'passwordresetconfirm.html') #success page
+                messages.info(request, "Password is reset successfully. Please login with the new password.")
+                return render(request, 'passwordresetconfirm.html')  # success page
 
             else:
-                messages.info(request, 'Reset link is invalid! Please check the link or resend a new link to you email.')
-                return render(request, 'passwordresetconfirm.html') #success page
-               
+                messages.info(request,
+                              'Reset link is invalid! Please check the link or resend a new link to you email.')
+                return render(request, 'passwordresetconfirm.html')  # success page
+
         else:
-            messages.info(request, 'Passwords do not match, please try again with the link sent to email', extra_tags='match')
+            messages.info(request, 'Passwords do not match, please try again with the link sent to email',
+                          extra_tags='match')
             return render(request, 'passwordresetconfirm.html')
-       
+
     else:
         return render(request, "passwordreset.html")
 
+
 def reset_password(request):
     return render(request, 'passwordreset.html')
+
 
 def confirmEmailProfileUpdation(user):
     try:
@@ -797,6 +937,7 @@ def confirmEmailProfileUpdation(user):
     except:
         pass
 
+
 def confirmEmailPasswordUpdation(user):
     try:
         send_mail(
@@ -807,9 +948,44 @@ def confirmEmailPasswordUpdation(user):
     except:
         pass
 
+
+def confirmEmailTicketBooking(user, movie, show, showroom, ticket):
+    try:
+        send_mail(
+            subject='Ticket Booked!!!',
+            message='Dear {name},\nYour ticket has been booked successfully.\n' \
+                    'Ticket Details\n' \
+                    '___________________________________\n' \
+                    'Movie      :   {movie}\n' \
+                    'Theater      :   {theater}\n' \
+                    'Show Date  :   {showDate}\n' \
+                    'Show Time  :   {showTime}\n' \
+                    'Adult          :   {adult}\n' \
+                    'Child     :   {child}\n' \
+                    'Senior     :   {senior}\n' \
+                    'Seats      :   {seats}\n' \
+                    '___________________________________\n' \
+                    'Your Booking reference number is {reference}.'.format(name=user.first_name,
+                                                                           movie=movie,
+                                                                           theater=showroom.theatre,
+                                                                           showDate=show.showDate,
+                                                                           showTime=show.MovieTime,
+                                                                           adult=ticket.ticket_adult,
+                                                                           child=ticket.ticket_child,
+                                                                           senior=ticket.ticket_senior,
+                                                                           seats=ticket.seat_data,
+                                                                           reference=ticket.referenceNumber),
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email])
+    except Exception as error:
+        print('Exception')
+        print(error)
+        pass
+
+
 def notifyPromo(request, promo_id):
     allUsers = User.objects.filter(is_promo=True)
-    promo = get_object_or_404(Promotion,pk=promo_id)
+    promo = get_object_or_404(Promotion, pk=promo_id)
     promooff = promo.discount
     code = promo.promo_code
     validuntil = promo.valid_upto
@@ -819,34 +995,36 @@ def notifyPromo(request, promo_id):
         first_name = user.first_name
         to_email = user.email
         message = render_to_string('promomail.html', {
-        'firstname': first_name,
-        'promooff': promooff,
-        'code': code,
-        'validfrom' : validfrom,
-        'validuntil': validuntil
+            'firstname': first_name,
+            'promooff': promooff,
+            'code': code,
+            'validfrom': validfrom,
+            'validuntil': validuntil
         })
         email = EmailMessage(mail_subject, message, to=[to_email])
         if email.send():
             print(f' User : {to_email} notified successfully')
 
+
 def encryption(message):
     encrypted = ""
     for char in message:
         if char.isalpha():
-            encrypted += chr(ord('a') + (ord(char) - ord('a') + 13) % 26) # replace characters with ROT13 shift
+            encrypted += chr(ord('a') + (ord(char) - ord('a') + 13) % 26)  # replace characters with ROT13 shift
         elif char.isdigit():
-            encrypted += str((int(char) + 5) % 10) # replace integers with +5 modulus 10
+            encrypted += str((int(char) + 5) % 10)  # replace integers with +5 modulus 10
         else:
             encrypted += char
     return encrypted
+
 
 def decryption(encrypted):
     decrypted = ""
     for char in encrypted:
         if char.isalpha():
-            decrypted += chr(ord('a') + (ord(char) - ord('a') - 13) % 26) # reverse ROT13 shift for characters
+            decrypted += chr(ord('a') + (ord(char) - ord('a') - 13) % 26)  # reverse ROT13 shift for characters
         elif char.isdigit():
-            decrypted += str((int(char) - 5) % 10) # reverse +5 modulus 10 for integers
+            decrypted += str((int(char) - 5) % 10)  # reverse +5 modulus 10 for integers
         else:
             decrypted += char
     return decrypted

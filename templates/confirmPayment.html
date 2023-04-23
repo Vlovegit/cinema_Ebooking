@@ -1,10 +1,226 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>hello payment page</h1>
-</body>
-</html>
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+<div class="container h-75 pt-5">
+    <div class="row ml-auto">
+        <div class="col ml-auto">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
+
+                form {
+                    width: 1000px;
+                    margin: 0 auto;
+                }
+
+                fieldset {
+                    border: none;
+                }
+
+                legend {
+                    font-size: 1.5em;
+                    font-weight: bold;
+                }
+
+                label {
+                    display: inline-block;
+                    width: 100px;
+                    text-align: right;
+                    margin-right: 10px;
+                }
+
+                input[type="text"],
+                select {
+                    font-size: 1em;
+                    padding: 5px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    width: 250px;
+                    margin-bottom: 10px;
+                }
+
+                #add_card {
+                    background-color: #4caf50;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                #add_card:hover {
+                    background-color: #3e8e41;
+                }
+
+                ul#credit_cards {
+                    margin: 0;
+                    padding: 0;
+                    list-style-type: none;
+                }
+
+                ul#credit_cards li {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    padding: 10px;
+                    background-color: #f9f9f9;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+
+                ul#credit_cards li div {
+                    flex: 1;
+                    margin-right: 20px;
+                }
+
+                ul#credit_cards li div:last-child {
+                    margin-right: 0;
+                }
+
+                ul#credit_cards li label {
+                    width: auto;
+                    margin-right: 0;
+                }
+
+                ul#credit_cards li button {
+                    background-color: #f44336;
+                    color: white;
+                    padding: 5px 10px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+
+                ul#credit_cards li button:hover {
+                    background-color: #da190b;
+                }
+
+                /* Style for the "Add Credit Card" button */
+                .add-card-button {
+                    background-color: #4caf50; /* Green background */
+                    border: none; /* Remove border */
+                    color: white; /* White text */
+                    padding: 10px 20px; /* Add padding */
+                    text-align: center; /* Center-align text */
+                    text-decoration: none; /* Remove underline */
+                    display: inline-block; /* Display as a block element */
+                    font-size: 16px; /* Font size */
+                    margin-bottom: 20px; /* Add bottom margin */
+                }
+
+                /* Style for the "Save Changes" button */
+                .save-changes-button {
+                    background-color: #008cba; /* Blue background */
+                    border: none; /* Remove border */
+                    color: white; /* White text */
+                    padding: 10px 20px; /* Add padding */
+                    text-align: center; /* Center-align text */
+                    text-decoration: none; /* Remove underline */
+                    display: inline-block; /* Display as a block element */
+                    font-size: 16px; /* Font size */
+                    margin-bottom: 20px; /* Add bottom margin */
+                }
+            </style>
+            <div class="card">
+                <div class="card-body p-5">
+                    <h1 class="text-uppercase text-center mb-5">Confirm Payment</h1>
+                    <form method="POST" action="confirmPayment">
+                        {% csrf_token %}
+                        <input name="referenceNumber" type="text" id="referenceNumber"
+                               hidden="True" value="{{ referenceNumber }}"></input>
+                        <h2>Payment Cards:</h2>
+                        <div>
+                        <ul id="credit_cards">
+                            {% for card in cards %}
+
+                            <li>
+                                <div>
+                                    <label for="cardHolderName_{{ forloop.counter }}">Cardholder Name:</label>
+                                    <input type="text" required="true" id="cardHolderName_{{ forloop.counter }}" readonly name="cardHolderName_{{ forloop.counter }}" value="{{ card.cardHolderName }}" />
+                                </div>
+
+                                <div>
+                                    <label for="cardNum_{{ forloop.counter }}">Card Number:</label>
+                                    <input type="text" required="true" id="cardNum_{{ forloop.counter }}" readonly name="cardNum_{{ forloop.counter }}" value="{{ card.cardNum }}" />
+                                </div>
+
+                                <div>
+                                    <label for="expiryDate_{{ forloop.counter }}">Expiration Date:</label>
+                                    <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" readonly name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}" />
+                                </div>
+                                <div>
+                                <button type="submit" name="cardId" id="cardId" value="{{card.id}}" style="margin:20px 10px 0px 10px">Pay</button>
+                                </div>
+                            </li>
+
+                            {% endfor %}
+                        </ul>
+                        </div>
+                        <div class="col-8">
+                                    <div class="card" style="border-radius: 15px;">
+                                        <div class="card-body p-5">
+                                            <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>
+                                            <div class="form-outline mb-4 row ml-auto">
+                                                <div class="col ml-auto">
+                                                    <label class="form-label" for="card_number">Card Number</label>
+                                                </div>
+                                                <div class="col ml-auto">
+                                                    <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" placeholder="Card Number *" />
+                                                </div>
+                                            </div>
+                                            <div class="form-outline mb-4 row ml-auto">
+                                                <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>
+                                                <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" placeholder="Card Holder Name *" /></div>
+                                            </div>
+                                            <div class="form-outline mb-4 row ml-auto">
+                                                <div class="col ml-auto"><label class="form-label" for="expireMM">Exp. Date</label>
+                                                <div class="row ml-auto">
+                                                    <select name="expiredate" id="expireMM">
+                                                        <option value="">Month</option>
+                                                        <option value="01">01</option>
+                                                        <option value="02">02</option>
+                                                        <option value="03">03</option>
+                                                        <option value="04">04</option>
+                                                        <option value="05">05</option>
+                                                        <option value="06">06</option>
+                                                        <option value="07">07</option>
+                                                        <option value="08">08</option>
+                                                        <option value="09">09</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                </div>
+                                                <div class="row ml-auto">
+                                                    <select name="expireyear" id="expireYY">
+                                                        <option value="">Year</option>
+                                                        <option value="20">2020</option>
+                                                        <option value="21">2021</option>
+                                                        <option value="22">2022</option>
+                                                        <option value="23">2023</option>
+                                                        <option value="24">2024</option>
+                                                    </select>
+                                                    <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />
+                                                </div>
+                                                    </div>
+
+                                            </div>
+                                            <div>
+                                            <button class="btn btn-outline-success" name="Proceed Payment" value="payment" type="submit">Proceed Payment</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% if messages %} {% for message in messages %}
+                        <h3>{{message}}</h3>
+                        {% endfor %} {% endif %}
+                        {% endblock %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

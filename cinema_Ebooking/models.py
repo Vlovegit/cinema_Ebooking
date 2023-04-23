@@ -128,6 +128,7 @@ class ScheduleMovie(models.Model):
     def __str__(self):
         return self.movie.name
 
+
 class Promotion(models.Model):
     discount = models.IntegerField()
     user_notified = models.BooleanField(default=False, editable=False)
@@ -147,4 +148,19 @@ class Seat(models.Model):
 
     def __str__(self):
         return f'%s on %s at %s' % (self.show.movie.name, self.show.showDate, self.show.MovieTime)
+
+
+
+class Tickets(models.Model):
+    isBooked=models.BooleanField(default=False) #changed from isBookingDone to isBooked
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    show = models.ForeignKey(ScheduleMovie,on_delete=models.CASCADE)
+    ticket_child=models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)])
+    ticket_adult=models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)])
+    ticket_senior=models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)])
+    time_created = models.DateTimeField(auto_now_add=True,auto_now=False)
+    seat_data = models.TextField(blank=True, null=True)
+    referenceNumber = models.TextField(max_length=50,blank=True, null=True)
+    def __str__(self):
+        return self.id
 
