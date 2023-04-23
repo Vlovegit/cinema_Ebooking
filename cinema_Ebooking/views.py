@@ -304,7 +304,6 @@ def confirmPayment(request):
         print('Pay button ID')
         print(cardIdBtn)
         referenceNumber = request.POST.get("referenceNumber")
-        referenceNumber = 'tkt20230423113235113263'
         ticket = Tickets.objects.filter(referenceNumber=referenceNumber).first()
         seatsOccupied = Seat.objects.filter(show_id=ticket.show_id).first()
         currentUser = User.objects.get(email=request.user)
@@ -343,13 +342,12 @@ def confirmPayment(request):
         ticket.isBooked = True
         print(list_string_selected)
         print(list_string_booked)
-        #seatsOccupied.save()
-        #ticket.save()
+        seatsOccupied.save()
+        ticket.save()
         show = ScheduleMovie.objects.filter(id=ticket.show_id).first()
         movie = Movie.objects.filter(id=show.movie_id).first()
         showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
         confirmEmailTicketBooking(currentUser, movie, show, showroom, ticket)
-        #confirmEmailProfileUpdation(currentUser)
         print('Email sent')
         print(referenceNumber)
         print(request.method)
@@ -358,7 +356,6 @@ def confirmPayment(request):
         print('Confirm Payment')
         showId = request.GET.get("show_id")
         referenceNumber = request.GET.get("referenceNumber")
-        referenceNumber = 'tkt20230423113235113263'
         print(referenceNumber)
         print(showId)
         mydata = User.objects.filter(email=request.user).first()
