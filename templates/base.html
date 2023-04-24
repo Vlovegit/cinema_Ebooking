@@ -26,7 +26,7 @@
     <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">E-Cinema Booking System</a>
+    <a class="navbar-brand" href="/">E-Booking System</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -34,8 +34,8 @@
       <ul class="navbar-nav ms-auto">
           <li class="nav-item">
               <form id="searchbar-form" method="get" action="/base" class="d-flex">
-                <select class="form-select" aria-label="selectform" id="movie_category" name="movie_category">
-                  <option {% if movie_list.movie_category == 'ALL'%} selected {%endif%}>ALL</option>
+                <select class="form-select text-dark" aria-label="selectform" id="movie_category" name="movie_category">
+                  <option {% if movie_list.movie_category == 'ALL'%} selected {%endif%} >ALL</option>
                   <option {% if movie_list.movie_category == 'Action'%} selected {%endif%}>Action</option>
                   <option {% if movie_list.movie_category == 'Horror'%} selected {%endif%}>Horror</option>
                   <option {% if movie_list.movie_category == 'Suspense'%} selected {%endif%}>Suspense</option>
@@ -45,31 +45,33 @@
                   <option {% if movie_list.movie_category == 'Documentary'%} selected {%endif%}>Documentary</option>
                   <option {% if movie_list.movie_category == 'Thriller'%} selected {%endif%}>Thriller</option>
                 </select>
+
                 <input class="form-control me-2" type="text" value="{{movie_list.movie_title}}" aria-label="Search" id="movie_name" name="movie_name" style="width: 300px">
                 <button class="btn btn-success" type="submit">Search</button>
               </form>
             </li>
         <li class="nav-item">
-          <a class="nav-link navbar-nav-auto-left" aria-current="page" href="/">Home</a>
+          <a class="nav-link navbar-nav-auto-left text-dark" aria-current="page" href="/">Home</a>
         </li>
+        <br>
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="/orderHistory">Orders</a>
+            <a class="nav-link text-dark" href="/orderHistory">Orders</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
+            <a class="nav-link text-dark" href="/logout">Logout</a>
           </li>
           {% if user.is_staff == 0 %}
             <li class="nav-item">
-              <a class="nav-link" href="/edit_profile">Profile</a>
+              <a class="nav-link text-dark" href="/edit_profile">Profile</a>
             </li>
           {% endif %}
         {% else %}
           <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
+            <a class="nav-link text-dark" href="/login">Login</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/registration">Registration</a>
+            <a class="nav-link text-dark" href="/registration">Registration</a>
           </li>
         {% endif %}
       </ul>
