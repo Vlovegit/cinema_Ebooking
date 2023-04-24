@@ -21,6 +21,17 @@
       margin-left: auto;
     }
   }
+
+  #select {
+    border-radius: 25px;
+  }
+  .btn btn-success{
+    border-radius: 25px;
+  }
+
+  #search_bar{
+    border-radius:25px;
+  }
 </style>
     </head>
     <body>
@@ -34,7 +45,7 @@
       <ul class="navbar-nav ms-auto">
           <li class="nav-item">
               <form id="searchbar-form" method="get" action="/base" class="d-flex">
-                <select class="form-select text-dark" aria-label="selectform" id="movie_category" name="movie_category">
+                <select id = "select" class="form-select text-dark" aria-label="selectform" id="movie_category" name="movie_category">
                   <option {% if movie_list.movie_category == 'ALL'%} selected {%endif%} >ALL</option>
                   <option {% if movie_list.movie_category == 'Action'%} selected {%endif%}>Action</option>
                   <option {% if movie_list.movie_category == 'Horror'%} selected {%endif%}>Horror</option>
@@ -45,8 +56,9 @@
                   <option {% if movie_list.movie_category == 'Documentary'%} selected {%endif%}>Documentary</option>
                   <option {% if movie_list.movie_category == 'Thriller'%} selected {%endif%}>Thriller</option>
                 </select>
-
-                <input class="form-control me-2" type="text" value="{{movie_list.movie_title}}" aria-label="Search" id="movie_name" name="movie_name" style="width: 300px">
+                <i class="fa-sharp fa-solid fa-magnifying-glass" style="color: #fff;"></i>
+                <input id="search_bar" class="form-control me-2" type="text" value="{{movie_list.movie_title}}" aria-label="Search" id="movie_name" name="movie_name" style="width: 300px">
+                <i class="fa-sharp fa-solid fa-magnifying-glass" style="color: #fff;"></i>
                 <button class="btn btn-success" type="submit">Search</button>
               </form>
             </li>
