@@ -20,6 +20,7 @@ from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -46,7 +47,7 @@ def login_user(request):
 
         # print(email)
         # print(password)
-
+        
         mydata = User.objects.filter(email=email).values()
         print(mydata.exists())
         try:
@@ -270,9 +271,14 @@ def show_time(request):
 
 
 def ticketcount(request):
+    
+    if not request.user.is_authenticated:
+        messages.info(request, 'Please log in to book a movie.')
+        return render(request, 'login.html')
+            
     showId = request.GET.get("show_id")
     #print(showId)
-    show = ScheduleMovie.objects.filter(id=showId).first()
+    show = ScheduleMovie.objects.filter(id=showId).first() 
     print(show)
     #print(show.movie_id)
     movie = Movie.objects.filter(id=show.movie_id).first()
@@ -301,6 +307,7 @@ def confirmPayment(request):
     if request.method == 'POST':
         print('Confirm Payment')
         cardIdBtn = request.POST.get("cardId")
+        print('I am here')
         print('Pay button ID')
         print(cardIdBtn)
         referenceNumber = request.POST.get("referenceNumber")
@@ -438,6 +445,7 @@ def checkout(request):
             return render(request, 'checkout.html', context)
         if make_payment_btn is not None:
             print('make payment')
+            print("Final price for the ticket: ", price)
             ticket = Tickets()
             ticket.user = request.user
             ticket.isBooked = False
@@ -447,6 +455,7 @@ def checkout(request):
             ticket.seat_data = selectedseats
             ticket.show_id = showId
             ticket.time_created = datetime.now()
+            ticket.price = price
             referenceNumber = 'tkt-' + "-".join(str(ticket.time_created).split(' '))
             ticket.referenceNumber = referenceNumber.replace('-', '').replace(':', '').replace('.', '')
             seatsOccupied = Seat.objects.filter(show_id=showId).first()
@@ -484,6 +493,7 @@ def checkout(request):
             print(list_string_selected)
             print(list_string_available)
             seatsOccupied.save()
+            
             ticket.save()
             return redirect(f'/confirmPayment?show_Id={showId}&referenceNumber={ticket.referenceNumber}')
     else:
@@ -1003,6 +1013,41 @@ def notifyPromo(request, promo_id):
         email = EmailMessage(mail_subject, message, to=[to_email])
         if email.send():
             print(f' User : {to_email} notified successfully')
+
+@login_required    
+def order_history(request):
+    user=request.user
+    user = User.objects.get(email=request.user)
+    print(user.id)
+    tickets = Tickets.objects.filter(user_id=user.id, isBooked = True)
+    records = []
+    for ticket in tickets:
+        print(ticket.show_id)
+        show = ScheduleMovie.objects.get(id=ticket.show_id)
+        movie = Movie.objects.get(id=show.movie_id)
+        theatre = ShowRoom.objects.get(id=show.theatre_id)
+        print(show)
+        print(theatre)
+        timestamp_str = str(ticket.time_created)
+        timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S.%f%z")
+        formatted_timestamp = timestamp.strftime("%m-%d-%y %H:%M")
+        record = {
+            "movie_name" : movie.name,
+            "theatre_name" : theatre.theatre,
+            "total_amount" : ticket.price,
+            "status" : "Booked",
+            "seats" : ticket.seat_data,
+            "BookingId" : ticket.referenceNumber,
+            "show_date" : show.showDate,
+            "show_time" : show.MovieTime,
+            "booking_date" : formatted_timestamp
+        }
+        records.append(record)
+    
+    #print(tickets.show_id)
+    context = {'records': records}
+    print(context)
+    return render(request, 'booking_history.html',context)
 
 
 def encryption(message):

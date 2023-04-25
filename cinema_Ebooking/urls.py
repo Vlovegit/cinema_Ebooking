@@ -29,5 +29,6 @@ urlpatterns = [
      path('accountSuccess/',views.account_success, name='accountSuccess'),
      path('accountVerify/',views.account_verify, name='accountVerify'),
      path('accountNotVerified',views.account_notverified, name='accountNotVerified'),
+     path('orderHistory/',views.order_history,name='history'),
      path('admin/', admin.site.urls)
 ]
