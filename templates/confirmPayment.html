@@ -129,10 +129,7 @@
                     <h1 class="text-uppercase text-center mb-5">Confirm Payment</h1>
                     <form method="POST" action="confirmPayment">
                         {% csrf_token %}
-                        <input name="referenceNumber" type="text" id="referenceNumber"
-                               hidden="True" value="{{ referenceNumber }}"></input>
-                        <h2>Payment Cards:</h2>
-                        <div>
+                        <input name="referenceNumber" hidden="True" type="text" id="referenceNumber" value="{{ referenceNumber }}"><div />
                         <ul id="credit_cards">
                             {% for card in cards %}
 
@@ -151,73 +148,125 @@
                                     <label for="expiryDate_{{ forloop.counter }}">Expiration Date:</label>
                                     <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" readonly name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}" />
                                 </div>
+                                <!--                                <div>-->
+                                <!--                                    <label for="expiryDate_{{ forloop.counter }}">CVV:</label>-->
+                                <!--                                    <input type="text" required="true" id="cvv_{{ forloop.counter }}" name="cvv_{{ forloop.counter }}" style="width: 75px" />-->
+                                <!--                                </div>-->
                                 <div>
-                                <button type="submit" name="cardId" id="cardId" value="{{card.id}}" style="margin:20px 10px 0px 10px">Pay</button>
+                                    <button type="submit" name="cardId" id="cardId" value="{{card.id}}" style="margin: 20px 10px 0px 10px;">Select</button>
                                 </div>
                             </li>
 
                             {% endfor %}
                         </ul>
-                        </div>
-                        <div class="col-8">
-                                    <div class="card" style="border-radius: 15px;">
-                                        <div class="card-body p-5">
-                                            <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>
-                                            <div class="form-outline mb-4 row ml-auto">
-                                                <div class="col ml-auto">
-                                                    <label class="form-label" for="card_number">Card Number</label>
-                                                </div>
-                                                <div class="col ml-auto">
-                                                    <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" placeholder="Card Number *" />
-                                                </div>
-                                            </div>
-                                            <div class="form-outline mb-4 row ml-auto">
-                                                <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>
-                                                <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" placeholder="Card Holder Name *" /></div>
-                                            </div>
-                                            <div class="form-outline mb-4 row ml-auto">
-                                                <div class="col ml-auto"><label class="form-label" for="expireMM">Exp. Date</label>
-                                                <div class="row ml-auto">
-                                                    <select name="expiredate" id="expireMM">
-                                                        <option value="">Month</option>
-                                                        <option value="01">01</option>
-                                                        <option value="02">02</option>
-                                                        <option value="03">03</option>
-                                                        <option value="04">04</option>
-                                                        <option value="05">05</option>
-                                                        <option value="06">06</option>
-                                                        <option value="07">07</option>
-                                                        <option value="08">08</option>
-                                                        <option value="09">09</option>
-                                                        <option value="10">10</option>
-                                                        <option value="11">11</option>
-                                                        <option value="12">12</option>
-                                                    </select>
-                                                </div>
-                                                <div class="row ml-auto">
-                                                    <select name="expireyear" id="expireYY">
-                                                        <option value="">Year</option>
-                                                        <option value="20">2020</option>
-                                                        <option value="21">2021</option>
-                                                        <option value="22">2022</option>
-                                                        <option value="23">2023</option>
-                                                        <option value="24">2024</option>
-                                                    </select>
-                                                    <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />
-                                                </div>
-                                                    </div>
 
+                        <div class="row ml-auto">
+                            <div class="col ml-auto">
+                                <button class="add-card-button" type="button" onclick="addCard()">Add Credit Card</button>
+                            </div>
+                            <div class="col ml-auto">
+                                <button class="save-changes-button" type="submit">Save Changes</button>
+                            </div>
+                        </div>
+
+                        <div class="col-8">
+                            <div class="card" style="border-radius: 15px;">
+                                <div class="card-body p-5">
+                                    <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>
+                                    <div class="form-outline mb-4 row ml-auto">
+                                        <div class="col ml-auto">
+                                            <label class="form-label" for="card_number">Card Number</label>
+                                        </div>
+                                        <div class="col ml-auto">
+                                            <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" value="{{ selectedCard.cardNum }}" placeholder="Card Number *" />
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4 row ml-auto">
+                                        <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>
+                                        <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" value="{{ selectedCard.cardHolderName}}" placeholder="Card Holder Name *" /></div>
+                                    </div>
+                                    <div class="form-outline mb-4 row ml-auto">
+                                        <div class="col ml-auto">
+                                            <label class="form-label">Exp. Date</label>
+                                            <div class="row ml-auto">
+                                                <input name="month" id="month" value="{{ month }}" />
+                                                <!--                                                    <select name="expiredate" id="expireMM" value="34">-->
+                                                <!--                                                        <option value="">Month</option>-->
+                                                <!--                                                        <option value="01">01</option>-->
+                                                <!--                                                        <option value="02">02</option>-->
+                                                <!--                                                        <option value="03">03</option>-->
+                                                <!--                                                        <option value="04">04</option>-->
+                                                <!--                                                        <option value="05">05</option>-->
+                                                <!--                                                        <option value="06">06</option>-->
+                                                <!--                                                        <option value="07">07</option>-->
+                                                <!--                                                        <option value="08">08</option>-->
+                                                <!--                                                        <option value="09">09</option>-->
+                                                <!--                                                        <option value="10">10</option>-->
+                                                <!--                                                        <option value="11">11</option>-->
+                                                <!--                                                        <option value="12">12</option>-->
+                                                <!--                                                    </select>-->
                                             </div>
-                                            <div>
-                                            <button class="btn btn-outline-success" name="Proceed Payment" value="payment" type="submit">Proceed Payment</button>
+                                            <div class="row ml-auto">
+                                                <input name="year" id="year" value="{{ year }}" />
+
+                                                <!--                                                    <select name="expireyear" id="expireYY">-->
+                                                <!--                                                        <option value="">Year</option>-->
+                                                <!--                                                        <option value="20">2020</option>-->
+                                                <!--                                                        <option value="21">2021</option>-->
+                                                <!--                                                        <option value="22">2022</option>-->
+                                                <!--                                                        <option value="23">2023</option>-->
+                                                <!--                                                        <option value="24">2024</option>-->
+                                                <!--                                                    </select>-->
+                                                <div class="row ml-auto">
+                                                    <div class="col ml-auto"><input type="text" name="cvv" id="cvv" class="form-control form-control-lg" placeholder="CVV *" /></div>
+                                                </div>
+                                                <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />
                                             </div>
                                         </div>
                                     </div>
+                                    <div>
+                                        <button class="btn btn-outline-success" name="confirm_payment" value="payment" type="submit">Confirm Payment</button>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
                         {% if messages %} {% for message in messages %}
                         <h3>{{message}}</h3>
-                        {% endfor %} {% endif %}
-                        {% endblock %}
+                        {% endfor %} {% endif %} {% endblock %}
+                        <script>
+                            function addCard() {
+                                var cards_list = document.getElementById("credit_cards");
+                                var num_cards = cards_list.getElementsByTagName("li").length;
+                                console.log("add cards");
+                                if (num_cards >= 3) {
+                                    alert("You can only add up to 3 cards.");
+                                    return;
+                                }
+
+                                var new_card_id = num_cards + 1;
+                                var new_card_html = `
+                  <li>
+                    <div>
+                      <label for="cardHolderName_${new_card_id}">Cardholder Name:</label>
+                      <input type="text" required="true" id="cardHolderName_${new_card_id}" name="cardHolderName_${new_card_id}">
+                    </div>
+
+                    <div>
+                      <label for="cardNum_${new_card_id}">Card Number:</label>
+                      <input type="text" required="true" id="cardNum_${new_card_id}" name="cardNum_${new_card_id}" maxlength="16">
+                    </div>
+
+                    <div>
+                      <label for="expiryDate_${new_card_id}">Expiration Date:</label>
+                      <input type="text" required="true" id="expiryDate_${new_card_id}" name="expiryDate_${new_card_id}" placeholder="MM/YY">
+                    </div>
+
+                    <button type="button">Select</button>
+                  </li>
+                `;
+                                cards_list.innerHTML += new_card_html;
+                            }
+                        </script>
                     </form>
                 </div>
             </div>
