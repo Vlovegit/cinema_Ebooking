@@ -309,7 +309,9 @@ def confirmPayment(request):
         cardIdBtn = request.POST.get("cardId")
         confirm_payment = request.POST.get("confirm_payment")
         referenceNumber = request.POST.get("referenceNumber")
+        save_changes = request.POST.get("save_changes")
         print(referenceNumber)
+        print(save_changes)
         if cardIdBtn is not None:
 
             print('I am here')
@@ -342,12 +344,73 @@ def confirmPayment(request):
                 'cards': cardDetails,
                 'referenceNumber': referenceNumber,
                 'selectedCard': selectedCard,
-                'month' : month,
-                'year' : year
+                'month': month,
+                'year': year
 
             }
             return render(request, 'confirmPayment.html', context)
+        if save_changes is not None:
+            print(request.user)
+            user = User.objects.get(email=request.user)
+            print(user.id)
+            updated = False
+            if user is not None:
+                card_count = 0
+                cards = []
+                containsRecord = False
+                for key, value in request.POST.items():
+                    if key.startswith('cardHolderName_'):
+                        containsRecord = True
+                        card_count = key.split("_")[1]
+                        card = {}
+                        card['cardHolderName'] = value
+                        card['cardNum'] = encryption(request.POST.get(f'cardNum_{card_count}'))
+                        card['expiryDate'] = encryption(request.POST.get(f'expiryDate_{card_count}'))
+                        card['last_four'] = request.POST.get(f'cardNum_{card_count}')[-4:]
+                        cards.append(card)
+                        print("Adding")
+                if containsRecord == True:
+                    print("Deleting record now")
+                    # retrieve the record to be deleted
+                    card_to_delete = Card.objects.filter(user_id=request.user.id)
+                    # delete the record
+                    card_to_delete.delete()
+                print(cards)
+                for card in cards:
+                    # save each card object to the database
+                    obj, created = Card.objects.get_or_create(
+                        user_id=user.id,
+                        cardHolderName=card['cardHolderName'],
+                        cardNum=card['cardNum'],
+                        last_four=card['last_four'],
+                        expiryDate=card['expiryDate']
+                    )
+                    if created:
+                        updated = True
+                        print('Record created')
+                    else:
+                        print('Record Skipped')
+
+                mydata = Card.objects.filter(user_id=user.id).values()
+                for data in mydata:
+                    # modify values as needed
+                    data['cardNum'] = decryption(data['cardNum'])
+                    data['expiryDate'] = decryption(data['expiryDate'])
+                    data['last_four'] = decryption(data['last_four'])
+                    # data['cardHolderName'] = decryption(data['cardHolderName'])
+
+                context = {
+                    'cards': mydata,
+                    'referenceNumber': referenceNumber,
+
+                }
+                if updated == True:
+                    messages.info(request, 'Successfully updated the payment details for the user.')
+                return render(request, 'confirmPayment.html', context)
+
         if confirm_payment is not None:
+            referenceNumber = request.POST.get("referenceNumberPay")
+            print('Confirm Payment Button')
             print(referenceNumber)
             ticket = Tickets.objects.filter(referenceNumber=referenceNumber).first()
             print(ticket.time_created)
@@ -454,7 +517,7 @@ def confirmPayment(request):
                 print('Email sent')
                 print(referenceNumber)
                 print(request.method)
-                return render(request, 'confirmPayment.html')
+                return render(request, 'bookingconfirmed.html')
     else:
         print('Confirm Payment')
         showId = request.GET.get("show_Id")
@@ -477,6 +540,12 @@ def confirmPayment(request):
 
         }
         return render(request, 'confirmPayment.html', context)
+
+
+def bookingConfirmed(request):
+    if request.method == 'POST':
+        return render(request, 'index.html');
+    return render(request, 'bookingconfirmed.html')
 
 
 def checkout(request):
@@ -584,11 +653,11 @@ def checkout(request):
             for i in list_seat_selected:
                 if k == 0:
                     list_string_selected = str(i)
-                    print(str(k) +'------' +list_string_selected)
+                    print(str(k) + '------' + list_string_selected)
                     k = 1
                 else:
                     list_string_selected = list_string_selected + ',' + str(i)
-                    print(str(k) +'-------  ' +list_string_selected)
+                    print(str(k) + '-------  ' + list_string_selected)
 
             k = 0
             for i in list_seat_available:
@@ -599,7 +668,6 @@ def checkout(request):
                 else:
                     list_string_available = list_string_available + ',' + str(i)
                     print(str(k) + '------' + list_string_available)
-
 
             seatsOccupied.seat_available = list_string_available
             seatsOccupied.seat_selected = list_string_selected
@@ -663,7 +731,7 @@ def seats(request):
         seniorCount = json.loads(request.body)['seniorCount']
         print(seats)
         print(showId)
-        context={
+        context = {
 
         }
         print('Entering Checkout')
