@@ -83,14 +83,6 @@ DATABASES = {
     }
 }
 
-# Schedule expire_old_tickets() to run every 10 minutes
-SCHEDULE_TASKS = {
-    'expire_old_tickets': {
-        'task': 'scheduler.expire_old_tickets',
-        'schedule': 600.0,  # 10 minutes
-    },
-}
-
 if 'DATABASE_URL' in os.environ:
     import dj_database_url
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
