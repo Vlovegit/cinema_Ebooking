@@ -21,6 +21,7 @@ urlpatterns = [
      path('edit_password', views.edit_password, name='editpassword'),
      path('checkout', views.checkout, name='checkout'),
      path('confirmPayment', views.confirmPayment, name='confirmPayment'),
+     path('bookingConfirmed', views.bookingConfirmed, name='bookingConfirmed'),
      path('seatselect/', views.seats, name='seats'),
      path('orderconfirmation/<order>/', views.orderconfirmation, name='orderconfirmation'),
      path('summary', views.summary, name='summary'),
@@ -29,5 +30,6 @@ urlpatterns = [
      path('accountSuccess/',views.account_success, name='accountSuccess'),
      path('accountVerify/',views.account_verify, name='accountVerify'),
      path('accountNotVerified',views.account_notverified, name='accountNotVerified'),
+     path('orderHistory/',views.order_history,name='history'),
      path('admin/', admin.site.urls)
 ]

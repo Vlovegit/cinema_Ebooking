@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timezone
 from django.db.models.functions import Now
+import uuid
 
 
 # Create your models here.
@@ -160,7 +161,16 @@ class Tickets(models.Model):
     ticket_senior=models.IntegerField(default=0, validators=[MaxValueValidator(10), MinValueValidator(0)])
     time_created = models.DateTimeField(auto_now_add=True,auto_now=False)
     seat_data = models.TextField(blank=True, null=True)
+    price = models.TextField(blank=True, null=True)
+    status = models.TextField(default="Active", blank=True, null=True)
     referenceNumber = models.TextField(max_length=50,blank=True, null=True)
     def __str__(self):
-        return self.id
+        return str(self.id)
+    
+class Booking(models.Model):
+    tickets = models.OneToOneField(Tickets,on_delete=models.CASCADE)
+    total = models.FloatField()
+    bookingID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    def __str__(self):
+        return f'%s on %s at %s for %s' % (self.tickets.show.movie.name,self.tickets.show.showDate,self.tickets.show.MovieTime, self.tickets.user.email)
 
