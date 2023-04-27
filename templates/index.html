@@ -232,8 +232,12 @@
             {% for x in moviesNow %}
             <div>
                 <div class="relative">
-                    <div class="relative h-72 w-full overflow-hidden rounded-lg">
-                        <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                    <form action="movie_description">
+                        <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                            <button value="{{ x.name }}" name="cinema_button" {{ x.name }}>
+                            <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                            </button>
+                        </form>
                         {% csrf_token %}
                     </div>
                     <div class="relative mt-4">
@@ -253,14 +257,6 @@
                 </div>
                 <div class="mt-6">
                     {% csrf_token %}
-                    <form action="movie_description">
-                        <button
-                                name="cinema_button"
-                                value="{{ x.name }}"
-                                class="w-full relative flex items-center justify-center rounded-md border border-transparent bg-gray-700 px-8 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600">
-                            View
-                            Movie<span class="sr-only"></span></button>
-                    </form>
 
                     <button
                             data-movie-title="{{x.name}}"
@@ -286,8 +282,12 @@
             {% for x in moviesSoon %}
             <div>
                 <div class="relative">
+                    <form action="movie_description">
                     <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                        <button value="{{ x.name }}" name="cinema_button" {{ x.name }}>
                         <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                        </button>
+                    </form>
                         {%csrf_token%}
                     </div>
                     <div class="relative mt-4">
