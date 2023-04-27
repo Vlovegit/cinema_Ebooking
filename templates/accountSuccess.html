@@ -14,42 +14,36 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 </head>
 <body>
-   <section class="vh-100 bg-image">
-    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-            <div class="card" style="border-radius: 15px;">
-              <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5">Registration Sucess</h2>
-
+   <section class="bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div class="w-full bg-gray-800 rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl text-center">
+                    Registration Success
+                </h1>
                 <form>
-
-
-
-                  <div class="form-outline mb-4">
-                    <h1>{%if messages %}
-                      <div style="font-size: medium;">
-                        {% for msg in messages %}
-                          {% if 'verify' in msg.tags %}
-                            {{msg}}
-                          {% endif %}
-                        {% endfor %}
-                      </div>
-                    {% endif %}</h1>
+                                <div class="form-outline mb-4">
+                <h1 class="text-white">{%if messages %}
+                  <div style="font-size: medium;">
+                    {% for msg in messages %}
+                      {% if 'verify' in msg.tags %}
+                        {{msg}}
+                      {% endif %}
+                    {% endfor %}
                   </div>
-
-                  <p class="text-center text-muted mt-5 mb-0"><a href="/" class="fw-bold text-body">E-Cinema Booking System</a></p>
-
-                </form>
-
+                {% endif %}</h1>
               </div>
-            </div>
+
+              <p class="text-center text-muted mt-5 mb-0"><a href="/" class="font-medium text-blue-500 hover:underline">E-Cinema Booking System</a></p>
+
+            </form>
+
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+
 </body>
 </html>
  {% endblock %}

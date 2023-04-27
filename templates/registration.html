@@ -1,248 +1,264 @@
+{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="{'css/registration.css'}">
-    <link rel="stylesheet" href="{'css/bootstrap.css'}">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
-  <!-- MDB -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>
+    <!--    <link rel="stylesheet" href="{'css/registration.css'}">-->
+    <!--    <link rel="stylesheet" href="{'css/bootstrap.css'}">-->
+    <!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"-->
+    <!--          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">-->
+    <!-- Font Awesome -->
+    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>-->
+    <!-- Google Fonts -->
+    <!--    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>-->
+    <!-- MDB -->
+    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.css" rel="stylesheet"/>-->
     <!-- MDB -->
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
+    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>-->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function validatePassword(event) {
+            const password = event.target.value;
+            const hasDigit = /\d/.test(password);
+            const hasSymbol = /\W/.test(password);
+            const hasValidLength = password.length >= 8;
+            document.getElementById('length-check').classList.toggle('text-green-500', hasValidLength);
+            document.getElementById('digit-check').classList.toggle('text-green-500', hasDigit);
+            document.getElementById('symbol-check').classList.toggle('text-green-500', hasSymbol);
+        }
+
+    </script>
 </head>
 <body>
 {% block content %}
-   <section class="vh-100 bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.jpg');">
-    <div class="mask d-flex align-items-center h-100 gradient-custom-3" style= "overflow: scroll;">      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-            <div class="card" style="border-radius: 15px;">
-              <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 
-                <form method="post" action="registration">
-                    {% csrf_token %}
-                <form method="POST" novalidate>
-                    {% csrf_token %}
-                    {{register_form}}
+<section class="bg-gray-900 ">
+    <div class="p-5 flex flex-col items-center justify-center px-6 py-8 mx-auto min-h-screen lg:py-0">
+        <div class="w-full bg-gray-800 rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
+                    Create an account
+                </h1>
+                <form class="space-y-4 md:space-y-6" method="post" action="registration">
+                      {% csrf_token %}
 
-                  <div class="form-outline mb-4">
-                    <input type="text" id="firstName" class="form-control form-control-lg" name="first_name"/>
-                    <label class="form-label" for="firstName">First Name *</label>
-                  </div>
-                    <div class="form-outline mb-4">
-                    <input type="text" id="lastName" class="form-control form-control-lg" name="last_name"/>
-                    <label class="form-label" for="lastName">Last Name *</label>
-                  </div>
 
-                  <div class="form-outline mb-4">
-
-                    <input type="email" id="email" class="form-control form-control-lg" name="email" required/>
-                    <label class="form-label" for="email">Your Email *</label>
-                    <div class="invalid-feedback">Please choose a username.</div>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input name="password1" type="password" id="password1" class="form-control form-control-lg" onInput = "check()" required />
-                    <label class="form-label" for="password1">Password *</label>
-                    <div id="check0" style = "color:grey">
-                      <i class="far fa-check-circle"></i>  <span> Length more than 8.</span>
+                     <div>
+                        <label for="firstName" class="block mb-2 text-sm font-medium text-white">First Name</label>
+                        <input type="text" name="first_name" id="firstName"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="John" required="">
                     </div>
-                    <div id="check1" style = "color:grey">
-                      <i class="far fa-check-circle"></i>  <span> Contain atleast one numeric.</span>
-                    </div>
-                    <div id="check2" style = "color:grey">
-                      <i class="far fa-check-circle"></i>  <span> Contain atleast one symbol.</span>
-                    </div>
-                  </div>
 
-                  <div class="form-outline mb-4">
-                    <input name="password2" type="password" id="password2" class="form-control form-control-lg" onInput = "check1()" required />
-                    <label class="form-label" for="password2">Repeat your password *</label>
-                  </div>
+                     <div>
+                        <label for="lastName" class="block mb-2 text-sm font-medium text-white">Last Name</label>
+                        <input type="text" name="last_name" id="lastName"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="Doe" required="">
+                    </div>
 
-                  <div class="form-outline mb-4">
-                    <input type="text" id="phonenumber" class="form-control form-control-lg" name="phone_number"/>
-                    <label class="form-label" for="phone number">Phone Number *</label>
-                  </div>
-                  <div style="text-align:center;padding-bottom:5px">
-                  <div class="btn-group dropend">
-                    <button
-                      type="button"
-                      class="btn btn-primary dropdown-toggle"
-                      data-mdb-toggle="dropdown"
-                      aria-expanded="false"
-                      style="border-right:100pxls:padding-bottom:20px">
-                      Optional Details
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-white">Your email</label>
+                        <input type="email" name="email" id="email"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="name@company.com" required="">
+                    </div>
+                    <div>
+                        <label for="password1" class="block mb-2 text-sm font-medium text-white">Password</label>
+                        <input type="password" name="password1" id="password1" placeholder="••••••••"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               required="" oninput="validatePassword(event)">
+                        <ul class="mt-2 text-xs text-gray-500">
+                            <li id="length-check">- Minimum 8 characters</li>
+                            <li id="digit-check">- At least one numeric character</li>
+                            <li id="symbol-check">- At least one symbol</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <label for="password2"
+                               class="block mb-2 text-sm font-medium text-white">Confirm
+                            password</label>
+                        <input type="password" name="password2" id="password2"
+                               placeholder="••••••••"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               required="">
+                    </div>
+
+                     <div>
+                        <label for="phonenumber" class="block mb-2 text-sm font-medium text-white">Phone Number</label>
+                        <input type="text" name="phone_number" id="phonenumber"
+                               class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               placeholder="4044092123" required="">
+                    </div>
+
+                     <button type="button" id="toggle-payment-info"
+                            class="mt-4 text-sm font-medium text-white focus:outline-none">
+                        Show optional payment information
                     </button>
-                    <div class="dropdown-menu ms-3 p-2" style="width: 360px;background-color:#F4F4F4">
-                      <form class="px-4 py-3">
-                        <div class="btn-group">
-                          <input
-                            type="radio"
-                            class="btn-check"
-                            name="options"
-                            id="option1"
-                            autocomplete="off"
-                            checked
-                          />
-                          <label class="btn btn-secondary" for="option1"><i class="fab fa-cc-paypal fa-3x"></i></label>
 
-                          <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" />
-                          <label class="btn btn-secondary" for="option2"><i class="fab fa-cc-visa fa-3x" ></i></label>
 
-                          <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off" />
-                          <label class="btn btn-secondary" for="option3"><i class="fab fa-cc-mastercard fa-3x"></i></label>
-                          <input type="radio" class="btn-check" name="options" id="option4" autocomplete="off" />
-                          <label class="btn btn-secondary" for="option4"><i class="fab fa-cc-amex fa-3x"></i></label>
+                    <!-- OPTIONAL -->
+                    <div id="payment-info-section" class="hidden mt-4">
+                        <div class="mt-6">
+                            <h2 class="text-lg font-semibold text-white mb-4">Optional: Payment Information</h2>
+                            <div>
+                                <label for="cardHolderName" class="block mb-2 text-sm font-medium text-white">Card
+                                    Holder
+                                    Name</label>
+                                <input type="text" name="cardHolderName" id="cardHolderName"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label for="cardNum" class="block mt-4 mb-2 text-sm font-medium text-white">Card
+                                    Number</label>
+                                <input type="text" name="cardNum" id="cardNum"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div>
+                                <label for="expiryDate" class="block mt-4 mb-2 text-sm font-medium text-white">Expiration
+                                    Date</label>
+                                <input type="text" name="expiryDate" id="expiryDate"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="MM/YY">
+                            </div>
+                            <div>
+                                <label for="address" class="block mt-4 mb-2 text-sm font-medium text-white">Street
+                                    Address</label>
+                                <input type="text" name="address" id="address"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="123 Main St">
+                            </div>
+<!--                            <div>-->
+<!--                                <label for="billing-address" class="block mt-4 mb-2 text-sm font-medium text-white">Billing-->
+<!--                                    Address</label>-->
+<!--                                <input type="text" name="billing-address" id="billing-address"-->
+<!--                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
+<!--                                       placeholder="123 Main St">-->
+<!--                            </div>-->
+                            <div>
+                                <label for="aptNumber" class="block mt-4 mb-2 text-sm font-medium text-white">Apt
+                                    Number</label>
+                                <input type="text" name="aptNumber" id="aptNumber"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus               -500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="Apt 4B">
+                            </div>
+                            <div>
+                                <label for="state" class="block mt-4 mb-2 text-sm font-medium text-white">State</label>
+                                <input type="text" name="state" id="state"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="California">
+                            </div>
+                            <div>
+                                <label for="country"
+                                       class="block mt-4 mb-2 text-sm font-medium text-white">Country</label>
+                                <input type="text" name="country" id="country"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="United States">
+                            </div>
+                            <div>
+                                <label for="zip" class="block mt-4 mb-2 text-sm font-medium text-white">Zip
+                                    Code</label>
+                                <input type="text" name="zip" id="zip"
+                                       class="bg-gray-700 border border-gray-600 text-white sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 placeholder-gray-500 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                       placeholder="12345">
+                            </div>
                         </div>
-                        <div class="my-2">Card Information</div>
-
-                        <div class="form-outline my-4">
-                          <input id="cardHolderName" name="cardHolderName" type="tel" inputmode="text"   placeholder="Virat Kholi" class="form-control" />
-                          <label class="form-label" for="form2Example1">Card Holder Name</label>
-                        </div>
-                        <div class="form-outline my-4">
-                          <input id="ccnum" name="cardNum" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx" class="form-control" />
-                          <label class="form-label" for="form2Example1">Card Number</label>
-                        </div>
-
-                        <div class="form-outline mb-4" style="float:left;width:150px">
-                          <input type="text" id="valid" name="expiryDate" placeholder="MM / YY" maxlength='7' class="form-control" />
-                          <label class="form-label" for="form2Example2">Expiration Date</label>
-                        </div>
-
-                        <br></br>
-                        <div style="padding-right:90px">
-                        Billing Address
-                          </div>
-                        <div class="row mb-4" style="float:left">
-                           <div class="form-outline mb-4" style="float:left;width:150px">
-                            <input type="text" id="address" name="address" class="form-control"/>
-                            <label class="form-label" for="form2Example1" style="float:left">Street Address</label>
-                          </div>
-                         <div class="form-outline mb-4" style="float:left;width:80px">
-                           <input type="text" id="aptNumber" name="aptNumber" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">Apt Number</label>
-                         </div>
-                        </div>
-                        <div class="row mb-4" style="float:left">
-                        <div class="form-outline mb-4" style="float:left;width:150px">
-                           <input type="text" id="state" name="state" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">State</label>
-                         </div>
-                         <div class="form-outline mb-4" style="float:left;width:150px">
-                          <input type="text" id="country" name="country" class="form-control" />
-                           <label class="form-label" for="form2Example1" style="float:left">Country</label>
-                        </div>
-                         <div class="form-outline mb-4" style="float:left;width:100px">
-                           <input type="text" id="zip" name="zip" class="form-control" />
-                            <label class="form-label" for="form2Example1" style="float:left">Zip Code</label>
-                         </div>
-                        </div><br><br><br><br><br><br><br><br>
-                        
-
-                           <!--div class="row mb-4" style="float:left">
-                          <div class="form-outline mb-4">
-                         <input type="tel" id="phoneNumber" class="form-control form-control-lg" />
-                         <label class="form-label" for="phoneNumber">Phone Number</label>
-                         </div>
-                           </div-->
-
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Save Details</button>
-                      </form>
-
                     </div>
-                  </div>
-                  <div class="form-check d-flex justify-content-center my-3">
-                    <input
-                      class="form-check-input me-2"
-                      type="checkbox"
-                      value=""
-                      id="form2Example3cg" required
-                    />
-                    <label class="form-check-label" for="form2Example3g">
-                      I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
-                    </label>
-                  </div>
-                  <div class="form-check d-flex justify-content-center my-3">
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        id="promotion"
-                        name="promotion"
-                      />
-                      <label class="form-check-label" for="promotion">
-                        Subscribe to get e-mailed promotions
-                      </label>
-                  </div>
-                  <div class="d-flex justify-content-center">
+                    <!-- End of the optional payment information section -->
+
+                    <div class="flex items-start">
+                        <div class="flex items-center h-5">
+                            <input id="terms" aria-describedby="terms" type="checkbox"
+                                   class="w-4 h-4 border border-gray-600 rounded bg-gray-800 focus:ring-3 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:ring-offset-gray-800"
+                                   required="">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="terms" class="font-light text-gray-400">I accept the <a
+                                    class="font-medium text-blue-500 hover:underline" href="#">Terms and
+                                Conditions</a></label>
+                        </div>
+                    </div>
+                    <div class="flex items-start mt-4">
+                        <div class="flex items-center h-5">
+                            <input id="promotion" aria-describedby="promotion" type="checkbox"
+                                   class="w-4 h-4 border border-gray-600 rounded bg-gray-800 focus:ring-3 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-500 dark:ring-offset-gray-800">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="promotion" class="font-light text-gray-400">Subscribe to get e-mailed
+                                promotions</label>
+                        </div>
+                    </div>
 
 
-                    <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
-                  </div>
-                  {% if messages %}
-                      {% for message in messages %}
-                        <h4 class="text-red">{{message}}</h4>
-                      {% endfor %}
-                  {% endif %}
 
-                  <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="/login/" class="fw-bold text-body"><u>Login here</u></a></p>
-                  </div>
+                    <button type="submit"
+                            class="w-full mt-2 relative flex items-center justify-center rounded-md border border-transparent bg-gray-700 px-8 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600">
+                        Create an account
+                    </button>
+                    <p class="text-sm font-light text-gray-400">
+                        Already have an account? <a href="#" class="font-medium text-blue-500 hover:underline">Login
+                        here</a>
+                    </p>
                 </form>
-                  <p class="text-center text-muted mt-5 mb-0"><a href="/">E-Cinema Booking System</a></p>              </div>
-
             </div>
-          </div>
         </div>
-      </div>
+
     </div>
-  </section>
+</section>
+</body>
+</html>
+
 <script type="text/javascript" href="{% static 'js/scripts.js' %}"></script>
+
 <script>
-  function check(){
-    var input = document.getElementById("password1").value;
-    var input1 = document.getElementById("password2").value;
-    if(input.length >=8){
-        document.getElementById("check0").style.color = "green";
+        <!--    SHOW/HIDE OPTIONAL FIELDS-->
+         document.getElementById("toggle-payment-info").addEventListener("click", function () {
+            const paymentInfoSection = document.getElementById("payment-info-section");
+            const toggleButton = document.getElementById("toggle-payment-info");
+
+            if (paymentInfoSection.classList.contains("hidden")) {
+                paymentInfoSection.classList.remove("hidden");
+                toggleButton.textContent = "Hide optional payment information";
+            } else {
+                paymentInfoSection.classList.add("hidden");
+                toggleButton.textContent = "Show optional payment information";
+            }
+        });
+
+    function check() {
+        var input = document.getElementById("password1").value;
+        var input1 = document.getElementById("password2").value;
+        if (input.length >= 8) {
+            document.getElementById("check0").style.color = "green";
+        } else {
+            document.getElementById("check0").style.color = "red";
+        }
+        if (input.match(/[0-9]/i)) {
+            document.getElementById("check1").style.color = "green";
+        } else {
+            document.getElementById("check1").style.color = "red";
+        }
+        if (input.match(/[^A-Za-z0-9-' ']/i)) {
+            document.getElementById("check2").style.color = "green";
+        } else {
+            document.getElementById("check2").style.color = "red";
+        }
     }
-    else{
-      document.getElementById("check0").style.color = "red";
+
+    function check1() {
+        var input = document.getElementById("password1").value;
+        var input1 = document.getElementById("password2").value;
+        if (input1 == input) {
+            document.getElementById("check3").style.color = "green";
+        } else {
+            document.getElementById("check3").style.color = "red";
+        }
     }
-    if(input.match(/[0-9]/i))
-    {
-        document.getElementById("check1").style.color="green";
-    }
-    else
-    {
-       document.getElementById("check1").style.color="red";
-    }
-    if(input.match(/[^A-Za-z0-9-' ']/i))
-    {
-        document.getElementById("check2").style.color="green";
-    }
-    else
-    {
-       document.getElementById("check2").style.color="red";
-    }
-}
-  function check1(){
-    var input = document.getElementById("password1").value;
-    var input1 = document.getElementById("password2").value;
-    if(input1 == input){
-      document.getElementById("check3").style.color="green";
-    }
-    else{
-      document.getElementById("check3").style.color = "red";
-    }
-  }
 </script>
+
 {% endblock %}
 </body>
 

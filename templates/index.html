@@ -17,10 +17,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
-            <script src="https://kit.fontawesome.com/4b877571d6.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-1vjCiTtTlTpxr9XlP2lWTKO4bLy4NzjZ4+0LMizOwNlrDfOrKMYx9+9pO8E/DRjDzdr6R5of6mTF+6U5/hqjKQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-    
+    <script src="https://kit.fontawesome.com/4b877571d6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+          integrity="sha512-1vjCiTtTlTpxr9XlP2lWTKO4bLy4NzjZ4+0LMizOwNlrDfOrKMYx9+9pO8E/DRjDzdr6R5of6mTF+6U5/hqjKQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css"/>
+
 
     <style>
         /* Set slideshow container height and width */
@@ -160,19 +162,19 @@
             animation: scale-in .2s;
             display: flex;
             flex-direction: column;
-          }
-          
-          .popup h2 {
+        }
+
+        .popup h2 {
             font-size: 28px;
             margin-bottom: 10px;
-          }
-          
-          .popup p {
+        }
+
+        .popup p {
             font-size: 18px;
             margin-bottom: 10px;
-          }
-          
-          .popup .close-popup-btn {
+        }
+
+        .popup .close-popup-btn {
             background-color: #f44336;
             color: white;
             border: none;
@@ -184,13 +186,13 @@
             width: 20%;
             display: block;
             margin: 0 auto;
-          }
-          
-          .popup .close-popup-btn:hover {
+        }
+
+        .popup .close-popup-btn:hover {
             background-color: #d32f2f;
-          }
-          
-          .overlay {
+        }
+
+        .overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -198,73 +200,19 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 99;
-          }
-
-          .showtime-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-          }
-
-          .swiper-slide {
-            padding-left: 36px;
-          }
-          
-          .showtime-btn {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            align-items: normal;
-          }
-
-          .popup-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-right: 90px;
-          }
-
-        #carousel-prev,
-        #carousel-next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            font-size: 2em;
-            color: #000;
-            padding: 0.5em;
-            z-index: 2;
-            cursor: pointer;
         }
 
-#carousel-prev:hover,
-#carousel-next:hover {
-  background: #000;
-  color: #fff;
-}
-
-          
 
     </style>
 
-    
-    
+
 </head>
 
-<section class="bg-dark py-5">
+<section class="bg-gray-900 py-5">
     <div class="slideshow-container">
         {% for movie in moviesNow %}
         <div class="mySlides">
-            <iframe src="{{ movie.trailer }}" frameborder="0" allowfullscreen></iframe>
+            <iframe src="{{movie.trailer}}" frameborder="0" allowfullscreen></iframe>
         </div>
         {% endfor %}
         <div class="button-container">
@@ -272,93 +220,117 @@
             <button class="next next-button" onclick="plusSlides(1)">❯</button>
         </div>
     </div>
-    <div class="dot-container">
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-        <span class="dot" onclick="currentSlide(4)"></span>
-    </div>
 </section>
 
-<!-- CURRENTLY SHOWING STARTS -->
-<section class="bg-light">
-    <div class="container px-2 px-lg-2 mt-2">
-        <h2 class="mb-4">Currently Showing</h2>
-        <div class="swiper mySwiper">
-            <div class ="swiper-wrapper">
-                {% for x in moviesNow %}
-                    <div class = "swiper-slide">
-                        <div class="col mb-5">
-                            <div class="card h-75" style="min-width: 250px; max-width: 250px">
-                                <img src="{{ x.poster }}" alt="Movie 1" height="300">
-                {% csrf_token %}
-                                <div class="card-body">
-                                    <h5 class="card-title">"{{ x.name }}"</h5>
-                                    <p class="card-text">{{ x.category1 }}, {{ x.category2 }}, {{ x.category3 }}</p>
-                                </div>
-                            </div>
-                {% csrf_token %}
-                            <form action="movie_description">
-                                <div>
-                                <button class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" style="min-width: 250px; max-width: 250px" value="{{ x.name }}" name="cinema_button" {{ x.name }}>View Movie</button> 
-                                </div>
-                            </form>
-                            <br>
-                            <div>
-                                <button data-movie-title="{{ x.name }}" onclick="bookNow(event)"
-                                class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" style="min-width: 250px; max-width: 250px">Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </div>
-</section>
-<!-- CURRENTLY SHOWING ENDS -->
 
-<!-- COMING SOON STARTS -->
-<section class="bg-dark py-5">
-    <div class="container px-2 px-lg-2 mt-2">
-        <h2 class="text-white mb-4">Coming Soon</h2>
-        <div class ="swiper mySwiper">
-            <div class="swiper-wrapper">
-                {% for x in moviesSoon %}
-                    <div class = "swiper-slide">
-                        <div class="col mb-5">
-                            <div class="card" style="min-width: 250px; max-width: 250px">
-                                <img src="{{ x.poster }}" alt="Movie 1" height="300">
-                {%csrf_token%}
-                                <div class="card-body">
-                                    <h5 class="card-title">"{{ x.name }}"</h5>
-                                    <p class="card-text">{{ x.category1 }}, {{ x.category2 }}, {{ x.category3 }}</p>
-                                </div>
-                            </div>
-                            <form action="movie_description">
-                                <div >
-                                    <button class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" style="min-width: 250px; max-width: 250px" value="{{ x.name }}" name="cinema_button" {{ x.name }}>View Movie</button>
-                                </div>
-                            </form>
-                        </div>
+<div class="bg-gray-800">
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 class="text-xl font-bold text-gray-100">Currently Showing</h2>
+
+        <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+
+            {% for x in moviesNow %}
+            <div>
+                <div class="relative">
+                    <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                        <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                        {% csrf_token %}
                     </div>
-                {% endfor %}
+                    <div class="relative mt-4">
+                        <h3 class="text-sm font-medium text-gray-100">{{x.name}}</h3>
+                        <p class="card-text flex flex-wrap items-start justify-start min-h-[65px]">
+                            {% if x.category1 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-600 text-gray-200 mt-2 mr-2">{{ x.category1 }}</span>
+                            {% endif %}
+                            {% if x.category2 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-600 text-gray-200 mt-2 mr-2">{{ x.category2 }}</span>
+                            {% endif %}
+                            {% if x.category3 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-600 text-gray-200 mt-2 mr-2">{{ x.category3 }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    {% csrf_token %}
+                    <form action="movie_description">
+                        <button
+                                name="cinema_button"
+                                value="{{ x.name }}"
+                                class="w-full relative flex items-center justify-center rounded-md border border-transparent bg-gray-700 px-8 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600">
+                            View
+                            Movie<span class="sr-only"></span></button>
+                    </form>
+
+                    <button
+                            data-movie-title="{{x.name}}"
+                            onclick="bookNow(event)"
+                            class="w-full mt-2 relative flex items-center justify-center rounded-md border border-transparent bg-gray-700 px-8 py-2 text-sm font-medium text-gray-300 hover:bg-gray-600">
+                        Book
+                        now<span class="sr-only">t</span></button>
+                </div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
+
+            {% endfor %}
+
         </div>
     </div>
-</section>
-<!-- COMING SOON ENDS -->
+</div>
+
+<div class="bg-white">
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 class="text-xl font-bold text-gray-900">Coming soon</h2>
+
+        <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
+
+            {% for x in moviesSoon %}
+            <div>
+                <div class="relative">
+                    <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                        <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                        {%csrf_token%}
+                    </div>
+                    <div class="relative mt-4">
+                        <h3 class="text-sm font-medium text-gray-900">{{x.name}}</h3>
+                        <p class="card-text flex flex-wrap items-start justify-start min-h-[65px]">
+                            {% if x.category1 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 mt-2 mr-2">{{ x.category1 }}</span>
+                            {% endif %}
+                            {% if x.category2 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 mt-2 mr-2">{{ x.category2 }}</span>
+                            {% endif %}
+                            {% if x.category3 %}
+                            <span class="inline-flex items-start px-2.5 py-0.5 rounded-md text-sm font-medium bg-gray-100 text-gray-800 mt-2 mr-2">{{ x.category3 }}</span>
+                            {% endif %}
+                        </p>
+
+
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <form action="movie_description">
+                        <button
+                                name="cinema_button"
+                                value="{{ x.name }}"
+                                class="w-full relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">
+                            View
+                            Movie<span class="sr-only"></span></button>
+                    </form>
+
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
 
 
 <!--/section-->
 
 <!-- FOOTER START -->
-<footer class="py-5 bg-dark">
+<footer class="py-5 bg-gray-900">
     <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Cinema E-Booking 2023</p></div>
 </footer>
 <!-- FOOTER END -->
@@ -374,36 +346,13 @@
 {% endif %}
 
 </body>
-<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper(".mySwiper", {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
-  </script>
 <script>
-
     let slideIndex = 1;
     showSlides(slideIndex);
 
-    // Next/previous controls
     function plusSlides(n) {
         showSlides(slideIndex += n);
-    }
-
-    // Thumbnail image controls
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
     }
 
     function showSlides(n) {
@@ -427,69 +376,90 @@
     }
 
     function bookNow(event) {
-        // add click event listener to each "Book Now" button
-        var movieTitle = event.target.getAttribute("data-movie-title");
-        console.log("Book now for " + movieTitle);
-    
-        // send movie title to backend to get showtime info
-        fetch(`/show_time?movie_title=${movieTitle}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.movies);
-                // create pop-up window HTML
-                var popupHtml = '<div class="popup bg-dark">';
-                popupHtml += '<h2 class = "text-white">' + movieTitle + '</h2>';
-                for (var i = 0; i < data.movies.length; i++) {
-                    var movie = data.movies[i];
-                    popupHtml += '<div class="popup-info text-white"><p>Theater: ' + movie.theatreid + '</p>';
-                    popupHtml += '<p>Date: ' + movie.showDate + '</p></div>';
-                    var showtimeContainer = document.createElement('div');
-                    showtimeContainer.classList.add('showtime-container');
-                    for (var j = 1; j <= 3; j++) {
-                        var showtime = 'show' + j;
-                        if (movie[showtime]) {
-                            var showtimeBtn = document.createElement('button');
-                            showtimeBtn.classList.add('showtime-btn');
-                            showtimeBtn.innerText = movie[showtime];
-                            showtimeBtn.setAttribute('data-movie-info', JSON.stringify({
-                                movieTitle: movieTitle,
-                                theatreId: movie.theatreid,
-                                showDate: movie.showDate,
-                                showTime: movie[showtime],
-                                showId: movie.showid
-                            }));
-                            showtimeContainer.appendChild(showtimeBtn);
-                        }
+    // add click event listener to each "Book Now" button
+    var movieTitle = event.target.getAttribute("data-movie-title");
+    console.log("Book now for " + movieTitle);
+
+    // send movie title to backend to get showtime info
+    fetch(`/show_time?movie_title=${movieTitle}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.movies);
+            // create pop-up window HTML
+            var popupHtml = '<style>';
+            popupHtml += '.popup { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 500px; padding: 20px; border-radius: 10px; background-color: #1c1c1e; z-index: 1000; }';
+            popupHtml += '.overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5); z-index: 999; }';
+            popupHtml += '.text-white { color: #ffffff; }';
+            popupHtml += '.popup-info { margin-bottom: 10px; }';
+            popupHtml += '.showtime-container { display: flex; justify-content: space-around; margin-bottom: 20px; }';
+            popupHtml += '.showtime-btn { background-color: #007aff; color: #ffffff; border: none; border-radius: 5px; padding: 5px 10px; font-size: 14px; cursor: pointer; }';
+            popupHtml += '.showtime-btn:hover { background-color: #005aff; }';
+            popupHtml += '.close-popup-btn { background-color: #ff3b30; color: #ffffff; border: none; border-radius: 5px; padding: 5px 10px; font-size: 14px; cursor: pointer; }';
+            popupHtml += '.close-popup-btn:hover { background-color: #ff1b1c; }';
+            popupHtml += '</style>';
+            popupHtml += '<div class="popup">';
+            popupHtml += '<h2 class="text-white">' + movieTitle + '</h2>';
+            for (var i = 0; i < data.movies.length; i++) {
+                var movie = data.movies[i];
+                popupHtml += '<div class="popup-info text-white"><p>Theater: ' + movie.theatreid + '</p>';
+                popupHtml += '<p>Date: ' + movie.showDate + '</p></div>';
+                var showtimeContainer = document.createElement('div');
+                showtimeContainer.classList.add('showtime-container');
+                for (var j = 1; j <= 3; j++) {
+                    var showtime = 'show' + j;
+                    if (movie[showtime]) {
+                        var showtimeBtn = document.createElement('button');
+                        showtimeBtn.classList.add('showtime-btn');
+                        showtimeBtn.innerText = movie[showtime];
+                        showtimeBtn.setAttribute('data-movie-info', JSON.stringify({
+                            movieTitle: movieTitle,
+                            theatreId: movie.theatreid,
+                            showDate: movie.showDate,
+                            showTime: movie[showtime],
+                            showId: movie.showid
+                        }));
+                        showtimeContainer.appendChild(showtimeBtn);
                     }
-                    popupHtml += '<div class="theater-date-container">';
-                    popupHtml += '</div>';
-                    popupHtml += showtimeContainer.outerHTML; // add showtime container HTML
                 }
-                popupHtml += '<button class="close-popup-btn">Close</button></div><div class="overlay"></div>';
-    
-                // insert pop-up window HTML into DOM
-                document.body.insertAdjacentHTML('beforeend', popupHtml);
-    
-                // add click event listener to close button
-                var closeBtn = document.querySelector('.close-popup-btn');
-                closeBtn.addEventListener('click', () => {
-                    // remove pop-up window from DOM
-                    var popup = document.querySelector('.popup');
-                    var overlay = document.querySelector('.overlay');
-                    popup.remove();
-                    overlay.remove();
+                               popupHtml += '<div class="theater-date-container">';
+                popupHtml += '</div>';
+                popupHtml += showtimeContainer.outerHTML; // add showtime container HTML
+            }
+
+           if (data.movies.length === 0) {
+              popupHtml += `
+                <div class="text-white text-center rounded p-4 shadow-lg">
+                  <h3 class="font-semibold">No showtimes found</h3>
+                </div>
+              `;
+            }
+
+
+            popupHtml += '<button class="close-popup-btn">Close</button></div><div class="overlay"></div>';
+
+            // insert pop-up window HTML into DOM
+            document.body.insertAdjacentHTML('beforeend', popupHtml);
+
+            // add click event listener to close button
+            var closeBtn = document.querySelector('.close-popup-btn');
+            closeBtn.addEventListener('click', () => {
+                // remove pop-up window from DOM
+                var popup = document.querySelector('.popup');
+                var overlay = document.querySelector('.overlay');
+                popup.remove();
+                overlay.remove();
+            });
+            var showBtns = document.querySelectorAll('.showtime-btn');
+            for (let showBtn of showBtns) {
+                showBtn.addEventListener('click', () => {
+                    var movieInfo = JSON.parse(showtimeBtn.getAttribute('data-movie-info'));
+                    var url = `/ticketcount?show_id=${movieInfo.showId}`;
+                    window.location.href = url;
                 });
-                var showBtns =  document.querySelectorAll('.showtime-btn');
-                for (let showBtn of showBtns){
-                    showBtn.addEventListener('click', () => {
-                        var movieInfo = JSON.parse(showtimeBtn.getAttribute('data-movie-info'));
-                        var url = `/ticketcount?show_id=${movieInfo.showId}`;
-                        window.location.href = url;
-                    });
-                }
-            })
-            .catch(error => console.log(error));
-    }
+            }
+        })
+        .catch(error => console.log(error));
+}
 </script>
     
 </html>

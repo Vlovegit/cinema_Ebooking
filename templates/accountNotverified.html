@@ -14,42 +14,31 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.6.0/mdb.min.js"></script>
 </head>
 <body>
-   <section class="vh-100 bg-image">
-    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-      <div class="container h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-          <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-            <div class="card" style="border-radius: 15px;">
-              <div class="card-body p-5">
-                <h2 class="text-uppercase text-center mb-5">Account Not Verified</h2>
-
-                
-                <form>
-
-                  <div class="form-outline mb-4">
-                    <h1>{%if messages %}
-                      <div style="font-size: medium;">
-                        {% for msg in messages %}
-                            {{msg}}
-                        {% endfor %}
-                      </div>
-                    {% endif %}</h1>
-                  </div>
-                  <div class="d-flex justify-content-center">
-                    <button onclick="window.location.href='{% url 'login' %}'" type="button" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" style="width:400px;background-color:skyblue">Login Now</button>
-                  </div>
-
-                  <p class="text-center text-muted mt-5 mb-0"><a href="/" class="fw-bold text-body">E-Cinema Booking System</a></p>
-
-                </form>
-
+   <section class="h-screen bg-gray-900">
+  <div class="flex items-center justify-center h-full">
+    <div class="max-w-md w-full">
+      <div class="bg-gray-800 shadow-md rounded-lg px-10 py-8">
+        <h2 class="text-2xl text-center font-bold text-white mb-8">Account Not Verified</h2>
+        <form>
+          <div class="mb-6">
+            <h1 class="text-xl text-white">{%if messages %}
+              <div style="font-size: medium;">
+                {% for msg in messages %}
+                  {{msg}}
+                {% endfor %}
               </div>
-            </div>
+            {% endif %}</h1>
           </div>
-        </div>
+          <div class="mb-6">
+            <button onclick="window.location.href='{% url 'login' %}'" type="button" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-indigo focus:bg-indigo-600">Login Now</button>
+          </div>
+          <p class="text-center text-gray-400 text-xs mt-5"><a href="/" class="text-white font-bold">E-Cinema Booking System</a></p>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 </body>
 </html>
  {% endblock %}
