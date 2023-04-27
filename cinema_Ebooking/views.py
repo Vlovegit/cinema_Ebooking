@@ -22,7 +22,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from django.utils.safestring import mark_safe
 
 # Create your views here.
 
@@ -304,6 +304,7 @@ def ticketcount(request):
 def confirmPayment(request):
     User = get_user_model()
     print(request.method)
+    print(request.user)
     if request.method == 'POST':
         print('Confirm Payment')
         cardIdBtn = request.POST.get("cardId")
@@ -517,6 +518,14 @@ def confirmPayment(request):
                 print('Email sent')
                 print(referenceNumber)
                 print(request.method)
+                messages.info(
+                request,
+                mark_safe(f'Dear {currentUser.first_name},<br><br>Thank you for choosing E-Cinema Booking System. Please go to your email {request.user} inbox and find the order details confirming your order shortly.<br><br>Note: Check your spam folder.<br><br>\
+                                            Order Id : {ticket.referenceNumber}<br>Movie : {movie}<br>Theater : {showroom.theatre}<br>\
+                                            Date : {show.showDate}<br>Time : {show.MovieTime}<br>Seats : {ticket.seat_data}<br>Amount Paid : {ticket.price}'),
+                extra_tags='confirm'
+)
+
                 return render(request, 'bookingconfirmed.html')
     else:
         print('Confirm Payment')

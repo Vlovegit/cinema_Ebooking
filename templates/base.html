@@ -58,9 +58,9 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
         <div class="relative flex h-16 items-center justify-between">
             <div class="flex items-center px-2 lg:px-0">
-                <a href="/" class="flex-shrink-0 text-white no-underline">
-                    E-Booking System
-                </a>
+                <a href="/" class="flex-shrink-0 no-underline">
+                    <img src="logo.jpeg" alt="E-Booking System" class="h-6">
+                  </a>
                 <div class="hidden lg:ml-6 lg:block">
                     <div class="flex space-x-4">
                         <a href="/"
@@ -100,7 +100,7 @@
         <option {% if movie_list.movie_category == 'Thriller'%} selected {%endif%}>Thriller</option>
       </select>
       <div class="relative">
-        <input id="search_bar" class="rounded-md border border-gray-400 bg-white h-8 w-full pl-2 pr-8" type="text" value="{{movie_list.movie_title}}" aria-label="Search" id="movie_name" name="movie_name" placeholder="Search">
+        <input id="search_bar" class="rounded-md border border-gray-400 bg-white h-8 w-full px-2" type="text" value="{{movie_list.movie_title}}" aria-label="Search" id="movie_name" name="movie_name" placeholder="Search">
         <button class="absolute right-0 top-0 h-full w-20 bg-green-500 hover:bg-green-600 text-white font-bold rounded-md" type="submit">Search</button>
       </div>
     </div>

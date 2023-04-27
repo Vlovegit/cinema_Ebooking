@@ -18,6 +18,9 @@
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
             crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/4b877571d6.js" crossorigin="anonymous"></script>
+    
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
           integrity="sha512-1vjCiTtTlTpxr9XlP2lWTKO4bLy4NzjZ4+0LMizOwNlrDfOrKMYx9+9pO8E/DRjDzdr6R5of6mTF+6U5/hqjKQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -228,14 +231,14 @@
         <h2 class="text-xl font-bold text-gray-100">Currently Showing</h2>
 
         <div class="mt-8 grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8">
-
+            
             {% for x in moviesNow %}
             <div>
                 <div class="relative">
                     <form action="movie_description">
-                        <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                        <div class="relative h-72 w-full overflow-hidden rounded-lg hover:scale-105 transform transition duration-500">
                             <button value="{{ x.name }}" name="cinema_button" {{ x.name }}>
-                            <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
+                            <img src="{{x.poster}}" class="h-full w-full object-contain object-center ">
                             </button>
                         </form>
                         {% csrf_token %}
@@ -283,7 +286,7 @@
             <div>
                 <div class="relative">
                     <form action="movie_description">
-                    <div class="relative h-72 w-full overflow-hidden rounded-lg">
+                    <div class="relative h-72 w-full overflow-hidden rounded-lg hover:scale-105 transform transition duration-500">
                         <button value="{{ x.name }}" name="cinema_button" {{ x.name }}>
                         <img src="{{x.poster}}" class="h-full w-full object-contain object-center">
                         </button>
@@ -307,17 +310,7 @@
 
                     </div>
                 </div>
-                <div class="mt-6">
-                    <form action="movie_description">
-                        <button
-                                name="cinema_button"
-                                value="{{ x.name }}"
-                                class="w-full relative flex items-center justify-center rounded-md border border-transparent bg-gray-100 px-8 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200">
-                            View
-                            Movie<span class="sr-only"></span></button>
-                    </form>
-
-                </div>
+                
             </div>
 
             {% endfor %}
