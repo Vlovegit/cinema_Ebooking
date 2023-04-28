@@ -17,7 +17,7 @@
                         <h2 class="text-xl font-semibold text-white mb-3">Payment Cards:</h2>
                         <ul id="credit_cards" class="space-y-4">
                             {% for card in cards %}
-                            <li class="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
+                          <li class="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
                                 <div class="flex-grow mr-5">
                                     <label for="cardHolderName_{{ forloop.counter }}" class="block font-semibold">Cardholder
                                         Name:</label>
@@ -39,19 +39,23 @@
                                            name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}"
                                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 </div>
-                                <button type="button" onclick="deleteCard(this)"
-                                        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">Delete
-                                </button>
+                                <div class="flex-grow">
+                                    <label class="text-transparent">s</label>
+                                    <button type="button" onclick="deleteCard(this)"
+                                            class="bg-red-500 text-white px-4  rounded-lg hover:bg-red-600 ml-4 self-center">Delete
+                                    </button>
+                                </div>
+
                             </li>
                             {% endfor %}
                         </ul>
                         <div class="justify-end mt-2 gap-2 flex">
-                                <button class="add-card-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                                        type="button" onclick="addCard()">Add Credit Card
-                                </button>
-                                <button class="save-changes-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                                        type="submit">Save Changes
-                                </button>
+                            <button class="add-card-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                                    type="button" onclick="addCard()">Add Credit Card
+                            </button>
+                            <button class="save-changes-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                    type="submit">Save Changes
+                            </button>
                         </div>
                         {% if messages %}
                         {% for message in messages %}
@@ -72,16 +76,16 @@
     }
 
     function addCard() {
-    var cards_list = document.getElementById("credit_cards");
-    var num_cards = cards_list.getElementsByTagName("li").length;
+        var cards_list = document.getElementById("credit_cards");
+        var num_cards = cards_list.getElementsByTagName("li").length;
 
-    if (num_cards >= 3) {
-        alert("You can only add up to 3 cards.");
-        return;
-    }
+        if (num_cards >= 3) {
+            alert("You can only add up to 3 cards.");
+            return;
+        }
 
-    var new_card_id = (num_cards + 1);
-    var new_card_html = `
+        var new_card_id = (num_cards + 1);
+        var new_card_html = `
       <li class="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
         <div class="flex-grow mr-5">
           <label for="cardHolderName_${new_card_id}" class="block font-semibold">Cardholder Name:</label>
@@ -98,11 +102,17 @@
           <input type="text" required="true" id="expiryDate_${new_card_id}" name="expiryDate_${new_card_id}" placeholder="MM/YY" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
         </div>
 
-        <button type="button" onclick="deleteCard(this)" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 ml-4 self-center">Delete</button>
+
+
+        <div class="flex-grow">
+            <label class="text-transparent">s</label>
+            <button type="button" onclick="deleteCard(this)" class="bg-red-500 text-white px-4  rounded-lg hover:bg-red-600 ml-4 self-center">Delete</button>
+        </div>
+</div>
       </li>
     `;
-    cards_list.innerHTML += new_card_html;
-}
+        cards_list.innerHTML += new_card_html;
+    }
 
 
 </script>
