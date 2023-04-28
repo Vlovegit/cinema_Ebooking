@@ -284,7 +284,10 @@ def ticketcount(request):
     movie = Movie.objects.filter(id=show.movie_id).first()
     # print(movie)
     showroom = ShowRoom.objects.filter(id=show.theatre_id).first()
-    seatremaining = 50 - show.booked_seats
+    seats = Seat.objects.filter(show_id=showId).first()
+    available_seats = []
+    available_seats = seats.seat_available.split(',')
+    seatremaining = len(available_seats)
     context = {
         'seatsremaining': seatremaining,
         'moviename': movie.name,
@@ -576,6 +579,8 @@ def checkout(request):
         childCount = request.POST.get("child")
         seniorCount = request.POST.get("senior")
         totalPrice = request.POST.get("total_price")
+        totalPaymentAmount = request.POST.get("amount")
+        print('Actual Payment amount : ',totalPaymentAmount)
         promotion_code = request.POST.get("promotion_code")
         print(promotion_code)
         promotion = Promotion.objects.filter(promo_code=promotion_code).first()
@@ -619,7 +624,7 @@ def checkout(request):
             return render(request, 'checkout.html', context)
         if make_payment_btn is not None:
             print('make payment')
-            print("Final price for the ticket: ", price)
+            print("Final price for the ticket: ", totalPaymentAmount)
             ticket = Tickets()
             ticket.user = request.user
             ticket.isBooked = False
@@ -629,7 +634,7 @@ def checkout(request):
             ticket.seat_data = selectedseats
             ticket.show_id = showId
             ticket.time_created = datetime.now()
-            ticket.price = price
+            ticket.price = totalPaymentAmount
             ticket.time_created = datetime.now(pytz.utc)
             timeCreated = ticket.time_created.strftime('%Y-%m-%d %H:%M:%S.%f')
             referenceNumber = 'tkt-' + "-".join(str(timeCreated).split(' '))
@@ -944,7 +949,7 @@ def edit_password(request):
                 return render(request, 'new_password.html')
         else:
             if currentPassword is not None:
-                messages.info(request, 'Failed to Authenticate, reset through email link', extra_tags='fail')
+                messages.info(request, 'Failed to Authenticate, current password is incorrect', extra_tags='fail')
                 print("Failed to Authenticate, reset through email link")
             return render(request, 'new_password.html')
     else:
@@ -1085,7 +1090,7 @@ def resetPwdEmail(request, user, to_email):
 def forgot_password_validation(request, uidb64, token):
     if request.method == 'POST':
 
-        currentpassword = request.POST['current_password']
+        #currentpassword = request.POST['current_password']
         newpassword1 = request.POST['new_password']
         newpassword2 = request.POST['new_password2']
         if newpassword1 == newpassword2:
@@ -1096,12 +1101,6 @@ def forgot_password_validation(request, uidb64, token):
             except(TypeError, ValueError, OverflowError, User.DoesNotExist):
                 user = None
 
-            user2 = auth.authenticate(email=user.email, password=currentpassword)
-            if user2 is None:
-                messages.info(request,
-                              'Current password entered is incorrect. Please try again with the link sent to mail earlier.',
-                              extra_tags='invalid')
-                return render(request, 'passwordresetconfirm.html')
             if user is not None and account_activation_token.check_token(user, token):
                 user.set_password(newpassword1)
                 print(user.password)
