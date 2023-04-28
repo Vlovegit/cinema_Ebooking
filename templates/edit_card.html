@@ -17,7 +17,7 @@
                         <h2 class="text-xl font-semibold text-white mb-3">Payment Cards:</h2>
                         <ul id="credit_cards" class="space-y-4">
                             {% for card in cards %}
-                          <li class="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
+                            <li class="flex justify-between items-center bg-gray-200 p-4 rounded-lg">
                                 <div class="flex-grow mr-5">
                                     <label for="cardHolderName_{{ forloop.counter }}" class="block font-semibold">Cardholder
                                         Name:</label>
@@ -42,7 +42,8 @@
                                 <div class="flex-grow">
                                     <label class="text-transparent">s</label>
                                     <button type="button" onclick="deleteCard(this)"
-                                            class="bg-red-500 text-white px-4  rounded-lg hover:bg-red-600 ml-4 self-center">Delete
+                                            class="bg-red-500 text-white px-4  rounded-lg hover:bg-red-600 ml-4 self-center">
+                                        Delete
                                     </button>
                                 </div>
 
@@ -70,10 +71,11 @@
 </div>
 <script>
     function deleteCard(button) {
-        var li = button.parentNode;
-        var ul = li.parentNode;
-        ul.removeChild(li);
+        console.log(button)
+        var div = button.parentNode.parentNode;
+        div.remove();
     }
+
 
     function addCard() {
         var cards_list = document.getElementById("credit_cards");
