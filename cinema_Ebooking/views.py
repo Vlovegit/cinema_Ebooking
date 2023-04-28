@@ -111,7 +111,7 @@ def registration(request):
         password2 = request.POST['password2']
         email = request.POST['email']
         is_promo = request.POST.get('promotion', None)
-
+        print(is_promo)
         ######################optional data#########################################
         addr = request.POST.get('address', None)
         aptn = request.POST.get('aptNumber', None)
@@ -170,15 +170,16 @@ def registration(request):
         user.save()
         print('User created')
         print(user.first_name)
-
-        card = Card.objects.create(cardHolderName=cardHolderName, expiryDate=expiryDate, user_id=user.id)
-        card.cardHolderName = cardHolderName
-        card.cardNum = encryption(cardNum)
-        card.expiryDate = encryption(expiryDate)
-        card.last_four = last_four
         print(cardNum)
+        if cardNum == 0 : 
+            card = Card.objects.create(cardHolderName=cardHolderName, expiryDate=expiryDate, user_id=user.id)
+            card.cardHolderName = cardHolderName
+            card.cardNum = encryption(cardNum)
+            card.expiryDate = encryption(expiryDate)
+            card.last_four = last_four
+            print(cardNum)
 
-        card.save()
+            card.save()
         activateEmail(request, user, email)  # email confirmation
         return redirect('accountSuccess')  # success #register
     else:

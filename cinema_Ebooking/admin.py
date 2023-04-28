@@ -29,6 +29,12 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_promo', 'is_staff')
     search_fields = ('first_name', 'email')
 
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Mark selected users as inactive"
+
+    actions = [make_inactive]
+
 
 admin.site.register(User, UserAdmin)
 
