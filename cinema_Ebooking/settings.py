@@ -78,7 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ebooking',
         'USER': 'postgres',
-        'PASSWORD': '12345678',
+        'PASSWORD': 'password',
         'HOST': 'localhost'
     }
 }

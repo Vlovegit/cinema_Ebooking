@@ -1,355 +1,147 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
-<link rel="stylesheet" href="{% static 'css/registration.css' %}" />
-<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
-<div class="container h-75 pt-5">
-    <div class="row ml-auto">
-        <div class="col ml-auto">
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                }
 
-                form {
-                    width: 1000px;
-                    margin: 0 auto;
-                }
-
-                fieldset {
-                    border: none;
-                }
-
-                legend {
-                    font-size: 1.5em;
-                    font-weight: bold;
-                }
-
-                label {
-                    display: inline-block;
-                    width: 100px;
-                    text-align: right;
-                    margin-right: 10px;
-                }
-
-                input[type="text"],
-                select {
-                    font-size: 1em;
-                    padding: 5px;
-                    border-radius: 5px;
-                    border: 1px solid #ccc;
-                    width: 250px;
-                    margin-bottom: 10px;
-                }
-
-                #add_card {
-                    background-color: #4caf50;
-                    color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-
-                #add_card:hover {
-                    background-color: #3e8e41;
-                }
-
-                ul#credit_cards {
-                    margin: 0;
-                    padding: 0;
-                    list-style-type: none;
-                }
-
-                ul#credit_cards li {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 10px;
-                    padding: 10px;
-                    background-color: #f9f9f9;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                }
-
-                ul#credit_cards li div {
-                    flex: 1;
-                    margin-right: 20px;
-                }
-
-                ul#credit_cards li div:last-child {
-                    margin-right: 0;
-                }
-
-                ul#credit_cards li label {
-                    width: auto;
-                    margin-right: 0;
-                }
-
-                ul#credit_cards li button {
-                    background-color: #f44336;
-                    color: white;
-                    padding: 5px 10px;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                }
-
-                ul#credit_cards li button:hover {
-                    background-color: #da190b;
-                }
-
-                /* Style for the "Add Credit Card" button */
-                .add-card-button {
-                    background-color: #4caf50; /* Green background */
-                    border: none; /* Remove border */
-                    color: white; /* White text */
-                    padding: 10px 20px; /* Add padding */
-                    text-align: center; /* Center-align text */
-                    text-decoration: none; /* Remove underline */
-                    display: inline-block; /* Display as a block element */
-                    font-size: 16px; /* Font size */
-                    margin-bottom: 20px; /* Add bottom margin */
-                }
-
-                /* Style for the "Save Changes" button */
-                .save-changes-button {
-                    background-color: #008cba; /* Blue background */
-                    border: none; /* Remove border */
-                    color: white; /* White text */
-                    padding: 10px 20px; /* Add padding */
-                    text-align: center; /* Center-align text */
-                    text-decoration: none; /* Remove underline */
-                    display: inline-block; /* Display as a block element */
-                    font-size: 16px; /* Font size */
-                    margin-bottom: 20px; /* Add bottom margin */
-                }
-            </style>
-            <div>
-            <div class="row ml-auto">
-                <div class="card">
-                    <div class="card-body p-5">
-                        <h1 class="text-uppercase text-center mb-5">Confirm Payment</h1>
-                        <form method="POST" action="confirmPayment">
-                            {% csrf_token %}
-                            <input name="referenceNumber" hidden="True" type="text" id="referenceNumber" value="{{ referenceNumber }}" />
-                            <div />
-                            <ul id="credit_cards">
-                                {% for card in cards %}
-
-                                <li>
-                                    <div>
-                                        <label for="cardHolderName_{{ forloop.counter }}">Cardholder Name:</label>
-                                        <input type="text" required="true" id="cardHolderName_{{ forloop.counter }}" readonly name="cardHolderName_{{ forloop.counter }}" value="{{ card.cardHolderName }}" />
-                                    </div>
-
-                                    <div>
-                                        <label for="cardNum_{{ forloop.counter }}">Card Number:</label>
-                                        <input type="text" required="true" id="cardNum_{{ forloop.counter }}" readonly name="cardNum_{{ forloop.counter }}" value="{{ card.cardNum }}" />
-                                    </div>
-
-                                    <div>
-                                        <label for="expiryDate_{{ forloop.counter }}">Expiration Date:</label>
-                                        <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" readonly name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}" />
-                                    </div>
-                                    <!--                                <div>-->
-                                    <!--                                    <label for="expiryDate_{{ forloop.counter }}">CVV:</label>-->
-                                    <!--                                    <input type="text" required="true" id="cvv_{{ forloop.counter }}" name="cvv_{{ forloop.counter }}" style="width: 75px" />-->
-                                    <!--                                </div>-->
-                                    <div>
-                                        <button type="submit" name="cardId" id="cardId" value="{{card.id}}" style="margin: 20px 10px 0px 10px;">Select</button>
-                                    </div>
-                                </li>
-
-                                {% endfor %}
-                            </ul>
-
-                            <div class="row ml-auto">
-                                <div class="col ml-auto">
-                                    <button class="add-card-button" type="button" onclick="addCard()">Add Credit Card</button>
-                                </div>
-                                <div class="col ml-auto">
-                                    <button class="save-changes-button" type="submit" name="save_changes" id="save_changes" style="margin: 20px 10px 0px 10px;">Save Changes</button>
-
-<!--                                    <button class="save-changes-button" id="save_changes" name="save_changes" type="submit">Save Changes</button>-->
-                                </div>
+<link rel="stylesheet" href="{% static 'css/registration.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<div class="p-10 mb-0 pb-20 min-h-screen  bg-gray-900 text-white">
+    <div class="grid grid-cols-1 gap-4">
+        <div class="mx-auto">
+            <h1 class="text-3xl text-center mb-5">Confirm Payment</h1>
+            <form method="POST" action="confirmPayment" class="space-y-4">
+                {% csrf_token %}
+                <input name="referenceNumber" hidden="True" type="text" id="referenceNumber"
+                       value="{{ referenceNumber }}"/>
+                <ul id="credit_cards" class="divide-y divide-gray-500">
+                    {% for card in cards %}
+                    <li class="py-4">
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label for="cardHolderName_{{ forloop.counter }}" class="block text-sm font-medium">Cardholder
+                                    Name:</label>
+                                <input type="text" required="true" id="cardHolderName_{{ forloop.counter }}" readonly
+                                       name="cardHolderName_{{ forloop.counter }}" value="{{ card.cardHolderName }}"
+                                       class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"/>
                             </div>
-                        </form>
-                    </div>
-                    <!--                        <div class="col-8">-->
-                    <!--                            <div class="card" style="border-radius: 15px;">-->
-                    <!--                                <div class="card-body p-5">-->
-                    <!--                                    <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>-->
-                    <!--                                    <div class="form-outline mb-4 row ml-auto">-->
-                    <!--                                        <div class="col ml-auto">-->
-                    <!--                                            <label class="form-label" for="card_number">Card Number</label>-->
-                    <!--                                        </div>-->
-                    <!--                                        <div class="col ml-auto">-->
-                    <!--                                            <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" value="{{ selectedCard.cardNum }}" placeholder="Card Number *" />-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="form-outline mb-4 row ml-auto">-->
-                    <!--                                        <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>-->
-                    <!--                                        <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" value="{{ selectedCard.cardHolderName}}" placeholder="Card Holder Name *" /></div>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="form-outline mb-4 row ml-auto">-->
-                    <!--                                        <div class="col ml-auto">-->
-                    <!--                                            <label class="form-label">Exp. Date</label>-->
-                    <!--                                            <div class="row ml-auto">-->
-                    <!--                                                <input name="month" id="month" value="{{ month }}" />-->
-                    <!--                                                &lt;!&ndash;                                                    <select name="expiredate" id="expireMM" value="34">&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="">Month</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="01">01</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="02">02</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="03">03</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="04">04</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="05">05</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="06">06</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="07">07</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="08">08</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="09">09</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="10">10</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="11">11</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="12">12</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                    </select>&ndash;&gt;-->
-                    <!--                                            </div>-->
-                    <!--                                            <div class="row ml-auto">-->
-                    <!--                                                <input name="year" id="year" value="{{ year }}" />-->
-
-                    <!--                                                &lt;!&ndash;                                                    <select name="expireyear" id="expireYY">&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="">Year</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="20">2020</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="21">2021</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="22">2022</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="23">2023</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                        <option value="24">2024</option>&ndash;&gt;-->
-                    <!--                                                &lt;!&ndash;                                                    </select>&ndash;&gt;-->
-                    <!--                                                <div class="row ml-auto">-->
-                    <!--                                                    <div class="col ml-auto"><input type="text" name="cvv" id="cvv" class="form-control form-control-lg" placeholder="CVV *" /></div>-->
-                    <!--                                                </div>-->
-                    <!--                                                <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />-->
-                    <!--                                            </div>-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div>-->
-                    <!--                                        <button class="btn btn-outline-success" name="confirm_payment" value="payment" type="submit">Confirm Payment</button>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-
-
-                </div>
-            </div>
-
-            <div class="row ml-auto">
-                <div class="card">
-                    <div class="card-body p-5">
-                        <h1 class="text-uppercase text-center mb-5">Confirm Payment</h1>
-                        <form method="POST" action="confirmPayment">
-                            {% csrf_token %}
-                            <input name="referenceNumberPay" hidden="True" type="text" id="referenceNumberPay" value="{{ referenceNumber }}" />
-                            <div class="col-8">
-                                <div class="card" style="border-radius: 15px;">
-                                    <div class="card-body p-5">
-                                        <h3 class="text-uppercase text-center mb-5">Enter Payment</h3>
-                                        <div class="form-outline mb-4 row ml-auto">
-                                            <div class="col ml-auto">
-                                                <label class="form-label" for="card_number">Card Number</label>
-                                            </div>
-                                            <div class="col ml-auto">
-                                                <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number" class="form-control form-control-lg" value="{{ selectedCard.cardNum }}" placeholder="Card Number *" />
-                                            </div>
-                                        </div>
-                                        <div class="form-outline mb-4 row ml-auto">
-                                            <div class="col ml-auto"><label class="form-label" for="card_name">Card Holder Name</label></div>
-                                            <div class="col ml-auto"><input type="text" name="cname" id="card_name" class="form-control form-control-lg" value="{{ selectedCard.cardHolderName}}" placeholder="Card Holder Name *" /></div>
-                                        </div>
-                                        <div class="form-outline mb-4 row ml-auto">
-                                            <div class="col ml-auto">
-                                                <label class="form-label">Exp. Date</label>
-                                                <div class="row ml-auto">
-                                                    <input name="month" id="month" value="{{ month }}" />
-                                                    <!--                                                    <select name="expiredate" id="expireMM" value="34">-->
-                                                    <!--                                                        <option value="">Month</option>-->
-                                                    <!--                                                        <option value="01">01</option>-->
-                                                    <!--                                                        <option value="02">02</option>-->
-                                                    <!--                                                        <option value="03">03</option>-->
-                                                    <!--                                                        <option value="04">04</option>-->
-                                                    <!--                                                        <option value="05">05</option>-->
-                                                    <!--                                                        <option value="06">06</option>-->
-                                                    <!--                                                        <option value="07">07</option>-->
-                                                    <!--                                                        <option value="08">08</option>-->
-                                                    <!--                                                        <option value="09">09</option>-->
-                                                    <!--                                                        <option value="10">10</option>-->
-                                                    <!--                                                        <option value="11">11</option>-->
-                                                    <!--                                                        <option value="12">12</option>-->
-                                                    <!--                                                    </select>-->
-                                                </div>
-                                                <div class="row ml-auto">
-                                                    <input name="year" id="year" value="{{ year }}" />
-
-                                                    <!--                                                    <select name="expireyear" id="expireYY">-->
-                                                    <!--                                                        <option value="">Year</option>-->
-                                                    <!--                                                        <option value="20">2020</option>-->
-                                                    <!--                                                        <option value="21">2021</option>-->
-                                                    <!--                                                        <option value="22">2022</option>-->
-                                                    <!--                                                        <option value="23">2023</option>-->
-                                                    <!--                                                        <option value="24">2024</option>-->
-                                                    <!--                                                    </select>-->
-                                                    <div class="row ml-auto">
-                                                        <div class="col ml-auto"><input type="text" required="True" name="cvv" id="cvv" class="form-control form-control-lg" placeholder="CVV *" /></div>
-                                                    </div>
-                                                    <input class="inputCard" type="hidden" name="expiry" id="expiry" maxlength="4" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-outline-success" name="confirm_payment" value="payment" type="submit">Confirm Payment</button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div>
+                                <label for="cardNum_{{ forloop.counter }}" class="block text-sm font-medium">Card
+                                    Number:</label>
+                                <input type="text" required="true" id="cardNum_{{ forloop.counter }}" readonly
+                                       name="cardNum_{{ forloop.counter }}" value="{{ card.cardNum }}"
+                                       class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"/>
                             </div>
-                        </form>
-                    </div>
-                    </div>
+
+                            <div>
+                                <label for="expiryDate_{{ forloop.counter }}" class="block text-sm font-medium">Expiration
+                                    Date:</label>
+                                <input type="text" required="true" id="expiryDate_{{ forloop.counter }}" readonly
+                                       name="expiryDate_{{ forloop.counter }}" value="{{ card.expiryDate }}"
+                                       class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"/>
+                            </div>
+                        </div>
+                        <div class="text-right mt-2">
+                            <button type="submit" name="cardId" id="cardId" value="{{card.id}}"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                Select
+                            </button>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="flex justify-between mt-4">
+                    <button type="button" onclick="addCard()" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:
+outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Add Credit Card
+                    </button>
+                    <button type="submit" name="save_changes" id="save_changes"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-400">
+                        Save Changes
+                    </button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+    <div class="grid grid-cols-1 gap-4">
+        <div class="mx-auto">
+            <h1 class="text-3xl text-center mb-5">Confirm Payment</h1>
+            <form method="POST" action="confirmPayment" class="space-y-4">
+                {% csrf_token %}
+                <input name="referenceNumberPay" hidden="True" type="text" id="referenceNumberPay"
+                       value="{{ referenceNumber }}"/>
+                <div class="card bg-gray-700 p-5 rounded-lg">
+                    <h3 class="text-xl text-center mb-5">Enter Payment</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="card_number" class="block text-sm font-medium">Card Number</label>
+                            <input type="text" minlength="16" maxlength="16" name="card_number" id="card_number"
+                                   class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-800 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                   value="{{ selectedCard.cardNum }}" placeholder="Card Number *"/>
+                        </div>
+                        <div>
+                            <label for="card_name" class="block text-sm font-medium">Card Holder Name</label>
+                            <input type="text" name="cname" id="card_name"
+                                   class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-800 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                   value="{{ selectedCard.cardHolderName }}" placeholder="Card Holder Name *"/>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium">Exp. Date</label>
+                            <div class="grid grid-cols-2 gap-4">
+                                <input name="month" id="month"
+                                       class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-800 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                       value="{{ month }}" placeholder="MM"/>
+                                <input name="year" id="year"
+                                       class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-800 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                       value="{{ year }}" placeholder="YY"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="cvv" class="block text-sm font-medium">CVV</label>
+                            <input type="text" required="True" name="cvv" id="cvv"
+                                   class="px-2 py-1 mt-1 block w-full rounded-md bg-gray-800 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500"
+                                   placeholder="CVV *"/>
+                        </div>
+                    </div>
+                    <div class="text-right mt-4">
+                        <button class="btn btn-outline-success" name="confirm_payment" value="payment" type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            Confirm Payment
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
-                                            <script>
-                                                function addCard() {
-                                                    var cards_list = document.getElementById("credit_cards");
-                                                    var num_cards = cards_list.getElementsByTagName("li").length;
-                                                    console.log("add cards");
-                                                    if (num_cards >= 3) {
-                                                        alert("You can only add up to 3 cards.");
-                                                        return;
-                                                    }
+<script>
+    function addCard() {
+        var cards_list = document.getElementById("credit_cards");
+        var num_cards = cards_list.getElementsByTagName("li").length;
+        console.log("add cards");
+        if (num_cards >= 3) {
+            alert("You can only add up to 3 cards.");
+            return;
+        }
 
-                                                    var new_card_id = num_cards + 1;
-                                                    var new_card_html = `
-                                      <li>
-                                        <div class="col ml-auto">
-                                          <label for="cardHolderName_${new_card_id}">Cardholder Name:</label>
-                                          <input type="text" required="true" id="cardHolderName_${new_card_id}" name="cardHolderName_${new_card_id}">
-                                        </div>
+        var new_card_id = num_cards + 1;
+        var new_card_html = `
+            <li class="bg-gray-800 p-4 rounded-lg space-y-4">
+                <div>
+                    <label for="cardHolderName_${new_card_id}" class="block text-sm font-medium">Cardholder Name:</label>
+                    <input type="text" required="true" id="cardHolderName_${new_card_id}" name="cardHolderName_${new_card_id}" class="mt-1 block w-full rounded-md bg-gray-900 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
 
-                                        <div class="col ml-auto">
-                                          <label for="cardNum_${new_card_id}">Card Number:</label>
-                                          <input type="text" required="true" id="cardNum_${new_card_id}" name="cardNum_${new_card_id}" maxlength="16">
-                                        </div>
+                <div>
+                    <label for="cardNum_${new_card_id}" class="block text-sm font-medium">Card Number:</label>
+                    <input type="text" required="true" id="cardNum_${new_card_id}" name="cardNum_${new_card_id}" maxlength="16" class="mt-1 block w-full rounded-md bg-gray-900 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
 
-                                        <div class="col ml-auto">
-                                          <label for="expiryDate_${new_card_id}">Expiration Date:</label>
-                                          <input type="text" required="true" id="expiryDate_${new_card_id}" name="expiryDate_${new_card_id}" placeholder="MM/YY">
-                                        </div>
-<!--                                        <div class=col "ml-auto">-->
-<!--                                        <button type="button">Select</button>-->
-<!--                                        </div>-->
-                                      </li>
-                                    `;
-                                                    cards_list.innerHTML += new_card_html;
-                                                }
-                                            </script>
+                <div>
+                    <label for="expiryDate_${new_card_id}" class="block text-sm font-medium">Expiration Date:</label>
+                    <input type="text" required="true" id="expiryDate_${new_card_id}" name="expiryDate_${new_card_id}" placeholder="MM/YY" class="mt-1 block w-full rounded-md bg-gray-900 text-white border-gray-600 focus:border-indigo-500 focus:ring-indigo-500">
+                </div>
+            </li>
+        `;
+        cards_list.innerHTML += new_card_html;
+    }
+</script>
 {% endblock %}

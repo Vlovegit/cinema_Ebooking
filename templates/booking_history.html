@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,168 +9,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300i,400" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <title>Document</title>
-    <style>
-        body {
-  /*background-color: #100e17;*/
-  background-color: black;
-  font-family: 'Open Sans', sans-serif;
-}
-
-.container {
-  height: auto;
-  width: auto;
-}
-
-.card {
-  height: 180px;
-  width: 70vw;
-  background-color: #17141d;
-  border-radius: 10px;
-  box-shadow: -1rem 0 3rem #000;
-  position: relative;
-  margin-top: 2vw;
-  margin-bottom: 2vw;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.title {
-  color: white;
-  font-weight: 300;
-  position: absolute;
-  left: 20px;
-}
-
-.bar {
-  position: absolute;
-  top:60px;
-  left: 20px;
-  height: 5px;
-  width: 85%;
-}
-
-.emptybar {
-  background-color: #2e3033;
-  width: 100%;
-  height: 100%;
-}
-
-.filledbar {
-  position: absolute;
-  top: 0px;
-  z-index: 3;
-  width: 0px;
-  height: 100%;
-  background: rgb(0,154,217);
-  background: linear-gradient(90deg, rgba(0,154,217,1) 0%, rgba(217,147,0,1) 65%, rgba(255,186,0,1) 100%);
-  transition: 0.6s ease-out;
-}
-
-.card:hover .filledbar {
-  width: 100%;
-  transition: 0.4s ease-out;
-}
-
-h4{
-    position: inherit;
-    text-align:right;
-    color: white;
-    padding-top: 50px;
-    padding-right: 15px;
-    font-size: 1.1em;
-}
-
-p{
-    color: white;
-    margin-bottom: auto;
-    margin-right: auto;
-    margin-left: auto;
-}
-table{
-    width: 95%;
-    text-align: left;
-    margin-top: 1vw;
-    margin-right: auto;
-    margin-left: auto;
-}
-td{
-    color: white;
-}
-
-</style>
 </head>
-<body>
-    <div class="container">
-      {% for s in records %}
-        <div class="card">
-          <h2 class="title">Booking Id: {{s.BookingId}}</h2>
-          <h4>{{s.booking_date}}</h4>
-          <div class="bar">
-            <div class="emptybar"></div>
-            <div class="filledbar"></div>
-            <div>
-                <table>
+<body class="bg-black text-white font-sans">
+<div class="container mx-auto px-4">
+    {% for s in records %}
+    <div class="card my-6 p-6 bg-gray-800 rounded-lg shadow-lg">
+        <h2 class="title text-lg font-semibold">Booking Id: {{s.BookingId}}</h2>
+        <h4 class="text-right text-sm">{{s.booking_date}}</h4>
+        <div class="bar mt-4 relative">
+            <div class="emptybar w-full h-1 bg-gray-700"></div>
+            <div class="filledbar absolute top-0 left-0 h-1 w-0 bg-gradient-to-r from-blue-600 via-yellow-500 to-yellow-300 transition-all duration-300 ease-out"></div>
+        </div>
+        <div class="mt-4">
+            <table class="w-full text-left">
                 <tr>
                     <td>Movie Name:</td>
                     <td>{{s.movie_name}}</td>
-                    <td style="width: 10vw;"></td>
-                    <td>Theatre Name: </td>
+                    <td class="w-16"></td>
+                    <td>Theatre Name:</td>
                     <td>{{s.theatre_name}}</td>
                 </tr>
                 <tr>
                     <td>Show Time:</td>
                     <td>{{s.show_time}}</td>
-                    <td style="width: 10vw;"></td>
-                    <td>Show Date: </td>
+                    <td class="w-16"></td>
+                    <td>Show Date:</td>
                     <td>{{s.show_date}}</td>
                 </tr>
                 <tr>
                     <td>Amount Paid (in $):</td>
                     <td>{{s.total_amount}}</td>
-                    <td style="width: 10vw;"></td>
-                    <td>Seats: </td>
-                    <td>{{s.seats}}</td>          
+                    <td class="w-16"></td>
+                    <td>Seats:</td>
+                    <td>{{s.seats}}</td>
                 </tr>
-                </table>
-            </div>
-            </div>
-          </div>
+            </table>
         </div>
-        {% endfor %}
-        <!-- <div class="card">
-          <h3 class="title">Booking Id: 0002</h3>
-          <div class="bar">
-            <div class="emptybar"></div>
-            <div class="filledbar"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3 class="title">Booking Id: 0003</h3>
-          <div class="bar">
-            <div class="emptybar"></div>
-            <div class="filledbar"></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h3 class="title">Booking Id: 0004</h3>
-          <div class="bar">
-            <div class="emptybar"></div>
-            <div class="filledbar"></div>
-          </div>
-        </div> -->
-
-      </div>
-
+    </div>
+    {% endfor %}
+</div>
 <!-- FOOTER START -->
-<footer class="py-5 bg-dark">
-  <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Cinema E-Booking 2023</p></div>
+<footer class="py-5 bg-gray-800">
+    <div class="container mx-auto px-4 text-center"><p class="m-0 text-white">Copyright &copy; Cinema E-Booking 2023</p>
+    </div>
 </footer>
 <!-- FOOTER END -->
-
 </body>
-
 </html>
 {% endblock %}
+
+
+
+
+

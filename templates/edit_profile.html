@@ -1,133 +1,125 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<head><link rel="stylesheet" href="{% static 'css/edit_profile.css' %}"></head>
 
-  <div class="container h-70 pt-5" >
-        <div class="d-flex justify-content-center">
-            <div class="d-flex justify-content-center">
-            <div class="card" style="height:760px;width:1200px">
-              <div class="card-body p-5">
-                <h1 class="text-uppercase text-center mb-5">Edit Profile</h1>
-
-                  {% comment %} {% if user.is_authenticated %} {% endcomment %}
-                  <form method="post" action="edit_profile">
-                      {% csrf_token %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<div class=" bg-gray-900 pt-5 min-h-screen">
+    <div class="flex justify-center">
+        <div class="card bg-gray-900  w-3/4">
+            <div class="card-body p-5">
+                <h1 class="text-xl font-semibold text-center mb-5 text-white">Edit Profile</h1>
+                <form method="post" action="edit_profile">
+                    {% csrf_token %}
                     {% for x in profileable %}
-                  <div class="col ml-auto">
-
-                    <div class="row ml-auto py-3">
-                        <div class="col ml-auto">
-                          <label for="formControlReadonly">E-Mail</label>
-                            <input name="email" type="text" id="formControlReadonly" value = "{{ x.email  }}" readonly class="form-control form-control-lg">
-                            
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="formControlReadonly" class="text-white">E-Mail</label>
+                            <input name="email" type="text" id="formControlReadonly" value="{{ x.email }}" readonly
+                                   class="form-control form-control-lg bg-gray-700 text-black rounded">
                         </div>
 
-                        <div class="col ml-auto">
-                          <label for="phone_number">Phone Number</label>
+                        <div>
+                            <label for="phone_number" class="text-white">Phone Number</label>
+                            <input name="phone_number" type="tel" id="phone_number" value="{{ x.phone }}"
+                                   class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black">
+                        </div>
 
-                            <input name="phone_number" type = "tel" id="phone_number"  value = "{{ x.phone  }}" class="form-control form-control-lg"
-                            >
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label for="first_name" class="text-white">First name</label>
+                            <input name="first_name" type="text" id="first_name" value="{{ x.first_name }}"
+                                   class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black"
+                                   placeholder={{profileable.first_name}}>
+                        </div>
 
-                            
+                        <div>
+                            <label for="last_name" class="text-white">Last name</label>
+                            <input name="last_name" type="text" id="last_name" value="{{ x.last_name }}"
+                                   class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black"
+                                   placeholder={{customuser.last_name}}>
                         </div>
                     </div>
-                    <div class="row ml-auto py-3">
-                        <div class="col ml-auto">
-                          <label for="first_name">First name</label>
-                            <input name="first_name" type="text" id="first_name" value = "{{ x.first_name  }}"
-                                   class="form-control form-control-lg" placeholder={{profileable.first_name}}>
-                            
-                        </div>
-                        <div class="col ml-auto">
-                          <label for="first_name">Last name</label>
-                            <input name="last_name" type="text"  id="last_name" value = "{{ x.last_name  }}"
-                                   class="form-control form-control-lg" placeholder={{customuser.last_name}}>
-                            
-                            </div>
+                    <div class="mt-4">
+                        <label class="text-white">Billing Address</label>
                     </div>
-                      <div class="col ml-auto">
-                          <label>Billing Address</label>
-                     </div>
-                      <div class="row ml-auto py-3">
-                          <div class="col ml-auto" style="width:80%">
-                            <input name= "streetAddressBilling" type="text" id="saddress" class="form-control"
-                                   value = "{{ x.address  }}">
-                            <label class="form-label" for="saddress">Street Address</label>
-                          </div>
-                          <div class="column" style="width:20%; margin:0px 15px 0px 0px">
-                           <input name="aptNumberBilling" type="text" id="aptnumber" class="form-control"
-                                   value = "{{ x.apartNumber  }}">
-                            <label class="form-label" for="aptnumber">Apt #</label>
+                    <div class="grid grid-cols-3 gap-4 mt-2">
+                        <div class="col-span-2">
+                            <input name="streetAddressBilling" type="text" id="saddress"
+                                   class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black" value="{{ x.address }}">
+                            <label class="form-label text-white" for="saddress">Street Address</label>
                         </div>
-                      </div>
-                      <div class="row ml-auto">
-                        <div class="col ml-auto">
-                           <input name="stateBilling" type="text" id="bstate" class="form-control" value = "{{ x.state  }}"
-                                  placeholder={{customuser.stateBilling}}>
-                            <label class="form-label" for="bstate" >State</label>
-                         </div>
-                          <div class="col ml-auto">
-                           <input name= "zipCodeBilling" id="bzipcode" value = "{{ x.zip  }}" class="form-control">
-                            <label class="form-label" for="bzipcode">Zip Code</label>
-                         </div>
-                          <div class="col ml-auto">
-                            <input name= "country" type="text" id="country" class="form-control"
-                                   value = "{{ x.country  }}">
-                            <label class="form-label" for="country">Country</label>
-                          </div>
-                      </div>
-                    <div class="col ml-auto" >
-                          <input type="checkbox" id="promotion" name="promotion">
-                        <label for="promotion"> Subscribe for Promotion</label><br>
 
-                    </div >
-                         <div class="column" style="text-align: center; margin:0px 0px 0px 14px">
-
-                            <button class="btn btn-success btn-block btn-lg gradient-custom-3 text-body px-2" type="submit">Update</button>
+                        <div>
+                            <input name="aptNumberBilling" type="text" id="aptnumber"
+                                    class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black" value="{{ x.apartNumber }}">
+                            <label class="form-label text-white" for="aptnumber">Apt #</label>
                         </div>
                     </div>
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        <div>
+                            <input name="stateBilling" type="text" id="bstate"
+                                    class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black" value="{{ x.state }}"
+                                   placeholder={{customuser.stateBilling}}>
+                            <label class="form-label text-white" for="bstate">State</label>
+                        </div>
 
+                        <div>
+                            <input name="zipCodeBilling" id="bzipcode" value="{{ x.zip }}"
+                                   class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black">
+                            <label class="form-label text-white" for="bzipcode">Zip Code</label>
+                        </div>
+                        <div>
+                            <input name="country" type="text" id="country"
+                                    class="form-control form-control-lg bg-gray-700 text-white rounded focus:bg-gray-700 focus:text-black" value="{{ x.country }}">
+                            <label class="form-label text-white" for="country">Country</label>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <input type="checkbox" id="promotion" name="promotion" class="text-white">
+                        <label for="promotion" class="text-white"> Subscribe for Promotion</label>
+                    </div>
+                    <div class="mt-4">
+                        <button class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                type="submit">Update
+                        </button>
+                    </div>
+                    {% endfor %}
+                </form>
 
-
-                  </form>
-                  {% endfor %}
-
-                  <div class="col ml-auto pt-3">
-                      <div class="row ml-auto ">
-                          <div class="col ml-auto">
-                          <form method="POST" action="edit_password" >
-                          {% csrf_token %}
-                              <div>
-                                  <button style="color:red" type="submit" value="Change Password",
-                                          class="btn btn-success btn-block btn-lg gradient-custom-6 text-body">Change Password</button>
-
-                              </div>
-                          </form>
-                              </div>
-                        <div class="col ml-auto">
-                            <form method="POST" action="edit_card">
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <form method="POST" action="edit_password">
                             {% csrf_token %}
-
-                              <div>
-                                  <button type="submit" value="Change Card Details",
-                                          class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Change Card Details</button>
-
-                              </div>
-
+                            <button style="color:red" type="submit" value="Change Password"
+                                    class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                Change Password
+                            </button>
                         </form>
-                        </div>
-                          </div>
-                  </div>
-                  {% if messages %}
-            {% for message in messages %}
-             <h3 style="text-align:center">{{message}}</h3>
-            {% endfor %}
-            {% endif %}
-                  {% comment %} {% else %} {% endcomment %}
-                <p class="text-center text-muted mt-5 mb-0">User Not Logged IN <a href="login" class="fw-bold text-body"><u>Login here</u></a></p>
-                      {% comment %} {% endif %} {% endcomment %}
-              </div>
+                    </div>
 
-            </div></div></div></div>
-        {% endblock %}
+                    <div>
+                        <form method="POST" action="edit_card">
+                            {% csrf_token %}
+                            <button type="submit" value="Change Card Details"
+                                    class="w-full bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                                Change Card Details
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                {% if messages %}
+                {% for message in messages %}
+                <h3 class="text-center text-red-500 mt-4">{{ message }}</h3>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

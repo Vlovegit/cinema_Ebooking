@@ -110,7 +110,7 @@ def registration(request):
         password1 = request.POST['password1']
         password2 = request.POST['password2']
         email = request.POST['email']
-        is_promo = request.POST['promotion']
+        is_promo = request.POST.get('promotion', None)
 
         ######################optional data#########################################
         addr = request.POST.get('address', None)
